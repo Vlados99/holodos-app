@@ -11,12 +11,12 @@ class RecipeEntity extends Equatable {
   final int cookTime; // in minutes
   final int howEasy; // 1 to 5
   final int serves;
-  final List<Category> catigories;
-  final List<Product> ingredients;
-  final List<Step> steps;
-  final List<Comment>? comments;
+  final List<CategoryEntity> catigories;
+  final List<ProductEntity> ingredients;
+  final List<StepEntity> steps;
+  final List<CommentEntity>? comments;
 
-  RecipeEntity(
+  const RecipeEntity(
       {required this.id,
       required this.name,
       required this.cookTime,
