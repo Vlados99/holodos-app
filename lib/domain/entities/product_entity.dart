@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-class Ingredient extends Equatable {
-  final int id;
+class Product extends Equatable {
+  final String id;
   final String name;
 
-  Ingredient({required this.id, required this.name});
+  Product({required this.id, required this.name});
 
   @override
   List<Object?> get props => [id, name];
