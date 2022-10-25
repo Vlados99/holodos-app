@@ -1,17 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:holodos/core/usecases/usecase.dart';
-import 'package:holodos/domain/repositories/recipe_repository.dart';
 
 import '../../core/error/failure.dart';
 import '../entities/recipe_entity.dart';
+import '../repositories/user_repository.dart';
 
-class GetAllRecipes extends UseCase<List<RecipeEntity>> {
-  final RecipeRepository recipeRepository;
+class GetAllRecipes extends UseCase<Stream<List<RecipeEntity>>> {
+  final UserRepository repository;
 
-  GetAllRecipes(this.recipeRepository);
+  GetAllRecipes(this.repository);
 
   @override
-  Future<Either<Failure, List<RecipeEntity>>> call() async {
-    return await recipeRepository.getAllRecipes();
+  Future<Either<Failure, Stream<List<RecipeEntity>>>> call() async {
+    return await repository.getAllRecipes();
   }
 }
