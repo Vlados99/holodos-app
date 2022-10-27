@@ -8,11 +8,12 @@ class StepEntity extends Equatable {
   final Blob image;
   final String content;
 
-  const StepEntity(
-      {required this.id,
-      this.title,
-      required this.image,
-      required this.content});
+  const StepEntity({
+    required this.id,
+    this.title,
+    required this.image,
+    required this.content,
+  });
 
   @override
   List<Object?> get props => [id, title, image, content];
