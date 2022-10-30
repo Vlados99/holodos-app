@@ -5,22 +5,22 @@ import 'package:holodos/core/usecases/usecase_with_params.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
 
-class SearchRecipeByName extends UseCaseWithParams<Stream<List<RecipeEntity>>,
-    SearchRecipeByNameParams> {
+class SearchRecipesByName extends UseCaseWithParams<Stream<List<RecipeEntity>>,
+    SearchRecipesByNameParams> {
   final UserRepository repository;
 
-  SearchRecipeByName({required this.repository});
+  SearchRecipesByName({required this.repository});
 
   @override
   Future<Either<Failure, Stream<List<RecipeEntity>>>> call(params) async {
-    return await repository.searchRecipeByName(params.name);
+    return await repository.searchRecipesByName(params.name);
   }
 }
 
-class SearchRecipeByNameParams extends Equatable {
+class SearchRecipesByNameParams extends Equatable {
   final String name;
 
-  SearchRecipeByNameParams({required this.name});
+  SearchRecipesByNameParams({required this.name});
 
   @override
   List<Object?> get props => [name];

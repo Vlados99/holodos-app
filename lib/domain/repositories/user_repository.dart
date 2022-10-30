@@ -33,11 +33,11 @@ abstract class UserRepository {
   Future<Either<Failure, Stream<List<RecipeEntity>>>> getRecipesFromFavorites(
       String uId);
 
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipeByName(
+  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByName(
       String name);
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipeByProducts(
+  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByProducts(
       List<ProductEntity> products);
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipeByCategories(
+  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByCategories(
       List<CategoryEntity> categories);
 
   Future<Either<Failure, void>> shareRecipe(RecipeEntity recipe);

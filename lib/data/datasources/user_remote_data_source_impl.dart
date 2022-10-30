@@ -210,7 +210,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<Stream<List<RecipeEntity>>> searchRecipeByCategories(
+  Future<Stream<List<RecipeEntity>>> searchRecipesByCategories(
       List<CategoryEntity> categories) async {
     final categoriesCollectionRef = firestore.collection("categories");
     final recipesCollectionRef = firestore.collection("recipes");
@@ -223,13 +223,13 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<Stream<List<RecipeEntity>>> searchRecipeByName(String name) {
+  Future<Stream<List<RecipeEntity>>> searchRecipesByName(String name) {
     // TODO: implement searchRecipeByName
     throw UnimplementedError();
   }
 
   @override
-  Future<Stream<List<RecipeEntity>>> searchRecipeByProducts(
+  Future<Stream<List<RecipeEntity>>> searchRecipesByProducts(
       List<ProductEntity> products) {
     // TODO: implement searchRecipeByProducts
     throw UnimplementedError();

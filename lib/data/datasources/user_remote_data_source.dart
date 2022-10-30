@@ -23,10 +23,10 @@ abstract class UserRemoteDataSource {
   Future<void> removeRecipeFromFavorites(String uId, RecipeEntity recipe);
   Future<Stream<List<RecipeEntity>>> getRecipesFromFavorites(String uId);
 
-  Future<Stream<List<RecipeEntity>>> searchRecipeByName(String name);
-  Future<Stream<List<RecipeEntity>>> searchRecipeByProducts(
+  Future<Stream<List<RecipeEntity>>> searchRecipesByName(String name);
+  Future<Stream<List<RecipeEntity>>> searchRecipesByProducts(
       List<ProductEntity> products);
-  Future<Stream<List<RecipeEntity>>> searchRecipeByCategories(
+  Future<Stream<List<RecipeEntity>>> searchRecipesByCategories(
       List<CategoryEntity> categories);
 
   Future<void> shareRecipe(RecipeEntity recipe);
