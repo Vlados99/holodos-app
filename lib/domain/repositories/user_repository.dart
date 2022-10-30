@@ -18,11 +18,11 @@ abstract class UserRepository {
   Future<Either<Failure, Stream<List<ProductEntity>>>> getAllProducts();
   Future<Either<Failure, void>> addProductToUserList(
       String uId, ProductEntity product);
-  Future<Either<Failure, void>> updateProductInUserList(
+  Future<Either<Failure, void>> updateProductFromUserList(
       String uId, ProductEntity product);
   Future<Either<Failure, void>> removeProductFromUserList(
       String uId, ProductEntity product);
-  Future<Either<Failure, Stream<List<ProductEntity>>>> getUserListWithProducts(
+  Future<Either<Failure, Stream<List<ProductEntity>>>> getListOfUsersProducts(
       String uId);
 
   Future<Either<Failure, Stream<List<RecipeEntity>>>> getAllRecipes();
@@ -42,7 +42,10 @@ abstract class UserRepository {
 
   Future<Either<Failure, void>> shareRecipe(RecipeEntity recipe);
   Future<Either<Failure, void>> commentOnRecipe(
-      String uId, CommentEntity comment, RecipeEntity recipe);
+      UserEntity user, CommentEntity comment, RecipeEntity recipe);
+
+  /*
   Future<Either<Failure, void>> commentOnComment(
       String uId, CommentEntity response, CommentEntity comment);
+  */
 }
