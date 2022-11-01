@@ -132,24 +132,24 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipeByCategories(
+  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByCategories(
       List<CategoryEntity> categories) async {
     return await _call<Stream<List<RecipeEntity>>>(
-        () => remoteDataSource.searchRecipeByCategories(categories));
+        () => remoteDataSource.searchRecipesByCategories(categories));
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipeByName(
+  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByName(
       String name) async {
     return await _call<Stream<List<RecipeEntity>>>(
-        () => remoteDataSource.searchRecipeByName(name));
+        () => remoteDataSource.searchRecipesByName(name));
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipeByProducts(
+  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByProducts(
       List<ProductEntity> products) async {
     return await _call<Stream<List<RecipeEntity>>>(
-        () => remoteDataSource.searchRecipeByProducts(products));
+        () => remoteDataSource.searchRecipesByProducts(products));
   }
 
   @override

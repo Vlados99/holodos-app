@@ -6,6 +6,8 @@ import 'package:holodos/domain/entities/comment_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
 
+import '../entities/user_entity.dart';
+
 class CommentOnRecipe extends UseCaseWithParams<void, CommentOnRecipeParams> {
   final UserRepository repository;
 
@@ -14,18 +16,18 @@ class CommentOnRecipe extends UseCaseWithParams<void, CommentOnRecipeParams> {
   @override
   Future<Either<Failure, void>> call(params) async {
     return await repository.commentOnRecipe(
-        params.uId, params.comment, params.recipe);
+        params.user, params.comment, params.recipe);
   }
 }
 
 class CommentOnRecipeParams extends Equatable {
-  final String uId;
+  final UserEntity user;
   final CommentEntity comment;
   final RecipeEntity recipe;
 
   CommentOnRecipeParams(
-      {required this.uId, required this.comment, required this.recipe});
+      {required this.user, required this.comment, required this.recipe});
 
   @override
-  List<Object?> get props => [uId, comment, recipe];
+  List<Object?> get props => [user, comment, recipe];
 }

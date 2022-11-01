@@ -8,7 +8,7 @@ import '../repositories/user_repository.dart';
 class GetAllRecipes extends UseCase<Stream<List<RecipeEntity>>> {
   final UserRepository repository;
 
-  GetAllRecipes(this.repository);
+  GetAllRecipes({required this.repository});
 
   @override
   Future<Either<Failure, Stream<List<RecipeEntity>>>> call() async {
