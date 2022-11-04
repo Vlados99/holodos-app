@@ -7,10 +7,16 @@ class StepModel extends StepEntity {
 
   factory StepModel.fromSnapshot(DocumentSnapshot snapshot) {
     return StepModel(
-      id: snapshot.get('id'),
-      title: snapshot.get('title'),
-      image: snapshot.get('image'),
-      content: snapshot.get('content'),
+      id: snapshot.data().toString().contains("id") ? snapshot.get('id') : '',
+      title: snapshot.data().toString().contains("title")
+          ? snapshot.get('title')
+          : '',
+      image: snapshot.data().toString().contains("image")
+          ? snapshot.get('image')
+          : '',
+      content: snapshot.data().toString().contains("content")
+          ? snapshot.get('content')
+          : '',
     );
   }
 

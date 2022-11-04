@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
-import 'package:holodos/core/platform/network_info.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
 import 'package:holodos/data/datasources/user_remote_data_source_impl.dart';
 import 'package:holodos/data/repositories/user_repository_impl.dart';
@@ -51,9 +50,10 @@ init() {
         createCurrentUser: sl(),
       ));
   sl.registerFactory(() => RecipeCubit(
-        removeRecipeFromFavorites: sl(),
-        getRecipesFromFavorites: sl(),
-        addRecipeToFavorites: sl(),
+        removeRecipeFromFavoritesUseCase: sl(),
+        getRecipesFromFavoritesUseCase: sl(),
+        addRecipeToFavoritesUseCase: sl(),
+        getAllRecipesUseCase: sl(),
       ));
 
   // UseCases
@@ -80,14 +80,13 @@ init() {
 
   // Repository
   sl.registerLazySingleton<UserRepository>(
-      () => UserRepositoryImpl(networkInfo: sl(), remoteDataSource: sl()));
+      () => UserRepositoryImpl(remoteDataSource: sl()));
 
   // Data sources
   sl.registerLazySingleton<UserRemoteDataSource>(
       () => UserRemoteDataSourceImpl(auth: sl(), firestore: sl()));
 
   // Core
-  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   // External
   final auth = FirebaseAuth.instance;

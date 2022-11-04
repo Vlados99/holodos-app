@@ -1,5 +1,4 @@
 import 'package:holodos/core/error/exception.dart';
-import 'package:holodos/core/platform/network_info.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
@@ -11,11 +10,9 @@ import 'package:dartz/dartz.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl extends UserRepository {
-  final NetworkInfo networkInfo;
   final UserRemoteDataSource remoteDataSource;
 
-  UserRepositoryImpl(
-      {required this.networkInfo, required this.remoteDataSource});
+  UserRepositoryImpl({required this.remoteDataSource});
 
   Future<Either<Failure, T>> _call<T>(Future<T> Function() callVoidFunc) async {
     try {

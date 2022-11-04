@@ -11,9 +11,10 @@ class RecipeEntity extends Equatable {
   final int cookTime; // in minutes
   final int howEasy; // 1 to 5
   final int serves;
-  final List<CategoryEntity> categories;
-  final List<ProductEntity> ingredients;
-  final List<StepEntity> steps;
+  final String imageUri;
+  final List<CategoryEntity>? categories;
+  final List<ProductEntity>? ingredients;
+  final List<StepEntity>? steps;
   final List<CommentEntity>? comments;
 
   const RecipeEntity({
@@ -22,6 +23,7 @@ class RecipeEntity extends Equatable {
     required this.cookTime,
     required this.howEasy,
     required this.serves,
+    required this.imageUri,
     required this.categories,
     required this.ingredients,
     required this.steps,
@@ -35,6 +37,7 @@ class RecipeEntity extends Equatable {
         cookTime,
         howEasy,
         serves,
+        imageUri,
         categories,
         ingredients,
         steps,

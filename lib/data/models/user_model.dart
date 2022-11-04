@@ -17,13 +17,26 @@ class UserModel extends UserEntity {
 
   factory UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     return UserModel(
-      uId: snapshot.get('uId'),
-      name: snapshot.get('name'),
-      email: snapshot.get('email'),
-      status: snapshot.get('status'),
-      password: snapshot.get('password'),
-      products: snapshot.get('products'),
-      favoriteRecipes: snapshot.get('favoriteRecipes'),
+      uId:
+          snapshot.data().toString().contains("uId") ? snapshot.get('uId') : '',
+      name: snapshot.data().toString().contains("name")
+          ? snapshot.get('name')
+          : '',
+      email: snapshot.data().toString().contains("email")
+          ? snapshot.get('email')
+          : '',
+      status: snapshot.data().toString().contains("status")
+          ? snapshot.get('status')
+          : '',
+      password: snapshot.data().toString().contains("password")
+          ? snapshot.get('password')
+          : '',
+      products: snapshot.data().toString().contains("products")
+          ? snapshot.get('products')
+          : '',
+      favoriteRecipes: snapshot.data().toString().contains("favoriteRecipes")
+          ? snapshot.get('favoriteRecipes')
+          : '',
     );
   }
 

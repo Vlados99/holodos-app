@@ -6,9 +6,13 @@ class ProductModel extends ProductEntity {
 
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
     return ProductModel(
-      id: snapshot.get('id'),
-      name: snapshot.get('name'),
-      unit: snapshot.get('unit'),
+      id: snapshot.data().toString().contains('id') ? snapshot.get('id') : '',
+      name: snapshot.data().toString().contains('name')
+          ? snapshot.get('name')
+          : '',
+      unit: snapshot.data().toString().contains('unit')
+          ? snapshot.get('unit')
+          : '',
     );
   }
 

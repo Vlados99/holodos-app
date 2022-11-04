@@ -7,10 +7,16 @@ class CommentModel extends CommentEntity {
 
   factory CommentModel.fromSnapshot(DocumentSnapshot snapshot) {
     return CommentModel(
-      id: snapshot.get('id'),
-      userName: snapshot.get('userName'),
-      content: snapshot.get('content'),
-      image: snapshot.get('image'),
+      id: snapshot.data().toString().contains("id") ? snapshot.get('id') : '',
+      userName: snapshot.data().toString().contains("userName")
+          ? snapshot.get('userName')
+          : '',
+      content: snapshot.data().toString().contains("content")
+          ? snapshot.get('content')
+          : '',
+      image: snapshot.data().toString().contains("image")
+          ? snapshot.get('image')
+          : '',
     );
   }
 

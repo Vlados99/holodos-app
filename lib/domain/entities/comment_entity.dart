@@ -5,7 +5,7 @@ class CommentEntity extends Equatable {
   final String id;
   final String userName;
   final String content;
-  final Blob? image;
+  final String? image;
 
   const CommentEntity({
     required this.id,

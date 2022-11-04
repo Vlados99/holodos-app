@@ -12,8 +12,9 @@ class RecipeModel extends RecipeEntity {
     required cookTime,
     required howEasy,
     required serves,
+    required imageUri,
     required categories,
-    required ingredients, // = product
+    required ingredients, // = products
     required steps,
     comments,
   }) : super(
@@ -22,12 +23,13 @@ class RecipeModel extends RecipeEntity {
           cookTime: cookTime,
           howEasy: howEasy,
           serves: serves,
+          imageUri: imageUri,
           categories: categories,
           ingredients: ingredients,
           steps: steps,
           comments: comments,
         );
-
+/*
   factory RecipeModel.fromSnapshot(DocumentSnapshot snapshot) {
     return RecipeModel(
       id: snapshot.get('id'),
@@ -41,6 +43,38 @@ class RecipeModel extends RecipeEntity {
       comments: snapshot.get('comments'),
     );
   }
+*/
+
+  factory RecipeModel.fromSnapshot(
+    DocumentSnapshot snapshot, {
+    required List<ProductModel> ingredients,
+    required List<StepModel> steps,
+    required List<CategoryModel> categories,
+    List<CommentModel>? comments,
+  }) {
+    return RecipeModel(
+      id: snapshot.data().toString().contains('id') ? snapshot.get('id') : '',
+      name: snapshot.data().toString().contains('name')
+          ? snapshot.get('name')
+          : '',
+      cookTime: snapshot.data().toString().contains('cookTime')
+          ? snapshot.get('cookTime')
+          : '',
+      howEasy: snapshot.data().toString().contains('howEasy')
+          ? snapshot.get('howEasy')
+          : '',
+      serves: snapshot.data().toString().contains('serves')
+          ? snapshot.get('serves')
+          : '',
+      imageUri: snapshot.data().toString().contains('serimageUrives')
+          ? snapshot.get('imageUri')
+          : '',
+      categories: categories,
+      ingredients: ingredients,
+      steps: steps,
+      comments: comments ?? '',
+    );
+  }
 
   Map<String, dynamic> toDocument() {
     return {
@@ -49,6 +83,7 @@ class RecipeModel extends RecipeEntity {
       'cookTime': cookTime,
       'howEasy': howEasy,
       'serves': serves,
+      'imageUri': imageUri,
       'categories': categories,
       'ingredients': ingredients,
       'steps': steps,
@@ -64,6 +99,7 @@ class RecipeModel extends RecipeEntity {
       cookTime: json["cookTime"],
       howEasy: json["howEasy"],
       serves: json["serves"],
+      imageUri: json["imageUri"],
       categories: json["categories"] != null
           ? CategoryModel.fromJson(json['categories'])
           : null,
