@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
+import 'package:holodos/data/models/category_model.dart';
 import 'package:holodos/data/models/comment_model.dart';
 import 'package:holodos/data/models/product_model.dart';
 import 'package:holodos/data/models/recipe_model.dart';
+import 'package:holodos/data/models/step_model.dart';
 import 'package:holodos/data/models/user_model.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
@@ -59,6 +61,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         cookTime: recipe.cookTime,
         howEasy: recipe.howEasy,
         serves: recipe.serves,
+        imageUri: recipe.imageUri,
         categories: recipe.categories,
         ingredients: recipe.ingredients,
         steps: recipe.steps,
@@ -137,15 +140,54 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     });
   }
 
+  Future<List<ProductModel>> _getRecipeIngredients() async {
+    return await firestore.collectionGroup("ingredients").get().then(
+        (querySnapshot) => querySnapshot.docs
+            .map((docSnapshot) => ProductModel.fromSnapshot(docSnapshot))
+            .toList());
+  }
+
+  Future<List<CategoryModel>> _getCategories() async {
+    return await firestore.collectionGroup("categories").get().then(
+        (querySnapshot) => querySnapshot.docs
+            .map((docSnapshot) => CategoryModel.fromSnapshot(docSnapshot))
+            .toList());
+  }
+
+  Future<List<StepModel>> _getSteps() async {
+    return await firestore.collectionGroup("steps").get().then(
+        (querySnapshot) => querySnapshot.docs
+            .map((docSnapshot) => StepModel.fromSnapshot(docSnapshot))
+            .toList());
+  }
+
+  Future<List<CommentModel>> _getComments() async {
+    return await firestore.collectionGroup("comments").get().then(
+        (querySnapshot) => querySnapshot.docs
+            .map((docSnapshot) => CommentModel.fromSnapshot(docSnapshot))
+            .toList());
+  }
+
   @override
   Future<Stream<List<RecipeEntity>>> getAllRecipes() async {
     final recipesCollectionRef = firestore.collection("recipes");
 
-    return recipesCollectionRef.snapshots().map((querySnapshot) {
-      return querySnapshot.docs
-          .map((docSnapshot) => RecipeModel.fromSnapshot(docSnapshot))
-          .toList();
+    final ingredients = await _getRecipeIngredients();
+    final categories = await _getCategories();
+    final steps = await _getSteps();
+    final comments = await _getComments();
+
+    final result = recipesCollectionRef.snapshots().map((querySnapshot) {
+      return querySnapshot.docs.map((docSnapshot) {
+        return RecipeModel.fromSnapshot(docSnapshot,
+            ingredients: ingredients,
+            categories: categories,
+            steps: steps,
+            comments: comments);
+      }).toList();
     });
+
+    return result;
   }
 
   @override
@@ -156,10 +198,19 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final usersRecipesCollectionRef =
         firestore.collection("users").doc(uId).collection("favoriteRecipes");
 
+    final ingredients = await _getRecipeIngredients();
+    final categories = await _getCategories();
+    final steps = await _getSteps();
+    final comments = await _getComments();
+
     return usersRecipesCollectionRef.snapshots().map((querySnapshot) {
-      return querySnapshot.docs
-          .map((docSnapshot) => RecipeModel.fromSnapshot(docSnapshot))
-          .toList();
+      return querySnapshot.docs.map((docSnapshot) {
+        return RecipeModel.fromSnapshot(docSnapshot,
+            ingredients: ingredients,
+            categories: categories,
+            steps: steps,
+            comments: comments);
+      }).toList();
     });
   }
 
@@ -215,10 +266,19 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final categoriesCollectionRef = firestore.collection("categories");
     final recipesCollectionRef = firestore.collection("recipes");
 
+    final ingredients = await _getRecipeIngredients();
+    final categories = await _getCategories();
+    final steps = await _getSteps();
+    final comments = await _getComments();
+
     return recipesCollectionRef.snapshots().map((querySnapshot) {
-      return querySnapshot.docs
-          .map((docSnapshot) => RecipeModel.fromSnapshot(docSnapshot))
-          .toList();
+      return querySnapshot.docs.map((docSnapshot) {
+        return RecipeModel.fromSnapshot(docSnapshot,
+            ingredients: ingredients,
+            categories: categories,
+            steps: steps,
+            comments: comments);
+      }).toList();
     });
   }
 
@@ -243,7 +303,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<void> signIn(UserEntity user) async => await auth
-      .signInWithEmailAndPassword(email: user.email, password: user.password);
+      .signInWithEmailAndPassword(email: user.email!, password: user.password!);
 
   @override
   Future<void> signOut() async => await auth.signOut();
@@ -251,7 +311,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<void> signUp(UserEntity user) async =>
       await auth.createUserWithEmailAndPassword(
-          email: user.email, password: user.password);
+          email: user.email!, password: user.password!);
 
   @override
   Future<void> updateProductFromUserList(
