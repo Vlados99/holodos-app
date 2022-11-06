@@ -3,31 +3,34 @@ import 'package:holodos/data/models/category_model.dart';
 import 'package:holodos/data/models/comment_model.dart';
 import 'package:holodos/data/models/product_model.dart';
 import 'package:holodos/data/models/step_model.dart';
+import 'package:holodos/data/models/tag_model.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 
 class RecipeModel extends RecipeEntity {
-  RecipeModel({
-    required id,
-    required name,
-    required cookTime,
-    required howEasy,
-    required serves,
-    required imageUri,
-    required categories,
-    required ingredients, // = products
-    required steps,
-    comments,
-  }) : super(
+  RecipeModel(
+      {required id,
+      required name,
+      required cookTime,
+      required complexity,
+      required serves,
+      required imgUri,
+      categories,
+      ingredients,
+      steps,
+      comments,
+      tags})
+      : super(
           id: id,
           name: name,
           cookTime: cookTime,
-          howEasy: howEasy,
+          complexity: complexity,
           serves: serves,
-          imageUri: imageUri,
+          imgUri: imgUri,
           categories: categories,
           ingredients: ingredients,
           steps: steps,
           comments: comments,
+          tags: tags,
         );
 /*
   factory RecipeModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -35,7 +38,7 @@ class RecipeModel extends RecipeEntity {
       id: snapshot.get('id'),
       name: snapshot.get('name'),
       cookTime: snapshot.get('cookTime'),
-      howEasy: snapshot.get('howEasy'),
+      complexity: snapshot.get('complexity'),
       serves: snapshot.get('serves'),
       categories: snapshot.get('categories'),
       ingredients: snapshot.get('ingredients'),
@@ -47,10 +50,11 @@ class RecipeModel extends RecipeEntity {
 
   factory RecipeModel.fromSnapshot(
     DocumentSnapshot snapshot, {
-    required List<ProductModel> ingredients,
-    required List<StepModel> steps,
-    required List<CategoryModel> categories,
+    List<ProductModel>? ingredients,
+    List<StepModel>? steps,
+    List<CategoryModel>? categories,
     List<CommentModel>? comments,
+    List<TagModel>? tags,
   }) {
     return RecipeModel(
       id: snapshot.data().toString().contains('id') ? snapshot.get('id') : '',
@@ -60,19 +64,20 @@ class RecipeModel extends RecipeEntity {
       cookTime: snapshot.data().toString().contains('cookTime')
           ? snapshot.get('cookTime')
           : '',
-      howEasy: snapshot.data().toString().contains('howEasy')
-          ? snapshot.get('howEasy')
+      complexity: snapshot.data().toString().contains('complexity')
+          ? snapshot.get('complexity')
           : '',
       serves: snapshot.data().toString().contains('serves')
           ? snapshot.get('serves')
           : '',
-      imageUri: snapshot.data().toString().contains('serimageUrives')
-          ? snapshot.get('imageUri')
+      imgUri: snapshot.data().toString().contains('imgUri')
+          ? snapshot.get("imgUri").toString()
           : '',
-      categories: categories,
-      ingredients: ingredients,
-      steps: steps,
+      categories: categories ?? '',
+      ingredients: ingredients ?? '',
+      steps: steps ?? '',
       comments: comments ?? '',
+      tags: tags ?? '',
     );
   }
 
@@ -81,13 +86,14 @@ class RecipeModel extends RecipeEntity {
       'id': id,
       'name': name,
       'cookTime': cookTime,
-      'howEasy': howEasy,
+      'complexity': complexity,
       'serves': serves,
-      'imageUri': imageUri,
+      'imgUri': imgUri,
       'categories': categories,
       'ingredients': ingredients,
       'steps': steps,
       'comments': comments,
+      'tags': tags,
     };
   }
 
@@ -97,9 +103,9 @@ class RecipeModel extends RecipeEntity {
       id: json["_id"],
       name: json["name"],
       cookTime: json["cookTime"],
-      howEasy: json["howEasy"],
+      complexity: json["complexity"],
       serves: json["serves"],
-      imageUri: json["imageUri"],
+      imgUri: json["imgUri"],
       categories: json["categories"] != null
           ? CategoryModel.fromJson(json['categories'])
           : null,
@@ -110,6 +116,7 @@ class RecipeModel extends RecipeEntity {
       comments: json["comments"] != null
           ? CommentModel.fromJson(json['comments'])
           : null,
+      tags: json["tags"] != null ? TagModel.fromJson(json['tags']) : null,
     );
   }
 }

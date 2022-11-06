@@ -1,19 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class StepEntity extends Equatable {
   final String id;
   final String? title;
-  final String? image;
-  final String content;
+  final int number;
+  final String? imgUri;
+  final String description;
 
   const StepEntity({
     required this.id,
+    required this.number,
     this.title,
-    this.image,
-    required this.content,
+    this.imgUri,
+    required this.description,
   });
 
   @override
-  List<Object?> get props => [id, title, image, content];
+  List<Object?> get props => [id, title, number, imgUri, description];
 }

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:holodos/domain/entities/comment_entity.dart';
 
 class CommentModel extends CommentEntity {
-  CommentModel({id, userName, content, image})
-      : super(id: id, userName: userName, content: content, image: image);
+  CommentModel({id, userName, comment})
+      : super(id: id, userName: userName, comment: comment);
 
   factory CommentModel.fromSnapshot(DocumentSnapshot snapshot) {
     return CommentModel(
@@ -11,11 +11,8 @@ class CommentModel extends CommentEntity {
       userName: snapshot.data().toString().contains("userName")
           ? snapshot.get('userName')
           : '',
-      content: snapshot.data().toString().contains("content")
-          ? snapshot.get('content')
-          : '',
-      image: snapshot.data().toString().contains("image")
-          ? snapshot.get('image')
+      comment: snapshot.data().toString().contains("comment")
+          ? snapshot.get('comment')
           : '',
     );
   }
@@ -24,8 +21,7 @@ class CommentModel extends CommentEntity {
     return {
       'id': id,
       'userName': userName,
-      'content': content,
-      'image': image,
+      'comment': comment,
     };
   }
 
@@ -34,8 +30,7 @@ class CommentModel extends CommentEntity {
     return CommentModel(
       id: json["id"],
       userName: json["userName"],
-      content: json["content"],
-      image: json["image"],
+      comment: json["comment"],
     );
   }
 }
