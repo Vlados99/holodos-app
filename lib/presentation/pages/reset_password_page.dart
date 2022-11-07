@@ -11,23 +11,21 @@ import 'package:holodos/presentation/widgets/sized_box.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
-class SignInPage extends StatefulWidget {
-  SignInPage({Key? key}) : super(key: key);
+class ResetPasswordPage extends StatefulWidget {
+  ResetPasswordPage({Key? key}) : super(key: key);
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
   GlobalKey<ScaffoldState> _scaffoldGlobalKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
 
     super.dispose();
   }
@@ -39,7 +37,7 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _scaffold() {
     return Scaffold(
-      appBar: simpleAppBar(title: "Sign in"),
+      appBar: simpleAppBar(title: "Reset password"),
       key: _scaffoldGlobalKey,
       body: BlocConsumer<UserCubit, UserState>(
         builder: (context, userState) {
@@ -56,12 +54,12 @@ class _SignInPageState extends State<SignInPage> {
         },
         listener: (context, userState) {
           if (userState is UserSuccess) {
-            BlocProvider.of<AuthCubit>(context).loggedIn();
+            snackBarSuccess(
+                context: context, message: "Success! Check your email");
           }
 
           if (userState is UserFailure) {
-            snackBarError(
-                context: context, message: "Invalid email or password");
+            snackBarError(context: context, message: "Invalid email");
           }
         },
       ),
@@ -75,7 +73,7 @@ class _SignInPageState extends State<SignInPage> {
         children: [
           sb_h50(),
           const Text(
-            "Welcome to Holodos",
+            "Reset your password",
             style: TextStyles.header,
           ),
           sb_h50(),
@@ -83,70 +81,36 @@ class _SignInPageState extends State<SignInPage> {
               context: context,
               controller: _emailController,
               hingText: "Enter your email"),
-          sb_h15(),
-          textField(
-              context: context,
-              controller: _passwordController,
-              hingText: "Enter your password"),
           sb_h50(),
           GestureDetector(
-            onTap: () => submitSignIn(),
+            onTap: () => submitReset(),
             child: button(
               context: context,
               backgroundColor: AppColors.button,
               fontColor: AppColors.textColorWhite,
-              text: "Login",
+              text: "Reset",
             ),
           ),
           sb_h15(),
           GestureDetector(
             onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, PageConst.resetPasswordPage, ((route) => false)),
+                context, PageConst.signInPage, ((route) => false)),
             child: button(
               context: context,
-              text: "Forgot password?",
+              text: "Go back",
               fontColor: AppColors.textColorDirtyGreen,
             ),
           ),
-          Expanded(
-            child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 0.0,
-                children: [
-                  const Text(
-                    "New Holodos?",
-                    style: TextStyles.text16black,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.pushNamedAndRemoveUntil(
-                        context, PageConst.signUpPage, ((route) => false)),
-                    child: button(
-                      width: 75,
-                      context: context,
-                      text: "Sign up",
-                      fontColor: AppColors.textColorDirtyGreen,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          sb_h15(),
         ],
       ),
     );
   }
 
-  submitSignIn() {
-    if (_emailController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty) {
-      BlocProvider.of<UserCubit>(context).submitSignIn(
+  submitReset() {
+    if (_emailController.text.isNotEmpty) {
+      BlocProvider.of<UserCubit>(context).resetPassword(
         user: UserEntity(
           email: _emailController.text,
-          password: _passwordController.text,
         ),
       );
     }

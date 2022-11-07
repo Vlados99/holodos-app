@@ -5,7 +5,10 @@ import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 import 'package:holodos/presentation/pages/recipes_page.dart';
-import 'package:holodos/presentation/widgets/snackbar.dart';
+import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/button.dart';
+import 'package:holodos/presentation/widgets/sized_box.dart';
+import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -38,6 +41,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _scaffold() {
     return Scaffold(
+      appBar: simpleAppBar(title: "Sign up"),
       key: _scaffoldGLobalKey,
       body: BlocConsumer<UserCubit, UserState>(
         builder: (context, userState) {
@@ -45,7 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
             return BlocBuilder<AuthCubit, AuthState>(
               builder: (context, authState) {
                 return authState is Authenticated
-                    ? RecipesPage(uId: authState.userId)
+                    ? RecipesPage()
                     : _bodyWidget();
               },
             );
@@ -58,7 +62,7 @@ class _SignUpPageState extends State<SignUpPage> {
           }
 
           if (userState is UserFailure) {
-            snackBarError(message: "Invalid email", context: context);
+            snackBarError(message: "Invalid data", context: context);
           }
         },
       ),
@@ -67,27 +71,47 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _bodyWidget() {
     return Container(
+      alignment: Alignment.center,
       child: Column(
         children: [
-          GestureDetector(
-            onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, PageConst.signInPage, (route) => false),
-            child: Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child: const Text("Go back to login"),
-            ),
+          sb_h50(),
+          const Text(
+            "Registration",
+            style: TextStyles.header,
           ),
-          CustomTextField().textField(
-              controller: _usernameController, hingText: "Enter your username"),
-          CustomTextField().textField(
-              controller: _emailController, hingText: "Enter your email"),
-          CustomTextField().textField(
-              controller: _passwordController, hingText: "Enter your password"),
+          sb_h50(),
+          textField(
+              context: context,
+              controller: _usernameController,
+              hingText: "Enter your username"),
+          sb_h15(),
+          textField(
+              context: context,
+              controller: _emailController,
+              hingText: "Enter your email"),
+          sb_h15(),
+          textField(
+              context: context,
+              controller: _passwordController,
+              hingText: "Enter your password"),
+          sb_h50(),
           GestureDetector(
             onTap: () => submitSignIn(),
-            child: Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child: const Text("Create my account"),
+            child: button(
+              context: context,
+              text: "Create account",
+              backgroundColor: AppColors.button,
+              fontColor: AppColors.textColorWhite,
+            ),
+          ),
+          sb_h15(),
+          GestureDetector(
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, PageConst.signInPage, ((route) => false)),
+            child: button(
+              context: context,
+              text: "Sign in",
+              fontColor: AppColors.textColorDirtyGreen,
             ),
           ),
         ],

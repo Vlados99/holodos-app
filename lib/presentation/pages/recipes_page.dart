@@ -1,20 +1,26 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
-import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
+import 'package:holodos/common/storage.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
+import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/drawer.dart';
+import 'package:holodos/presentation/widgets/recipe.dart';
 
 class RecipesPage extends StatefulWidget {
-  final String uId;
-  const RecipesPage({Key? key, required this.uId}) : super(key: key);
+  const RecipesPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<RecipesPage> createState() => _RecipesPageState();
 }
 
-class _RecipesPageState extends State<RecipesPage> {
+class _RecipesPageState extends State<RecipesPage> with RouteAware {
+  GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     BlocProvider.of<RecipeCubit>(context).getRecipes();
@@ -29,19 +35,11 @@ class _RecipesPageState extends State<RecipesPage> {
 
   Widget _scaffold() {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Recipes'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              BlocProvider.of<AuthCubit>(context).loggedOut();
-            },
-            icon: Icon(Icons.exit_to_app),
-            color: Colors.white,
-          ),
-        ],
-      ),
+      drawer: SafeArea(
+          child: drawer(PageConst.recipesPage,
+              MediaQuery.of(context).size.width - 80, context)),
+      key: _scaffolGlobalKey,
+      appBar: mainAppBar(title: "Recipes"),
       body: BlocBuilder<RecipeCubit, RecipeState>(
         builder: (context, recipeState) {
           if (recipeState is RecipeLoaded) {
@@ -61,6 +59,7 @@ class _RecipesPageState extends State<RecipesPage> {
 
   Widget _noRecipesWidget() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Icons.no_food),
         Text("Recipes are not found!"),
@@ -70,6 +69,7 @@ class _RecipesPageState extends State<RecipesPage> {
 
   Widget _bodyWidget(RecipeLoaded recipeLoadedState) {
     return Container(
+      alignment: Alignment.topCenter,
       child: recipeLoadedState.recipes.isEmpty
           ? _noRecipesWidget()
           : _recipesList(recipeLoadedState),
@@ -77,88 +77,47 @@ class _RecipesPageState extends State<RecipesPage> {
   }
 
   Widget _recipesList(RecipeLoaded recipeLoadedState) {
-    return GridView.builder(
-      itemCount: recipeLoadedState.recipes.length,
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
-      itemBuilder: (_, index) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, PageConst.recipePage,
-                arguments: recipeLoadedState.recipes[index]);
-          },
+    return Container(
+      child: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        itemCount: recipeLoadedState.recipes.length,
+        itemBuilder: (_, index) {
+          return RecipeItem(
+              context: context, state: recipeLoadedState, index: index);
           /* ADD THIS FUNCTIONAL TO FAVORITES RECIPES FOR USER
-          onLongPress: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text("Remove recipe"),
-                  content:
-                      const Text("Do you really want to remove this recipe?"),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        /* BlocProvider.of<RecipeCubit>(context)
-                            .removeRecipeFromFavorites();
-                            
-                            REMOVE RECIPE FROM FAVORITES
-                            */
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Remove"),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("No"),
-                    ),
-                  ],
-                );
-              },
-            );
-          },*/
-          child: Container(
-            alignment: AlignmentDirectional.center,
-            child: Column(
-              children: [
-                Text(
-                  "${recipeLoadedState.recipes[index].name}",
-                  style: CustomTextStyle.text32s,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                txt("Cook time: ${recipeLoadedState.recipes[index].cookTime} min",
-                    CustomTextStyle.text16s),
-                SizedBox(
-                  height: 8,
-                ),
-                txt("How easy: ${recipeLoadedState.recipes[index].howEasy}",
-                    CustomTextStyle.text16s),
-                SizedBox(
-                  height: 8,
-                ),
-                txt("Serves: ${recipeLoadedState.recipes[index].serves}",
-                    CustomTextStyle.text16s),
-                SizedBox(
-                  height: 8,
-                ),
-                txt("imageU: ${recipeLoadedState.recipes[index].imageUri}",
-                    CustomTextStyle.text16s),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget txt(String text, TextStyle style) {
-    return Text(
-      text,
-      style: style,
+            onLongPress: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Remove recipe"),
+                    content:
+                        const Text("Do you really want to remove this recipe?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          /* BlocProvider.of<RecipeCubit>(context)
+                              .removeRecipeFromFavorites();
+                              
+                              REMOVE RECIPE FROM FAVORITES
+                              */
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Remove"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("No"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },*/
+        },
+      ),
     );
   }
 }
