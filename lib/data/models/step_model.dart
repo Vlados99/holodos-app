@@ -25,7 +25,8 @@ class StepModel extends StepEntity {
           ? snapshot.get("number")
           : 0,
       imgUri: snapshot.data().toString().contains("imgUri")
-          ? snapshot.get("imgUri").toString()
+          ? (snapshot.get("imgUri") as DocumentReference<Map<String, dynamic>>)
+              .id
           : '',
       description: snapshot.data().toString().contains("description")
           ? snapshot.get("description")
