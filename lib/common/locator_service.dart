@@ -17,6 +17,8 @@ import 'package:holodos/domain/usecases/get_recipes_from_favorites.dart';
 import 'package:holodos/domain/usecases/is_sign_in.dart';
 import 'package:holodos/domain/usecases/remove_product_from_user_list.dart';
 import 'package:holodos/domain/usecases/remove_recipe_from_favorites.dart';
+import 'package:holodos/domain/usecases/reset_password.dart';
+import 'package:holodos/domain/usecases/search_products_by_name.dart';
 import 'package:holodos/domain/usecases/search_recipes_by_categories.dart';
 import 'package:holodos/domain/usecases/search_recipes_by_name.dart';
 import 'package:holodos/domain/usecases/search_recipes_by_products.dart';
@@ -26,6 +28,7 @@ import 'package:holodos/domain/usecases/sign_out.dart';
 import 'package:holodos/domain/usecases/sign_up.dart';
 import 'package:holodos/domain/usecases/update_product_from_user_list.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
+import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 
@@ -45,9 +48,10 @@ init() {
         getCurrentUserId: sl(),
       ));
   sl.registerFactory(() => UserCubit(
-        signIn: sl(),
-        signUp: sl(),
-        createCurrentUser: sl(),
+        signInUseCase: sl(),
+        signUpUseCase: sl(),
+        createCurrentUserUseCase: sl(),
+        resetPasswordUseCase: sl(),
       ));
   sl.registerFactory(() => RecipeCubit(
         removeRecipeFromFavoritesUseCase: sl(),
@@ -56,6 +60,13 @@ init() {
         getAllRecipesUseCase: sl(),
       ));
 
+  sl.registerFactory(() => ProductCubit(
+        addProductToUserListUseCase: sl(),
+        getListOfUsersProductsUseCase: sl(),
+        removeProductFromUserListUseCase: sl(),
+        updateProductFromUserListUseCase: sl(),
+        getAllProductsUseCase: sl(),
+      ));
   // UseCases
   sl.registerLazySingleton(() => AddProductToUserList(repository: sl()));
   sl.registerLazySingleton(() => AddRecipeToFavorites(repository: sl()));
@@ -77,6 +88,8 @@ init() {
   sl.registerLazySingleton(() => SignOut(repository: sl()));
   sl.registerLazySingleton(() => SignUp(repository: sl()));
   sl.registerLazySingleton(() => UpdateProductFromUserList(repository: sl()));
+  sl.registerLazySingleton(() => SearchProductsByName(repository: sl()));
+  sl.registerLazySingleton(() => ResetPassword(repository: sl()));
 
   // Repository
   sl.registerLazySingleton<UserRepository>(

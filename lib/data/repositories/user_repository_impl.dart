@@ -175,4 +175,16 @@ class UserRepositoryImpl extends UserRepository {
     return await _call<void>(
         () => remoteDataSource.updateProductFromUserList(uId, product));
   }
+
+  @override
+  Future<Either<Failure, Stream<List<ProductEntity>>>> searchProductsByName(
+      String name) async {
+    return await _call<Stream<List<ProductEntity>>>(
+        () => remoteDataSource.searchProductsByName(name));
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword(UserEntity user) async {
+    return await _call<void>(() => remoteDataSource.resetPassword(user));
+  }
 }

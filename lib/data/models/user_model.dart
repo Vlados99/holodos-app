@@ -4,12 +4,11 @@ import 'package:holodos/data/models/recipe_model.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
-  UserModel({uId, name, email, status, password, products, favoriteRecipes})
+  UserModel({uId, name, email, password, products, favoriteRecipes})
       : super(
           uId: uId,
           name: name,
           email: email,
-          status: status,
           password: password,
           products: products,
           favoriteRecipes: favoriteRecipes,
@@ -17,16 +16,12 @@ class UserModel extends UserEntity {
 
   factory UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     return UserModel(
-      uId:
-          snapshot.data().toString().contains("uId") ? snapshot.get('uId') : '',
+      uId: snapshot.id,
       name: snapshot.data().toString().contains("name")
           ? snapshot.get('name')
           : '',
       email: snapshot.data().toString().contains("email")
           ? snapshot.get('email')
-          : '',
-      status: snapshot.data().toString().contains("status")
-          ? snapshot.get('status')
           : '',
       password: snapshot.data().toString().contains("password")
           ? snapshot.get('password')
@@ -45,7 +40,6 @@ class UserModel extends UserEntity {
       'uId': uId,
       'name': name,
       'email': email,
-      'status': status,
       'password': password,
       'products': products,
       'favoriteRecipes': favoriteRecipes,
@@ -58,7 +52,6 @@ class UserModel extends UserEntity {
       uId: json["uId"],
       name: json["name"],
       email: json["email"],
-      status: json["status"],
       password: json["password"],
       products: json["products"] != null
           ? ProductModel.fromJson(json["products"])

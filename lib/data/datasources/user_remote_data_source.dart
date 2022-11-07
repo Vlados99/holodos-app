@@ -11,6 +11,7 @@ abstract class UserRemoteDataSource {
   Future<void> signOut();
   Future<String> getCurrentUId();
   Future<void> createCurrentUser(UserEntity user);
+  Future<void> resetPassword(UserEntity user);
 
   Future<Stream<List<ProductEntity>>> getAllProducts();
   Future<void> addProductToUserList(String uId, ProductEntity product);
@@ -22,6 +23,8 @@ abstract class UserRemoteDataSource {
   Future<void> addRecipeToFavorites(String uId, RecipeEntity recipe);
   Future<void> removeRecipeFromFavorites(String uId, RecipeEntity recipe);
   Future<Stream<List<RecipeEntity>>> getRecipesFromFavorites(String uId);
+
+  Future<Stream<List<ProductEntity>>> searchProductsByName(String name);
 
   Future<Stream<List<RecipeEntity>>> searchRecipesByName(String name);
   Future<Stream<List<RecipeEntity>>> searchRecipesByProducts(

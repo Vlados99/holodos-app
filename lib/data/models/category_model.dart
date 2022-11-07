@@ -6,7 +6,7 @@ class CategoryModel extends CategoryEntity {
 
   factory CategoryModel.fromSnapshot(DocumentSnapshot snapshot) {
     return CategoryModel(
-      id: snapshot.data().toString().contains("id") ? snapshot.get('id') : '',
+      id: snapshot.id,
       name: snapshot.data().toString().contains("name")
           ? snapshot.get('name')
           : '',

@@ -14,6 +14,7 @@ abstract class UserRepository {
   Future<Either<Failure, void>> signOut();
   Future<Either<Failure, String>> getCurrentUId();
   Future<Either<Failure, void>> createCurrentUser(UserEntity user);
+  Future<Either<Failure, void>> resetPassword(UserEntity user);
 
   Future<Either<Failure, Stream<List<ProductEntity>>>> getAllProducts();
   Future<Either<Failure, void>> addProductToUserList(
@@ -32,6 +33,9 @@ abstract class UserRepository {
       String uId, RecipeEntity recipe);
   Future<Either<Failure, Stream<List<RecipeEntity>>>> getRecipesFromFavorites(
       String uId);
+
+  Future<Either<Failure, Stream<List<ProductEntity>>>> searchProductsByName(
+      String name);
 
   Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByName(
       String name);

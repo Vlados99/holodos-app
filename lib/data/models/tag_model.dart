@@ -6,7 +6,7 @@ class TagModel extends TagEntity {
 
   factory TagModel.fromSnapshot(DocumentSnapshot snapshot) {
     return TagModel(
-      id: snapshot.data().toString().contains("id") ? snapshot.get("id") : '',
+      id: snapshot.id,
       name: snapshot.data().toString().contains("name")
           ? snapshot.get("name")
           : '',

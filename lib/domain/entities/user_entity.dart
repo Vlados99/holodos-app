@@ -6,7 +6,6 @@ class UserEntity extends Equatable {
   final String? uId;
   final String? name;
   final String? email;
-  final String? status;
   final String? password;
   final List<ProductEntity>? products;
   final List<RecipeEntity>? favoriteRecipes;
@@ -15,7 +14,6 @@ class UserEntity extends Equatable {
     this.uId,
     this.name,
     this.email,
-    this.status,
     this.password,
     this.products,
     this.favoriteRecipes,
@@ -23,5 +21,5 @@ class UserEntity extends Equatable {
 
   @override
   List<Object?> get props =>
-      [uId, name, email, status, password, products, favoriteRecipes];
+      [uId, name, email, password, products, favoriteRecipes];
 }

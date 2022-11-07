@@ -10,6 +10,7 @@ class RecipeModel extends RecipeEntity {
   RecipeModel(
       {required id,
       required name,
+      required cuisines,
       required cookTime,
       required complexity,
       required serves,
@@ -22,6 +23,7 @@ class RecipeModel extends RecipeEntity {
       : super(
           id: id,
           name: name,
+          cuisines: cuisines,
           cookTime: cookTime,
           complexity: complexity,
           serves: serves,
@@ -57,21 +59,25 @@ class RecipeModel extends RecipeEntity {
     List<TagModel>? tags,
   }) {
     return RecipeModel(
-      id: snapshot.data().toString().contains('id') ? snapshot.get('id') : '',
+      id: snapshot.id,
       name: snapshot.data().toString().contains('name')
           ? snapshot.get('name')
           : '',
+      cuisines: snapshot.data().toString().contains('cuisines')
+          ? snapshot.get('cuisines')
+          : '',
       cookTime: snapshot.data().toString().contains('cookTime')
           ? snapshot.get('cookTime')
-          : '',
+          : 0,
       complexity: snapshot.data().toString().contains('complexity')
           ? snapshot.get('complexity')
-          : '',
+          : 0,
       serves: snapshot.data().toString().contains('serves')
           ? snapshot.get('serves')
-          : '',
+          : 0,
       imgUri: snapshot.data().toString().contains('imgUri')
-          ? snapshot.get("imgUri").toString()
+          ? (snapshot.get("imgUri") as DocumentReference<Map<String, dynamic>>)
+              .id
           : '',
       categories: categories ?? '',
       ingredients: ingredients ?? '',
@@ -85,6 +91,7 @@ class RecipeModel extends RecipeEntity {
     return {
       'id': id,
       'name': name,
+      'cuisines': cuisines,
       'cookTime': cookTime,
       'complexity': complexity,
       'serves': serves,
@@ -102,6 +109,7 @@ class RecipeModel extends RecipeEntity {
     return RecipeModel(
       id: json["_id"],
       name: json["name"],
+      cuisines: json["cuisines"],
       cookTime: json["cookTime"],
       complexity: json["complexity"],
       serves: json["serves"],

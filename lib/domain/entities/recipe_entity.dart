@@ -1,14 +1,15 @@
 import 'package:equatable/equatable.dart';
-import 'package:holodos/domain/entities/tag_entity.dart';
 
 import 'category_entity.dart';
 import 'comment_entity.dart';
 import 'product_entity.dart';
 import 'step_entity.dart';
+import 'tag_entity.dart';
 
 class RecipeEntity extends Equatable {
   final String id;
   final String name;
+  final String cuisines;
   final int cookTime;
   final int complexity;
   final int serves;
@@ -22,6 +23,7 @@ class RecipeEntity extends Equatable {
   const RecipeEntity(
       {required this.id,
       required this.name,
+      required this.cuisines,
       required this.cookTime,
       required this.complexity,
       required this.serves,
@@ -36,6 +38,7 @@ class RecipeEntity extends Equatable {
   List<Object?> get props => [
         id,
         name,
+        cuisines,
         cookTime,
         complexity,
         serves,

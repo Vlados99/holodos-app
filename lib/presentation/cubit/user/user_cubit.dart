@@ -4,27 +4,30 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/domain/usecases/create_current_user.dart';
+import 'package:holodos/domain/usecases/reset_password.dart';
 import 'package:holodos/domain/usecases/sign_in.dart';
 import 'package:holodos/domain/usecases/sign_up.dart';
 
 part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
-  final SignIn signIn;
-  final SignUp signUp;
-  final CreateCurrentUser createCurrentUser;
+  final SignIn signInUseCase;
+  final SignUp signUpUseCase;
+  final CreateCurrentUser createCurrentUserUseCase;
+  final ResetPassword resetPasswordUseCase;
 
-  UserCubit(
-      {required this.signIn,
-      required this.signUp,
-      required this.createCurrentUser})
-      : super(UserInitial());
+  UserCubit({
+    required this.signInUseCase,
+    required this.signUpUseCase,
+    required this.createCurrentUserUseCase,
+    required this.resetPasswordUseCase,
+  }) : super(UserInitial());
 
   Future<void> submitSignIn({required UserEntity user}) async {
     emit(UserLoading());
     try {
       SignInParams params = SignInParams(user: user);
-      await signIn(params);
+      await signInUseCase(params);
       emit(UserSuccess());
     } on SocketException catch (_) {
       emit(UserFailure());
@@ -40,9 +43,23 @@ class UserCubit extends Cubit<UserState> {
       CreateCurrentUserParams createCurrentUserParams =
           CreateCurrentUserParams(user: user);
 
-      await signUp(signUpParams);
-      await createCurrentUser(createCurrentUserParams);
+      await signUpUseCase(signUpParams);
+      await createCurrentUserUseCase(createCurrentUserParams);
 
+      emit(UserSuccess());
+    } on SocketException catch (_) {
+      emit(UserFailure());
+    } catch (_) {
+      emit(UserFailure());
+    }
+  }
+
+  Future<void> resetPassword({required UserEntity user}) async {
+    emit(UserLoading());
+    try {
+      ResetPasswordParams params = ResetPasswordParams(user: user);
+
+      await resetPasswordUseCase(params);
       emit(UserSuccess());
     } on SocketException catch (_) {
       emit(UserFailure());
