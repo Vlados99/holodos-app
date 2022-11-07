@@ -7,7 +7,7 @@ import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/app_bar.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
-import 'package:holodos/presentation/widgets/recipe.dart';
+import 'package:holodos/presentation/widgets/recipe_item.dart';
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({
