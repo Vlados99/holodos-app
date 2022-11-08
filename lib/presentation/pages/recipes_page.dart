@@ -79,7 +79,6 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   Widget _recipesList(RecipeLoaded recipeLoadedState) {
     return Container(
       child: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 10),
         itemCount: recipeLoadedState.recipes.length,
         itemBuilder: (_, index) {
           return RecipeItem(

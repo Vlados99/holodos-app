@@ -21,6 +21,9 @@ class AppColors {
   static const Color textColorDirtyGreen = Color(0xFF267B6B);
   static const Color textColorGray = Color(0xFF858d9d);
   static const Color textColorWhite = Colors.white;
+
+  static const Color orange = Color(0xFFF2822C);
+  static const Color black = Colors.black;
 }
 
 class TextStyles {
@@ -34,6 +37,8 @@ class TextStyles {
 
   static const TextStyle text32black =
       TextStyle(fontSize: 32, color: AppColors.textColorBlack);
+  static const TextStyle text32White =
+      TextStyle(fontSize: 32, color: AppColors.textColorWhite);
   static const TextStyle text16black =
       TextStyle(fontSize: 16, color: AppColors.textColorBlack);
   static const TextStyle text16gray =
