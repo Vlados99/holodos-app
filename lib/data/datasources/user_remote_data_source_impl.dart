@@ -20,8 +20,59 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   UserRemoteDataSourceImpl({required this.auth, required this.firestore});
 
+  Future<bool> _productExists(ProductEntity product) async {
+    final uId = await getCurrentUId();
+    final usersProductCollectionRef =
+        firestore.collection("users").doc(uId).collection("products");
+
+    List<dynamic> existsProduct =
+        await _getExistsProduct(usersProductCollectionRef, product);
+    if (existsProduct.isEmpty) {
+      return true;
+    }
+    return existsProduct.contains(product.name) ? true : false;
+  }
+
+  Future<List<dynamic>> _getExistsProduct(
+      CollectionReference<Map<String, dynamic>> usersProductCollectionRef,
+      ProductEntity product) async {
+    final existsProduct = await usersProductCollectionRef
+        .where("name", isEqualTo: product.name)
+        .get()
+        .then((querySnapshot) =>
+            querySnapshot.docs.map((e) => e.data()).toList());
+    return existsProduct;
+  }
+
+  Future<void> _createAndAddProduct(
+      ProductEntity product,
+      CollectionReference<Map<String, dynamic>> usersProductCollectionRef,
+      String userProductDocId) async {
+    final newProduct = ProductModel(
+      id: userProductDocId,
+      name: product.name,
+      unit: product.unit,
+    ).toDocument();
+
+    await usersProductCollectionRef.doc(userProductDocId).set(newProduct);
+  }
+
+  Future<void> _updateProductUnit(
+      CollectionReference<Map<String, dynamic>> usersProductCollectionRef,
+      ProductEntity product) async {
+    final existsProduct =
+        await _getExistsProduct(usersProductCollectionRef, product);
+
+    Map<String, dynamic> unit = {
+      "unit": (int.parse(existsProduct[0]["unit"]) + int.parse(product.unit!))
+          .toString()
+    };
+    usersProductCollectionRef.doc(existsProduct[0]["id"]).update(unit);
+  }
+
   @override
-  Future<void> addProductToUserList(String uId, ProductEntity product) async {
+  Future<void> addProductToUserList(ProductEntity product) async {
+    final uId = await getCurrentUId();
     final usersProductCollectionRef =
         firestore.collection("users").doc(uId).collection("products");
     final userProductDocId = usersProductCollectionRef.doc().id;
@@ -30,17 +81,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         .doc(userProductDocId)
         .get()
         .then((_product) async {
-      final newProduct = ProductModel(
-        id: userProductDocId,
-        name: product.name,
-        unit: product.unit,
-      ).toDocument();
-
-      if (!_product.exists) {
-        await usersProductCollectionRef.doc(userProductDocId).set(newProduct);
+      if (await _productExists(product)) {
+        await _createAndAddProduct(
+            product, usersProductCollectionRef, userProductDocId);
       } else {
-        print("-----PRODUCT EXISTS, "
-            "TRY TO CREATE A FEATURE TO ADD UNIT TO THE PAST UNIT-----");
+        await _updateProductUnit(usersProductCollectionRef, product);
       }
       return;
     });
@@ -64,9 +109,12 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         complexity: recipe.complexity,
         serves: recipe.serves,
         imgUri: recipe.imgUri,
+        description: recipe.description,
         categories: recipe.categories,
         ingredients: recipe.ingredients,
         steps: recipe.steps,
+        comments: recipe.comments,
+        tags: recipe.tags,
       ).toDocument();
 
       if (!_recipe.exists) {
@@ -102,6 +150,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         id: commentId,
         userName: user.name,
         comment: comment.comment,
+        date: DateTime.now(),
       ).toDocument();
 
       await recipesCommentsCollectionRef.doc(commentId).set(newComment);
@@ -115,12 +164,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final uId = await getCurrentUId();
 
     await usersCollectionRef.doc(uId).get().then((_user) async {
-      final newUser = UserModel(
-        uId: uId,
+      var newUser = UserModel(
         password: user.password,
         email: user.email,
         name: user.name,
-      ).toDocument();
+      ).createUser();
 
       if (!_user.exists) {
         await usersCollectionRef.doc(uId).set(newUser);
@@ -330,7 +378,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<void> signIn(UserEntity user) async => await auth
-      .signInWithEmailAndPassword(email: user.email!, password: user.password!);
+      .signInWithEmailAndPassword(email: user.email!, password: user.password);
 
   @override
   Future<void> signOut() async => await auth.signOut();
@@ -338,7 +386,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<void> signUp(UserEntity user) async =>
       await auth.createUserWithEmailAndPassword(
-          email: user.email!, password: user.password!);
+          email: user.email!, password: user.password);
 
   @override
   Future<void> updateProductFromUserList(
@@ -347,7 +395,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final usersProductsCollectionRef =
         firestore.collection("users").doc(uId).collection("products");
 
-    if (product.unit != null) productMap['unit'] = product.unit;
+    productMap['unit'] = product.unit;
 
     await usersProductsCollectionRef.doc(product.id).update(productMap);
     return;

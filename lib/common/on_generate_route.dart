@@ -10,7 +10,7 @@ import 'package:holodos/presentation/pages/reset_password_page.dart';
 import 'package:holodos/presentation/pages/sign_in_page.dart';
 import 'package:holodos/presentation/pages/sign_up_page.dart';
 
-class OnGenerateRoute extends Route {
+class OnGenerateRoute {
   static Route<dynamic> route(RouteSettings settings) {
     final args = settings.arguments;
 

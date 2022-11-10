@@ -4,7 +4,7 @@ import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 
 Widget ProductItem({required ProductLoaded state, required int index}) {
   return Container(
-    padding: EdgeInsets.only(bottom: 4, left: 10),
+    padding: EdgeInsets.only(bottom: 8, left: 10),
     decoration: const BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.centerLeft,

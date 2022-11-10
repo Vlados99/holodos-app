@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/app_bar.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/product_item.dart';
+import 'package:holodos/presentation/widgets/snack_bar.dart';
+import 'package:holodos/presentation/widgets/text_field.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -17,11 +20,20 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
 
+  TextEditingController _productUnitController = TextEditingController();
+
   @override
   void initState() {
     BlocProvider.of<ProductCubit>(context).getProducts();
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _productUnitController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -68,11 +80,11 @@ class _ProductsPageState extends State<ProductsPage> {
       alignment: Alignment.topCenter,
       child: productLoadedState.products.isEmpty
           ? _noProductsWidget()
-          : _productsList(productLoadedState),
+          : _products(productLoadedState),
     );
   }
 
-  Widget _productsList(ProductLoaded productLoadedState) {
+  Widget _products(ProductLoaded productLoadedState) {
     return Column(
       children: [
         search(),
@@ -108,9 +120,22 @@ class _ProductsPageState extends State<ProductsPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("${productLoadedState.products[index].name}"),
+            content: inputRow("Enter quantity"),
             actions: [
               GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  ProductEntity product = ProductEntity(
+                      id: productLoadedState.products[index].id,
+                      name: productLoadedState.products[index].name,
+                      unit: _productUnitController.text);
+
+                  BlocProvider.of<ProductCubit>(context)
+                      .addProductToList(product: product);
+                  Navigator.pop(context);
+                  snackBarSuccess(
+                      context: context,
+                      message: "Product has added to Holodos");
+                },
                 child: Text("Add"),
               ),
             ],
@@ -136,6 +161,15 @@ class _ProductsPageState extends State<ProductsPage> {
           style: TextStyles.text16black,
         ),
       ),
+    );
+  }
+
+  Widget inputRow(String hintText) {
+    return Container(
+      child: textField(
+          context: context,
+          controller: _productUnitController,
+          hintText: hintText),
     );
   }
 }

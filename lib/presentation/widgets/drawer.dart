@@ -44,15 +44,37 @@ Drawer drawer(String routeName, double width, BuildContext context) => Drawer(
             ),
           ),
           Expanded(
-            child: GestureDetector(
-              onTap: () => BlocProvider.of<AuthCubit>(context).loggedOut(),
-              child: drawerListElement(
-                icon: Icons.exit_to_app,
-                text: "Sign out",
-                alignment: Alignment.bottomCenter,
-              ),
+              child: GestureDetector(
+            onTap: () => BlocProvider.of<AuthCubit>(context).loggedOut(),
+            child: drawerListElement(
+              icon: Icons.logout,
+              text: "Sign out",
+              alignment: Alignment.bottomCenter,
             ),
-          ),
+          )),
+          /*
+          Expanded(
+            child: BlocProvider.of<AuthCubit>(context).isSignedIn
+                ? GestureDetector(
+                    onTap: () =>
+                        BlocProvider.of<AuthCubit>(context).loggedOut(),
+                    child: drawerListElement(
+                      icon: Icons.logout,
+                      text: "Sign out",
+                      alignment: Alignment.bottomCenter,
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, PageConst.signInPage);
+                    },
+                    child: drawerListElement(
+                      icon: Icons.login,
+                      text: "Sign in",
+                      alignment: Alignment.bottomCenter,
+                    ),
+                  ),
+          ),*/
         ],
       ),
     );

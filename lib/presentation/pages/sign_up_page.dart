@@ -11,6 +11,8 @@ import 'package:holodos/presentation/widgets/sized_box.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
+import '../widgets/drawer.dart';
+
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key? key}) : super(key: key);
 
@@ -41,7 +43,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _scaffold() {
     return Scaffold(
-      appBar: simpleAppBar(title: "Sign up"),
+      drawer: SafeArea(
+          child: drawer(PageConst.recipesPage,
+              MediaQuery.of(context).size.width - 80, context)),
+      resizeToAvoidBottomInset: false,
+      appBar: mainAppBar(title: "Sign up"),
       key: _scaffoldGLobalKey,
       body: BlocConsumer<UserCubit, UserState>(
         builder: (context, userState) {
@@ -71,6 +77,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _bodyWidget() {
     return Container(
+      width: MediaQuery.of(context).size.width,
       alignment: Alignment.center,
       child: Column(
         children: [
@@ -83,17 +90,17 @@ class _SignUpPageState extends State<SignUpPage> {
           textField(
               context: context,
               controller: _usernameController,
-              hingText: "Enter your username"),
+              hintText: "Enter your username"),
           sb_h15(),
           textField(
               context: context,
               controller: _emailController,
-              hingText: "Enter your email"),
+              hintText: "Enter your email"),
           sb_h15(),
           textField(
               context: context,
               controller: _passwordController,
-              hingText: "Enter your password"),
+              hintText: "Enter your password"),
           sb_h50(),
           GestureDetector(
             onTap: () => submitSignIn(),
@@ -114,6 +121,16 @@ class _SignUpPageState extends State<SignUpPage> {
               fontColor: AppColors.textColorDirtyGreen,
             ),
           ),
+          sb_h15(),
+          GestureDetector(
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, PageConst.recipesPage, ((route) => false)),
+            child: button(
+              context: context,
+              text: "Continue without registation",
+              fontColor: AppColors.textColorDirtyGreen,
+            ),
+          ),
         ],
       ),
     );
@@ -125,6 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
         _passwordController.text.isNotEmpty) {
       BlocProvider.of<UserCubit>(context).submitSignUp(
         user: UserEntity(
+          name: _usernameController.text,
           email: _emailController.text,
           password: _passwordController.text,
         ),

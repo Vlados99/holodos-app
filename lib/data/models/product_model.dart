@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 
 class ProductModel extends ProductEntity {
-  ProductModel({id, name, unit}) : super(id: id, name: name, unit: unit);
+  ProductModel({required id, required name, required unit})
+      : super(id: id, name: name, unit: unit);
 
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
     return ProductModel(

@@ -27,11 +27,10 @@ class ProductCubit extends Cubit<ProductState> {
       required this.getAllProductsUseCase})
       : super(ProductInitial());
 
-  Future<void> addProductToList(
-      {required ProductEntity product, required String userId}) async {
+  Future<void> addProductToList({required ProductEntity product}) async {
     try {
       AddProductToUserListParams params =
-          AddProductToUserListParams(uId: userId, product: product);
+          AddProductToUserListParams(product: product);
       await addProductToUserListUseCase(params);
     } on SocketException catch (_) {
       emit(ProductFailure());

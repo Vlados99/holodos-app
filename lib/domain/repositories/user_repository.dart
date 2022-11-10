@@ -17,8 +17,7 @@ abstract class UserRepository {
   Future<Either<Failure, void>> resetPassword(UserEntity user);
 
   Future<Either<Failure, Stream<List<ProductEntity>>>> getAllProducts();
-  Future<Either<Failure, void>> addProductToUserList(
-      String uId, ProductEntity product);
+  Future<Either<Failure, void>> addProductToUserList(ProductEntity product);
   Future<Either<Failure, void>> updateProductFromUserList(
       String uId, ProductEntity product);
   Future<Either<Failure, void>> removeProductFromUserList(

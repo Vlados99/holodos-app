@@ -20,7 +20,7 @@ AppBar mainAppBarWithoutLogIn({required String title}) {
 }
 
 AppBar mainAppBar({required String title}) {
-  final bool value = false;
+  const bool value = false;
   return AppBar(
     title: Text(
       title,

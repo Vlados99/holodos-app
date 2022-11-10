@@ -8,7 +8,7 @@ class ProductEntity extends Equatable {
   const ProductEntity({
     required this.id,
     required this.name,
-    this.unit,
+    required this.unit,
   });
 
   @override

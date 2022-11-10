@@ -14,6 +14,7 @@ class RecipeEntity extends Equatable {
   final int complexity;
   final int serves;
   final String imgUri;
+  final String description;
   final List<CategoryEntity>? categories;
   final List<ProductEntity>? ingredients;
   final List<StepEntity>? steps;
@@ -28,6 +29,7 @@ class RecipeEntity extends Equatable {
       required this.complexity,
       required this.serves,
       required this.imgUri,
+      required this.description,
       this.categories,
       this.ingredients,
       this.steps,
@@ -43,6 +45,7 @@ class RecipeEntity extends Equatable {
         complexity,
         serves,
         imgUri,
+        description,
         categories,
         ingredients,
         steps,

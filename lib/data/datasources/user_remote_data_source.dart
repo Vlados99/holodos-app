@@ -14,7 +14,7 @@ abstract class UserRemoteDataSource {
   Future<void> resetPassword(UserEntity user);
 
   Future<Stream<List<ProductEntity>>> getAllProducts();
-  Future<void> addProductToUserList(String uId, ProductEntity product);
+  Future<void> addProductToUserList(ProductEntity product);
   Future<void> updateProductFromUserList(String uId, ProductEntity product);
   Future<void> removeProductFromUserList(String uId, ProductEntity product);
   Future<Stream<List<ProductEntity>>> getListOfUsersProducts(String uId);

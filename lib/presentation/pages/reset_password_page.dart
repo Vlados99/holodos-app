@@ -21,11 +21,11 @@ class ResetPasswordPage extends StatefulWidget {
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   GlobalKey<ScaffoldState> _scaffoldGlobalKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _passwordController.dispose();
 
     super.dispose();
   }
@@ -79,8 +79,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           sb_h50(),
           textField(
               context: context,
-              controller: _emailController,
-              hingText: "Enter your email"),
+              controller: _passwordController,
+              hintText: "Enter your email"),
           sb_h50(),
           GestureDetector(
             onTap: () => submitReset(),
@@ -107,10 +107,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   submitReset() {
-    if (_emailController.text.isNotEmpty) {
+    if (_passwordController.text.isNotEmpty) {
       BlocProvider.of<UserCubit>(context).resetPassword(
         user: UserEntity(
-          email: _emailController.text,
+          password: _passwordController.text,
         ),
       );
     }

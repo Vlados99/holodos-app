@@ -4,9 +4,13 @@ import 'package:holodos/data/models/recipe_model.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
-  UserModel({uId, name, email, password, products, favoriteRecipes})
+  UserModel(
+      {required name,
+      required email,
+      required password,
+      products,
+      favoriteRecipes})
       : super(
-          uId: uId,
           name: name,
           email: email,
           password: password,
@@ -16,7 +20,6 @@ class UserModel extends UserEntity {
 
   factory UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     return UserModel(
-      uId: snapshot.id,
       name: snapshot.data().toString().contains("name")
           ? snapshot.get('name')
           : '',
@@ -35,9 +38,16 @@ class UserModel extends UserEntity {
     );
   }
 
+  Map<String, dynamic> createUser() {
+    return {
+      'name': name,
+      'email': email,
+      'password': password,
+    };
+  }
+
   Map<String, dynamic> toDocument() {
     return {
-      'uId': uId,
       'name': name,
       'email': email,
       'password': password,
@@ -49,7 +59,6 @@ class UserModel extends UserEntity {
   //?????????????????????????????????????????????????????????????????
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      uId: json["uId"],
       name: json["name"],
       email: json["email"],
       password: json["password"],

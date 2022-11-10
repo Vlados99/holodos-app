@@ -15,6 +15,7 @@ class RecipeModel extends RecipeEntity {
       required complexity,
       required serves,
       required imgUri,
+      required description,
       categories,
       ingredients,
       steps,
@@ -28,6 +29,7 @@ class RecipeModel extends RecipeEntity {
           complexity: complexity,
           serves: serves,
           imgUri: imgUri,
+          description: description,
           categories: categories,
           ingredients: ingredients,
           steps: steps,
@@ -37,7 +39,6 @@ class RecipeModel extends RecipeEntity {
 /*
   factory RecipeModel.fromSnapshot(DocumentSnapshot snapshot) {
     return RecipeModel(
-      id: snapshot.get('id'),
       name: snapshot.get('name'),
       cookTime: snapshot.get('cookTime'),
       complexity: snapshot.get('complexity'),
@@ -79,6 +80,9 @@ class RecipeModel extends RecipeEntity {
           ? (snapshot.get("imgUri") as DocumentReference<Map<String, dynamic>>)
               .id
           : '',
+      description: snapshot.data().toString().contains("description")
+          ? snapshot.get("description")
+          : '',
       categories: categories ?? '',
       ingredients: ingredients ?? '',
       steps: steps ?? '',
@@ -96,6 +100,7 @@ class RecipeModel extends RecipeEntity {
       'complexity': complexity,
       'serves': serves,
       'imgUri': imgUri,
+      'description': description,
       'categories': categories,
       'ingredients': ingredients,
       'steps': steps,
@@ -107,13 +112,14 @@ class RecipeModel extends RecipeEntity {
   //?????????????????????????????????????????????????????????????????
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
     return RecipeModel(
-      id: json["_id"],
+      id: json["id"],
       name: json["name"],
       cuisines: json["cuisines"],
       cookTime: json["cookTime"],
       complexity: json["complexity"],
       serves: json["serves"],
       imgUri: json["imgUri"],
+      description: json["description"],
       categories: json["categories"] != null
           ? CategoryModel.fromJson(json['categories'])
           : null,

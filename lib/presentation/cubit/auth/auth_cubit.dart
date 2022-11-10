@@ -20,7 +20,7 @@ class AuthCubit extends Cubit<AuthState> {
       required this.getCurrentUserId})
       : super(AuthInitial());
 
-  Future<void> appStarted() async {
+  Future<void> userIsSignIn() async {
     final _isSignIn = await isSignIn();
 
     _isSignIn.fold((failure) => emit(UnAuthenticated()), (value) async {

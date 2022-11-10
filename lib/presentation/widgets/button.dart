@@ -17,7 +17,7 @@ Widget button({
       ),
     ),
     height: 40,
-    width: width ?? MediaQuery.of(context).size.width / 2,
+    width: width ?? MediaQuery.of(context).size.width / 1.5,
     child: Text(
       "${text}",
       style: TextStyle(

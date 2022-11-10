@@ -11,6 +11,8 @@ import 'package:holodos/presentation/widgets/sized_box.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
+import '../widgets/drawer.dart';
+
 class SignInPage extends StatefulWidget {
   SignInPage({Key? key}) : super(key: key);
 
@@ -39,7 +41,10 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _scaffold() {
     return Scaffold(
-      appBar: simpleAppBar(title: "Sign in"),
+      drawer: SafeArea(
+          child: drawer(PageConst.recipesPage,
+              MediaQuery.of(context).size.width - 80, context)),
+      appBar: mainAppBar(title: "Sign in"),
       key: _scaffoldGlobalKey,
       body: BlocConsumer<UserCubit, UserState>(
         builder: (context, userState) {
@@ -82,12 +87,12 @@ class _SignInPageState extends State<SignInPage> {
           textField(
               context: context,
               controller: _emailController,
-              hingText: "Enter your email"),
+              hintText: "Enter your email"),
           sb_h15(),
           textField(
               context: context,
               controller: _passwordController,
-              hingText: "Enter your password"),
+              hintText: "Enter your password"),
           sb_h50(),
           GestureDetector(
             onTap: () => submitSignIn(),
@@ -105,6 +110,16 @@ class _SignInPageState extends State<SignInPage> {
             child: button(
               context: context,
               text: "Forgot password?",
+              fontColor: AppColors.textColorDirtyGreen,
+            ),
+          ),
+          sb_h15(),
+          GestureDetector(
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, PageConst.recipesPage, ((route) => false)),
+            child: button(
+              context: context,
+              text: "Continue without login",
               fontColor: AppColors.textColorDirtyGreen,
             ),
           ),

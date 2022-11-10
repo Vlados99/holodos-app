@@ -45,9 +45,9 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, void>> addProductToUserList(
-      String uId, ProductEntity product) async {
+      ProductEntity product) async {
     return await _call<void>(
-        () => remoteDataSource.addProductToUserList(uId, product));
+        () => remoteDataSource.addProductToUserList(product));
   }
 
   @override
