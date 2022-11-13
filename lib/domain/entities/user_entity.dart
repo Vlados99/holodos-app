@@ -5,14 +5,14 @@ import 'package:holodos/domain/entities/recipe_entity.dart';
 class UserEntity extends Equatable {
   final String? name;
   final String? email;
-  final String password;
+  final String? password;
   final List<ProductEntity>? products;
   final List<RecipeEntity>? favoriteRecipes;
 
   const UserEntity({
     this.name,
     this.email,
-    required this.password,
+    this.password,
     this.products,
     this.favoriteRecipes,
   });

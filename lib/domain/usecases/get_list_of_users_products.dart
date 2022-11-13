@@ -5,14 +5,14 @@ import 'package:holodos/core/usecases/usecase_with_params.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
 
-class GetListOfUsersProducts extends UseCaseWithParams<
-    Stream<List<ProductEntity>>, GetListOfUsersProductsParams> {
+class GetListOfUsersProducts extends UseCaseWithParams<List<ProductEntity>,
+    GetListOfUsersProductsParams> {
   final UserRepository repository;
 
   GetListOfUsersProducts({required this.repository});
 
   @override
-  Future<Either<Failure, Stream<List<ProductEntity>>>> call(
+  Future<Either<Failure, List<ProductEntity>>> call(
       GetListOfUsersProductsParams params) async {
     return await repository.getListOfUsersProducts(params.uId);
   }

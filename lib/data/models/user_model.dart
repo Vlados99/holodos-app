@@ -31,10 +31,10 @@ class UserModel extends UserEntity {
           : '',
       products: snapshot.data().toString().contains("products")
           ? snapshot.get('products')
-          : '',
+          : [],
       favoriteRecipes: snapshot.data().toString().contains("favoriteRecipes")
           ? snapshot.get('favoriteRecipes')
-          : '',
+          : [],
     );
   }
 

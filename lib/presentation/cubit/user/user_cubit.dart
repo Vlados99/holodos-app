@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/domain/usecases/create_current_user.dart';
 import 'package:holodos/domain/usecases/reset_password.dart';
@@ -29,10 +30,10 @@ class UserCubit extends Cubit<UserState> {
       SignInParams params = SignInParams(user: user);
       await signInUseCase(params);
       emit(UserSuccess());
-    } on SocketException catch (_) {
-      emit(UserFailure());
+    } on FirebaseException catch (e) {
+      emit(UserFailure(errorMessage: e.message!));
     } catch (_) {
-      emit(UserFailure());
+      emit(UserFailure(errorMessage: "Unknown error"));
     }
   }
 
@@ -47,10 +48,10 @@ class UserCubit extends Cubit<UserState> {
       await createCurrentUserUseCase(createCurrentUserParams);
 
       emit(UserSuccess());
-    } on SocketException catch (_) {
-      emit(UserFailure());
+    } on FirebaseException catch (e) {
+      emit(UserFailure(errorMessage: e.message!));
     } catch (_) {
-      emit(UserFailure());
+      emit(UserFailure(errorMessage: "Unknown error"));
     }
   }
 
@@ -61,10 +62,10 @@ class UserCubit extends Cubit<UserState> {
 
       await resetPasswordUseCase(params);
       emit(UserSuccess());
-    } on SocketException catch (_) {
-      emit(UserFailure());
+    } on FirebaseException catch (e) {
+      emit(UserFailure(errorMessage: e.message!));
     } catch (_) {
-      emit(UserFailure());
+      emit(UserFailure(errorMessage: "Unknown error"));
     }
   }
 }

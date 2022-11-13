@@ -108,7 +108,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         cookTime: recipe.cookTime,
         complexity: recipe.complexity,
         serves: recipe.serves,
-        imgUri: recipe.imgUri,
+        imageLocation: recipe.imageLocation,
         description: recipe.description,
         categories: recipe.categories,
         ingredients: recipe.ingredients,
@@ -178,14 +178,20 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<Stream<List<ProductEntity>>> getAllProducts() async {
+  Future<List<ProductEntity>> getAllProducts() async {
     final productsCollectionRef = firestore.collection("products");
 
-    return productsCollectionRef.snapshots().map((querySnapshot) {
-      return querySnapshot.docs
-          .map((docSnapshot) => ProductModel.fromSnapshot(docSnapshot))
-          .toList();
-    });
+    QuerySnapshot querySnapshot = await productsCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => ProductModel.fromSnapshot(doc))
+        .toList();
+
+    // return productsCollectionRef.snapshots().map((querySnapshot) {
+    //   return querySnapshot.docs
+    //       .map((docSnapshot) => ProductModel.fromSnapshot(docSnapshot))
+    //       .toList();
+    // });
   }
 
   void _getRecipeIngredients(String docId) async {
@@ -238,9 +244,15 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   List<StepModel> steps = [];
 
   @override
-  Future<Stream<List<RecipeEntity>>> getAllRecipes() async {
+  Future<List<RecipeEntity>> getAllRecipes() async {
     final recipesCollectionRef = firestore.collection("recipes");
 
+    QuerySnapshot querySnapshot = await recipesCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => RecipeModel.fromSnapshot(doc))
+        .toList();
+/*
     final result = recipesCollectionRef.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((docSnapshot) {
         _getRecipeIngredients(docSnapshot.id);
@@ -260,18 +272,24 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       }).toList();
     });
 
-    return result;
+    return result;*/
   }
 
   @override
   Future<String> getCurrentUId() async => auth.currentUser!.uid;
 
   @override
-  Future<Stream<List<RecipeEntity>>> getRecipesFromFavorites(String uId) async {
+  Future<List<RecipeEntity>> getRecipesFromFavorites(String uId) async {
     final usersRecipesCollectionRef =
         firestore.collection("users").doc(uId).collection("favoriteRecipes");
 
-    return usersRecipesCollectionRef.snapshots().map((querySnapshot) {
+    QuerySnapshot querySnapshot = await usersRecipesCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => RecipeModel.fromSnapshot(doc))
+        .toList();
+
+    /*return usersRecipesCollectionRef.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((docSnapshot) {
         _getRecipeIngredients(docSnapshot.id);
         _getCategories();
@@ -285,19 +303,25 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             steps: steps,
             comments: comments);
       }).toList();
-    });
+    });*/
   }
 
   @override
-  Future<Stream<List<ProductEntity>>> getListOfUsersProducts(String uId) async {
+  Future<List<ProductEntity>> getListOfUsersProducts(String uId) async {
     final usersProductCollectionRef =
         firestore.collection("users").doc(uId).collection("products");
 
-    return usersProductCollectionRef.snapshots().map((querySnapshot) {
+    QuerySnapshot querySnapshot = await usersProductCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => ProductModel.fromSnapshot(doc))
+        .toList();
+
+    /*return usersProductCollectionRef.snapshots().map((querySnapshot) {
       return querySnapshot.docs
           .map((docSnapshot) => ProductModel.fromSnapshot(docSnapshot))
           .toList();
-    });
+    });*/
   }
 
   @override
@@ -335,12 +359,18 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<Stream<List<RecipeEntity>>> searchRecipesByCategories(
+  Future<List<RecipeEntity>> searchRecipesByCategories(
       List<CategoryEntity> selectedCategories) async {
     final categoriesCollectionRef = firestore.collection("categories");
     final recipesCollectionRef = firestore.collection("recipes");
 
-    return recipesCollectionRef.snapshots().map((querySnapshot) {
+    QuerySnapshot querySnapshot = await recipesCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => RecipeModel.fromSnapshot(doc))
+        .toList();
+
+    /*return recipesCollectionRef.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((docSnapshot) {
         _getRecipeIngredients(docSnapshot.id);
         _getCategories();
@@ -354,17 +384,17 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             steps: steps,
             comments: comments);
       }).toList();
-    });
+    });*/
   }
 
   @override
-  Future<Stream<List<RecipeEntity>>> searchRecipesByName(String name) {
+  Future<List<RecipeEntity>> searchRecipesByName(String name) {
     // TODO: implement searchRecipeByName
     throw UnimplementedError();
   }
 
   @override
-  Future<Stream<List<RecipeEntity>>> searchRecipesByProducts(
+  Future<List<RecipeEntity>> searchRecipesByProducts(
       List<ProductEntity> products) {
     // TODO: implement searchRecipeByProducts
     throw UnimplementedError();
@@ -378,7 +408,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<void> signIn(UserEntity user) async => await auth
-      .signInWithEmailAndPassword(email: user.email!, password: user.password);
+      .signInWithEmailAndPassword(email: user.email!, password: user.password!);
 
   @override
   Future<void> signOut() async => await auth.signOut();
@@ -386,7 +416,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<void> signUp(UserEntity user) async =>
       await auth.createUserWithEmailAndPassword(
-          email: user.email!, password: user.password);
+          email: user.email!, password: user.password!);
 
   @override
   Future<void> updateProductFromUserList(
@@ -402,9 +432,25 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<Stream<List<ProductEntity>>> searchProductsByName(String name) {
-    // TODO: implement searchProductsByName
-    throw UnimplementedError();
+  Future<List<ProductEntity>> searchProductsByName(String name) async {
+    const fieldName = "name";
+    final productsCollectionRef = firestore
+        .collection("products")
+        .orderBy(fieldName)
+        .where(fieldName, isGreaterThanOrEqualTo: name)
+        .where(fieldName, isLessThan: '${name}z');
+
+    QuerySnapshot querySnapshot = await productsCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => ProductModel.fromSnapshot(doc))
+        .toList();
+
+    /*return productsCollectionRef.snapshots().map((querySnapshot) {
+      return querySnapshot.docs
+          .map((docSnapshot) => ProductModel.fromSnapshot(docSnapshot))
+          .toList();
+    });*/
   }
 
   @override

@@ -1,33 +1,45 @@
 import 'package:flutter/material.dart';
+
 import 'package:holodos/common/app_const.dart';
 
-AppBar simpleAppBar({String? title}) {
-  return AppBar(
-    title: Text(
-      title ?? '',
-      style: TextStyles.appBarTextStyle,
-    ),
-  );
-}
+double _appbarHeight = 56;
 
-AppBar mainAppBarWithoutLogIn({required String title}) {
-  return AppBar(
-    title: Text(
-      title,
-      style: TextStyles.appBarTextStyle,
-    ),
-  );
-}
+class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  String? title;
+  bool? search;
+  SearchDelegate? delegate;
 
-AppBar mainAppBar({required String title}) {
-  const bool value = false;
-  return AppBar(
-    title: Text(
-      title,
-      style: TextStyles.appBarTextStyle,
-    ),
-    actions: [
-      Switch(value: value, onChanged: (value) => !value),
-    ],
-  );
+  MainAppBar({
+    Key? key,
+    this.title,
+    this.search = false,
+    this.delegate,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const bool value = false;
+    return AppBar(
+      title: Text(
+        title ?? '',
+        style: TextStyles.appBarTextStyle,
+      ),
+      actions: [
+        search!
+            ? GestureDetector(
+                onTap: () {
+                  showSearch(context: context, delegate: delegate!);
+                },
+                child: Container(
+                  child: Icon(Icons.search),
+                  padding: EdgeInsets.only(right: 16),
+                ),
+              )
+            : Container(),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(_appbarHeight);
 }

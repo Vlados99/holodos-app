@@ -42,7 +42,7 @@ Widget RecipeItem(
               children: [
                 Container(
                   child: buildResults(
-                      context, "recipes", state.recipes[index].imgUri),
+                      context, "recipes", state.recipes[index].imageLocation),
                 ),
                 Container(
                   height: height,

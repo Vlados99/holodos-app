@@ -16,31 +16,30 @@ abstract class UserRepository {
   Future<Either<Failure, void>> createCurrentUser(UserEntity user);
   Future<Either<Failure, void>> resetPassword(UserEntity user);
 
-  Future<Either<Failure, Stream<List<ProductEntity>>>> getAllProducts();
+  Future<Either<Failure, List<ProductEntity>>> getAllProducts();
   Future<Either<Failure, void>> addProductToUserList(ProductEntity product);
   Future<Either<Failure, void>> updateProductFromUserList(
       String uId, ProductEntity product);
   Future<Either<Failure, void>> removeProductFromUserList(
       String uId, ProductEntity product);
-  Future<Either<Failure, Stream<List<ProductEntity>>>> getListOfUsersProducts(
+  Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts(
       String uId);
 
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> getAllRecipes();
+  Future<Either<Failure, List<RecipeEntity>>> getAllRecipes();
   Future<Either<Failure, void>> addRecipeToFavorites(
       String uId, RecipeEntity recipe);
   Future<Either<Failure, void>> removeRecipeFromFavorites(
       String uId, RecipeEntity recipe);
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> getRecipesFromFavorites(
+  Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites(
       String uId);
 
-  Future<Either<Failure, Stream<List<ProductEntity>>>> searchProductsByName(
+  Future<Either<Failure, List<ProductEntity>>> searchProductsByName(
       String name);
 
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByName(
-      String name);
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByProducts(
+  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByName(String name);
+  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByProducts(
       List<ProductEntity> products);
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByCategories(
+  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByCategories(
       List<CategoryEntity> categories);
 
   Future<Either<Failure, void>> shareRecipe(RecipeEntity recipe);

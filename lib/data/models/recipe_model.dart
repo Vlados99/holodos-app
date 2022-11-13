@@ -4,7 +4,12 @@ import 'package:holodos/data/models/comment_model.dart';
 import 'package:holodos/data/models/product_model.dart';
 import 'package:holodos/data/models/step_model.dart';
 import 'package:holodos/data/models/tag_model.dart';
+import 'package:holodos/domain/entities/category_entity.dart';
+import 'package:holodos/domain/entities/comment_entity.dart';
+import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
+import 'package:holodos/domain/entities/step_entity.dart';
+import 'package:holodos/domain/entities/tag_entity.dart';
 
 class RecipeModel extends RecipeEntity {
   RecipeModel(
@@ -14,7 +19,7 @@ class RecipeModel extends RecipeEntity {
       required cookTime,
       required complexity,
       required serves,
-      required imgUri,
+      required imageLocation,
       required description,
       categories,
       ingredients,
@@ -28,7 +33,7 @@ class RecipeModel extends RecipeEntity {
           cookTime: cookTime,
           complexity: complexity,
           serves: serves,
-          imgUri: imgUri,
+          imageLocation: imageLocation,
           description: description,
           categories: categories,
           ingredients: ingredients,
@@ -76,18 +81,19 @@ class RecipeModel extends RecipeEntity {
       serves: snapshot.data().toString().contains('serves')
           ? snapshot.get('serves')
           : 0,
-      imgUri: snapshot.data().toString().contains('imgUri')
-          ? (snapshot.get("imgUri") as DocumentReference<Map<String, dynamic>>)
+      imageLocation: snapshot.data().toString().contains('imageLocation')
+          ? (snapshot.get("imageLocation")
+                  as DocumentReference<Map<String, dynamic>>)
               .id
           : '',
       description: snapshot.data().toString().contains("description")
           ? snapshot.get("description")
           : '',
-      categories: categories ?? '',
-      ingredients: ingredients ?? '',
-      steps: steps ?? '',
-      comments: comments ?? '',
-      tags: tags ?? '',
+      categories: categories ?? <CategoryEntity>[],
+      ingredients: ingredients ?? <ProductEntity>[],
+      steps: steps ?? <StepEntity>[],
+      comments: comments ?? <CommentEntity>[],
+      tags: tags ?? <TagEntity>[],
     );
   }
 
@@ -99,7 +105,7 @@ class RecipeModel extends RecipeEntity {
       'cookTime': cookTime,
       'complexity': complexity,
       'serves': serves,
-      'imgUri': imgUri,
+      'imageLocation': imageLocation,
       'description': description,
       'categories': categories,
       'ingredients': ingredients,
@@ -118,7 +124,7 @@ class RecipeModel extends RecipeEntity {
       cookTime: json["cookTime"],
       complexity: json["complexity"],
       serves: json["serves"],
-      imgUri: json["imgUri"],
+      imageLocation: json["imageLocation"],
       description: json["description"],
       categories: json["categories"] != null
           ? CategoryModel.fromJson(json['categories'])

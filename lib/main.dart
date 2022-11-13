@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/common/locator_service.dart' as di;
 import 'package:holodos/common/on_generate_route.dart';
+import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
+import 'package:holodos/presentation/bloc/search_recipe/search_recipe_bloc.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
@@ -30,6 +32,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserCubit>(create: (_) => di.sl<UserCubit>()),
         BlocProvider<RecipeCubit>(create: (_) => di.sl<RecipeCubit>()),
         BlocProvider<ProductCubit>(create: (_) => di.sl<ProductCubit>()),
+        BlocProvider<SearchRecipeBloc>(
+            create: (_) => di.sl<SearchRecipeBloc>()),
+        BlocProvider<SearchProductBloc>(
+            create: (_) => di.sl<SearchProductBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

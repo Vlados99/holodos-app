@@ -34,26 +34,19 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   }
 
   Widget _scaffold() {
-    return Scaffold(
-      drawer: SafeArea(
-          child: drawer(PageConst.recipesPage,
-              MediaQuery.of(context).size.width - 80, context)),
-      key: _scaffolGlobalKey,
-      appBar: mainAppBar(title: "Recipes"),
-      body: BlocBuilder<RecipeCubit, RecipeState>(
-        builder: (context, recipeState) {
-          if (recipeState is RecipeLoaded) {
-            return _bodyWidget(recipeState);
-          }
-          if (recipeState is RecipeFailure) {
-            return ErrorPage();
-          }
+    return BlocBuilder<RecipeCubit, RecipeState>(
+      builder: (context, recipeState) {
+        if (recipeState is RecipeLoaded) {
+          return _bodyWidget(recipeState);
+        }
+        if (recipeState is RecipeFailure) {
+          return ErrorPage();
+        }
 
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 
@@ -68,11 +61,20 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   }
 
   Widget _bodyWidget(RecipeLoaded recipeLoadedState) {
-    return Container(
-      alignment: Alignment.topCenter,
-      child: recipeLoadedState.recipes.isEmpty
-          ? _noRecipesWidget()
-          : _recipesList(recipeLoadedState),
+    return Scaffold(
+      drawer: SafeArea(
+          child: AppDrawer(
+              routeName: PageConst.recipesPage,
+              width: MediaQuery.of(context).size.width - 80,
+              context: context)),
+      key: _scaffolGlobalKey,
+      appBar: MainAppBar(title: "Recipes"),
+      body: Container(
+        alignment: Alignment.topCenter,
+        child: recipeLoadedState.recipes.isEmpty
+            ? _noRecipesWidget()
+            : _recipesList(recipeLoadedState),
+      ),
     );
   }
 

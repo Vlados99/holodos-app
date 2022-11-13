@@ -56,11 +56,8 @@ class RecipeCubit extends Cubit<RecipeState> {
       GetRecipesFromFavoritesParams params =
           GetRecipesFromFavoritesParams(uId: userId);
       final recipes = await getRecipesFromFavoritesUseCase(params);
-      recipes.fold(
-          (_) => emit(RecipeFailure()),
-          (value) => value.listen((recipes) {
-                emit(RecipeLoaded(recipes: recipes));
-              }));
+      recipes.fold((_) => emit(RecipeFailure()),
+          (value) => emit(RecipeLoaded(recipes: value)));
     } on SocketException catch (_) {
       emit(RecipeFailure());
     } catch (_) {
@@ -72,11 +69,8 @@ class RecipeCubit extends Cubit<RecipeState> {
     emit(RecipeLoading());
     try {
       final recipes = await getAllRecipesUseCase();
-      recipes.fold(
-          (_) => emit(RecipeFailure()),
-          (value) => value.listen((recipes) {
-                emit(RecipeLoaded(recipes: recipes));
-              }));
+      recipes.fold((_) => emit(RecipeFailure()),
+          (value) => emit(RecipeLoaded(recipes: value)));
     } on SocketException catch (_) {
       emit(RecipeFailure());
     } catch (_) {

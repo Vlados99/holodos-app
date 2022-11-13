@@ -37,106 +37,129 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _scaffold();
+  void initState() {
+    _emailController.clear();
+    _usernameController.clear();
+    _passwordController.clear();
+
+    super.initState();
   }
 
-  Widget _scaffold() {
-    return Scaffold(
-      drawer: SafeArea(
-          child: drawer(PageConst.recipesPage,
-              MediaQuery.of(context).size.width - 80, context)),
-      resizeToAvoidBottomInset: false,
-      appBar: mainAppBar(title: "Sign up"),
-      key: _scaffoldGLobalKey,
-      body: BlocConsumer<UserCubit, UserState>(
-        builder: (context, userState) {
-          if (userState is UserSuccess) {
-            return BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, authState) {
-                return authState is Authenticated
-                    ? RecipesPage()
-                    : _bodyWidget();
-              },
-            );
-          }
-          return _bodyWidget();
-        },
-        listener: (context, userState) {
-          if (userState is UserSuccess) {
-            BlocProvider.of<AuthCubit>(context).loggedIn();
-          }
+  @override
+  Widget build(BuildContext context) {
+    return _consumer();
+  }
 
-          if (userState is UserFailure) {
-            snackBarError(message: "Invalid data", context: context);
-          }
-        },
-      ),
+  Widget _consumer() {
+    return BlocConsumer<UserCubit, UserState>(
+      builder: (context, userState) {
+        if (userState is UserSuccess) {
+          return BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, authState) {
+              return authState is Authenticated ? RecipesPage() : _bodyWidget();
+            },
+          );
+        }
+        return _bodyWidget();
+      },
+      listener: (context, userState) {
+        if (userState is UserSuccess) {
+          BlocProvider.of<AuthCubit>(context).loggedIn();
+        }
+
+        if (userState is UserFailure) {
+          snackBarError(message: userState.errorMessage, context: context);
+        }
+      },
     );
   }
 
   Widget _bodyWidget() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          sb_h50(),
-          const Text(
-            "Registration",
-            style: TextStyles.header,
+    return Scaffold(
+        drawer: SafeArea(
+            child: AppDrawer(
+                routeName: PageConst.recipesPage,
+                width: MediaQuery.of(context).size.width - 80,
+                context: context)),
+        resizeToAvoidBottomInset: false,
+        appBar: MainAppBar(title: "Sign up"),
+        key: _scaffoldGLobalKey,
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              sb_h50(),
+              const Text(
+                "Registration",
+                style: TextStyles.header,
+              ),
+              sb_h50(),
+              SimpleTextField(
+                context: context,
+                controller: _usernameController,
+                labelText: "Enter your username",
+                icon: Icon(
+                  Icons.person,
+                  color: AppColors.dirtyGreen,
+                ),
+              ),
+              sb_h15(),
+              SimpleTextField(
+                context: context,
+                controller: _emailController,
+                labelText: "Enter your email",
+                icon: Icon(
+                  Icons.email,
+                  color: AppColors.dirtyGreen,
+                ),
+              ),
+              sb_h15(),
+              PasswordTextField(
+                context: context,
+                controller: _passwordController,
+                labelText: "Enter your password",
+                icon: Icon(
+                  Icons.lock,
+                  color: AppColors.dirtyGreen,
+                ),
+              ),
+              sb_h50(),
+              GestureDetector(
+                onTap: () => submitCreateAccount(),
+                child: Button(
+                  context: context,
+                  text: "Create account",
+                  backgroundColor: AppColors.button,
+                  fontColor: AppColors.textColorWhite,
+                ),
+              ),
+              sb_h15(),
+              GestureDetector(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context, PageConst.signInPage, ((route) => false)),
+                child: Button(
+                  context: context,
+                  text: "Sign in",
+                  fontColor: AppColors.textColorDirtyGreen,
+                ),
+              ),
+              sb_h15(),
+              GestureDetector(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context, PageConst.recipesPage, ((route) => false)),
+                child: Button(
+                  context: context,
+                  text: "Continue without registation",
+                  fontColor: AppColors.textColorDirtyGreen,
+                ),
+              ),
+            ],
           ),
-          sb_h50(),
-          textField(
-              context: context,
-              controller: _usernameController,
-              hintText: "Enter your username"),
-          sb_h15(),
-          textField(
-              context: context,
-              controller: _emailController,
-              hintText: "Enter your email"),
-          sb_h15(),
-          textField(
-              context: context,
-              controller: _passwordController,
-              hintText: "Enter your password"),
-          sb_h50(),
-          GestureDetector(
-            onTap: () => submitSignIn(),
-            child: button(
-              context: context,
-              text: "Create account",
-              backgroundColor: AppColors.button,
-              fontColor: AppColors.textColorWhite,
-            ),
-          ),
-          sb_h15(),
-          GestureDetector(
-            onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, PageConst.signInPage, ((route) => false)),
-            child: button(
-              context: context,
-              text: "Sign in",
-              fontColor: AppColors.textColorDirtyGreen,
-            ),
-          ),
-          sb_h15(),
-          GestureDetector(
-            onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, PageConst.recipesPage, ((route) => false)),
-            child: button(
-              context: context,
-              text: "Continue without registation",
-              fontColor: AppColors.textColorDirtyGreen,
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
-  submitSignIn() {
+  submitCreateAccount() {
     if (_usernameController.text.isNotEmpty &&
         _emailController.text.isNotEmpty &&
         _passwordController.text.isNotEmpty) {
@@ -147,6 +170,8 @@ class _SignUpPageState extends State<SignUpPage> {
           password: _passwordController.text,
         ),
       );
+    } else {
+      snackBarError(context: context, message: "Enter data in the fields");
     }
   }
 }

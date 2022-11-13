@@ -58,11 +58,8 @@ class ProductCubit extends Cubit<ProductState> {
       GetListOfUsersProductsParams params =
           GetListOfUsersProductsParams(uId: userId);
       final products = await getListOfUsersProductsUseCase(params);
-      products.fold(
-          (_) => emit(ProductFailure()),
-          (value) => value.listen((products) {
-                emit(ProductLoaded(products: products));
-              }));
+      products.fold((_) => emit(ProductFailure()),
+          (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
       emit(ProductFailure());
     } catch (_) {
@@ -74,11 +71,8 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductLoading());
     try {
       final products = await getAllProductsUseCase();
-      products.fold(
-          (_) => emit(ProductFailure()),
-          (value) => value.listen((products) {
-                emit(ProductLoaded(products: products));
-              }));
+      products.fold((_) => emit(ProductFailure()),
+          (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
       emit(ProductFailure());
     } catch (_) {

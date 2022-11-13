@@ -79,14 +79,14 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, Stream<List<ProductEntity>>>> getAllProducts() async {
-    return await _call<Stream<List<ProductEntity>>>(
+  Future<Either<Failure, List<ProductEntity>>> getAllProducts() async {
+    return await _call<List<ProductEntity>>(
         () => remoteDataSource.getAllProducts());
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> getAllRecipes() async {
-    return await _call<Stream<List<RecipeEntity>>>(
+  Future<Either<Failure, List<RecipeEntity>>> getAllRecipes() async {
+    return await _call<List<RecipeEntity>>(
         () => remoteDataSource.getAllRecipes());
   }
 
@@ -96,16 +96,16 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> getRecipesFromFavorites(
+  Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites(
       String uId) async {
-    return await _call<Stream<List<RecipeEntity>>>(
+    return await _call<List<RecipeEntity>>(
         () => remoteDataSource.getRecipesFromFavorites(uId));
   }
 
   @override
-  Future<Either<Failure, Stream<List<ProductEntity>>>> getListOfUsersProducts(
+  Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts(
       String uId) async {
-    return await _call<Stream<List<ProductEntity>>>(
+    return await _call<List<ProductEntity>>(
         () => remoteDataSource.getListOfUsersProducts(uId));
   }
 
@@ -129,23 +129,23 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByCategories(
+  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByCategories(
       List<CategoryEntity> categories) async {
-    return await _call<Stream<List<RecipeEntity>>>(
+    return await _call<List<RecipeEntity>>(
         () => remoteDataSource.searchRecipesByCategories(categories));
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByName(
+  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByName(
       String name) async {
-    return await _call<Stream<List<RecipeEntity>>>(
+    return await _call<List<RecipeEntity>>(
         () => remoteDataSource.searchRecipesByName(name));
   }
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> searchRecipesByProducts(
+  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByProducts(
       List<ProductEntity> products) async {
-    return await _call<Stream<List<RecipeEntity>>>(
+    return await _call<List<RecipeEntity>>(
         () => remoteDataSource.searchRecipesByProducts(products));
   }
 
@@ -177,9 +177,9 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, Stream<List<ProductEntity>>>> searchProductsByName(
+  Future<Either<Failure, List<ProductEntity>>> searchProductsByName(
       String name) async {
-    return await _call<Stream<List<ProductEntity>>>(
+    return await _call<List<ProductEntity>>(
         () => remoteDataSource.searchProductsByName(name));
   }
 

@@ -21,11 +21,11 @@ class ResetPasswordPage extends StatefulWidget {
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   GlobalKey<ScaffoldState> _scaffoldGlobalKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
 
   @override
   void dispose() {
-    _passwordController.dispose();
+    _emailController.dispose();
 
     super.dispose();
   }
@@ -37,7 +37,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   Widget _scaffold() {
     return Scaffold(
-      appBar: simpleAppBar(title: "Reset password"),
+      appBar: MainAppBar(
+        title: "Reset password",
+      ),
       key: _scaffoldGlobalKey,
       body: BlocConsumer<UserCubit, UserState>(
         builder: (context, userState) {
@@ -77,14 +79,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             style: TextStyles.header,
           ),
           sb_h50(),
-          textField(
-              context: context,
-              controller: _passwordController,
-              hintText: "Enter your email"),
+          SimpleTextField(
+            context: context,
+            controller: _emailController,
+            labelText: "Enter your email",
+            icon: const Icon(
+              Icons.lock,
+              color: AppColors.dirtyGreen,
+            ),
+          ),
           sb_h50(),
           GestureDetector(
             onTap: () => submitReset(),
-            child: button(
+            child: Button(
               context: context,
               backgroundColor: AppColors.button,
               fontColor: AppColors.textColorWhite,
@@ -95,7 +102,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           GestureDetector(
             onTap: () => Navigator.pushNamedAndRemoveUntil(
                 context, PageConst.signInPage, ((route) => false)),
-            child: button(
+            child: Button(
               context: context,
               text: "Go back",
               fontColor: AppColors.textColorDirtyGreen,
@@ -107,10 +114,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   submitReset() {
-    if (_passwordController.text.isNotEmpty) {
+    if (_emailController.text.isNotEmpty) {
       BlocProvider.of<UserCubit>(context).resetPassword(
         user: UserEntity(
-          password: _passwordController.text,
+          email: _emailController.text,
         ),
       );
     }

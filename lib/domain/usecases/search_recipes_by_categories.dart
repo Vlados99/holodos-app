@@ -6,14 +6,14 @@ import 'package:holodos/domain/entities/category_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
 
-class SearchRecipesByCategories extends UseCaseWithParams<
-    Stream<List<RecipeEntity>>, SearchRecipesByCategoriesParams> {
+class SearchRecipesByCategories extends UseCaseWithParams<List<RecipeEntity>,
+    SearchRecipesByCategoriesParams> {
   final UserRepository repository;
 
   SearchRecipesByCategories({required this.repository});
 
   @override
-  Future<Either<Failure, Stream<List<RecipeEntity>>>> call(params) async {
+  Future<Either<Failure, List<RecipeEntity>>> call(params) async {
     return await repository.searchRecipesByCategories(params.categories);
   }
 }

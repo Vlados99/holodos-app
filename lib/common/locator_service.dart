@@ -27,6 +27,8 @@ import 'package:holodos/domain/usecases/sign_in.dart';
 import 'package:holodos/domain/usecases/sign_out.dart';
 import 'package:holodos/domain/usecases/sign_up.dart';
 import 'package:holodos/domain/usecases/update_product_from_user_list.dart';
+import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
+import 'package:holodos/presentation/bloc/search_recipe/search_recipe_bloc.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
@@ -36,12 +38,14 @@ final sl = GetIt.instance;
 
 init() {
   // Bloc / Cubit
-  /*
-  sl.registerFactory(() => RecipeListCubit(getAllRecipes: sl()));
-  sl.registerFactory(() => RecipeSearchBloc(
+
+  sl.registerFactory(() => SearchRecipeBloc(
       searchRecipesByCategories: sl(),
       searchRecipesByProducts: sl(),
-      searchRecipesByName: sl()));*/
+      searchRecipesByName: sl()));
+  sl.registerFactory(
+      () => SearchProductBloc(searchProductsByName: sl()));
+
   sl.registerFactory(() => AuthCubit(
         isSignIn: sl(),
         signOut: sl(),

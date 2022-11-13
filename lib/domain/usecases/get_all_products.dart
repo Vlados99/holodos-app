@@ -11,7 +11,7 @@ class GetAllProducts extends UseCase<void> {
   GetAllProducts({required this.repository});
 
   @override
-  Future<Either<Failure, Stream<List<ProductEntity>>>> call() async {
+  Future<Either<Failure, List<ProductEntity>>> call() async {
     return await repository.getAllProducts();
   }
 }

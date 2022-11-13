@@ -24,6 +24,7 @@ class AppColors {
 
   static const Color orange = Color(0xFFF2822C);
   static const Color black = Colors.black;
+  static const Color dirtyGreen = Color(0xFF267B6B);
 }
 
 class TextStyles {

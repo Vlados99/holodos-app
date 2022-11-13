@@ -36,15 +36,40 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _scaffold();
+    return _consumer();
   }
 
+  Widget _consumer() {
+    return BlocConsumer<UserCubit, UserState>(
+      builder: (context, userState) {
+        if (userState is UserSuccess) {
+          return BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, authState) {
+              return authState is Authenticated ? RecipesPage() : _bodyWidget();
+            },
+          );
+        }
+        return _bodyWidget();
+      },
+      listener: (context, userState) {
+        if (userState is UserSuccess) {
+          BlocProvider.of<AuthCubit>(context).loggedIn();
+        }
+
+        if (userState is UserFailure) {
+          snackBarError(context: context, message: userState.errorMessage);
+        }
+      },
+    );
+  }
+/*
   Widget _scaffold() {
     return Scaffold(
       drawer: SafeArea(
           child: drawer(PageConst.recipesPage,
               MediaQuery.of(context).size.width - 80, context)),
-      appBar: mainAppBar(title: "Sign in"),
+      resizeToAvoidBottomInset: false,
+      appBar: MainAppBar(title: "Sign in"),
       key: _scaffoldGlobalKey,
       body: BlocConsumer<UserCubit, UserState>(
         builder: (context, userState) {
@@ -65,94 +90,112 @@ class _SignInPageState extends State<SignInPage> {
           }
 
           if (userState is UserFailure) {
-            snackBarError(
-                context: context, message: "Invalid email or password");
+            snackBarError(context: context, message: userState.errorMessage);
           }
         },
       ),
     );
-  }
+  }*/
 
   Widget _bodyWidget() {
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          sb_h50(),
-          const Text(
-            "Welcome to Holodos",
-            style: TextStyles.header,
-          ),
-          sb_h50(),
-          textField(
-              context: context,
-              controller: _emailController,
-              hintText: "Enter your email"),
-          sb_h15(),
-          textField(
-              context: context,
-              controller: _passwordController,
-              hintText: "Enter your password"),
-          sb_h50(),
-          GestureDetector(
-            onTap: () => submitSignIn(),
-            child: button(
-              context: context,
-              backgroundColor: AppColors.button,
-              fontColor: AppColors.textColorWhite,
-              text: "Login",
-            ),
-          ),
-          sb_h15(),
-          GestureDetector(
-            onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, PageConst.resetPasswordPage, ((route) => false)),
-            child: button(
-              context: context,
-              text: "Forgot password?",
-              fontColor: AppColors.textColorDirtyGreen,
-            ),
-          ),
-          sb_h15(),
-          GestureDetector(
-            onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, PageConst.recipesPage, ((route) => false)),
-            child: button(
-              context: context,
-              text: "Continue without login",
-              fontColor: AppColors.textColorDirtyGreen,
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 0.0,
-                children: [
-                  const Text(
-                    "New Holodos?",
-                    style: TextStyles.text16black,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.pushNamedAndRemoveUntil(
-                        context, PageConst.signUpPage, ((route) => false)),
-                    child: button(
-                      width: 75,
-                      context: context,
-                      text: "Sign up",
-                      fontColor: AppColors.textColorDirtyGreen,
-                    ),
-                  ),
-                ],
+    return Scaffold(
+        drawer: SafeArea(
+            child: AppDrawer(
+                routeName: PageConst.recipesPage,
+                width: MediaQuery.of(context).size.width - 80,
+                context: context)),
+        resizeToAvoidBottomInset: false,
+        appBar: MainAppBar(title: "Sign in"),
+        key: _scaffoldGlobalKey,
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              sb_h50(),
+              const Text(
+                "Welcome to Holodos",
+                style: TextStyles.header,
               ),
-            ),
+              sb_h50(),
+              SimpleTextField(
+                context: context,
+                controller: _emailController,
+                labelText: "Enter your email",
+                icon: const Icon(
+                  Icons.email,
+                  color: AppColors.dirtyGreen,
+                ),
+              ),
+              sb_h15(),
+              PasswordTextField(
+                context: context,
+                controller: _passwordController,
+                labelText: "Enter your password",
+                icon: const Icon(
+                  Icons.lock,
+                  color: AppColors.dirtyGreen,
+                ),
+              ),
+              sb_h50(),
+              GestureDetector(
+                onTap: () => submitSignIn(),
+                child: Button(
+                  context: context,
+                  backgroundColor: AppColors.button,
+                  fontColor: AppColors.textColorWhite,
+                  text: "Login",
+                ),
+              ),
+              sb_h15(),
+              GestureDetector(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context, PageConst.resetPasswordPage, ((route) => false)),
+                child: Button(
+                  context: context,
+                  text: "Forgot password?",
+                  fontColor: AppColors.textColorDirtyGreen,
+                ),
+              ),
+              sb_h15(),
+              GestureDetector(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context, PageConst.recipesPage, ((route) => false)),
+                child: Button(
+                  context: context,
+                  text: "Continue without login",
+                  fontColor: AppColors.textColorDirtyGreen,
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 0.0,
+                    children: [
+                      const Text(
+                        "New Holodos?",
+                        style: TextStyles.text16black,
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamedAndRemoveUntil(
+                            context, PageConst.signUpPage, ((route) => false)),
+                        child: Button(
+                          width: 75,
+                          context: context,
+                          text: "Sign up",
+                          fontColor: AppColors.textColorDirtyGreen,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              sb_h15(),
+            ],
           ),
-          sb_h15(),
-        ],
-      ),
-    );
+        ));
   }
 
   submitSignIn() {
@@ -164,6 +207,8 @@ class _SignInPageState extends State<SignInPage> {
           password: _passwordController.text,
         ),
       );
+    } else {
+      snackBarError(context: context, message: "Enter data in the fields");
     }
   }
 }

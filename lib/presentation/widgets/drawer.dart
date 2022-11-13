@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
 
-Drawer drawer(String routeName, double width, BuildContext context) => Drawer(
+class AppDrawer extends StatelessWidget {
+  String routeName;
+  double width;
+  BuildContext context;
+
+  AppDrawer({
+    Key? key,
+    required this.routeName,
+    required this.width,
+    required this.context,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
       backgroundColor: AppColors.mainBackground,
       width: width,
       child: Column(
@@ -78,45 +93,47 @@ Drawer drawer(String routeName, double width, BuildContext context) => Drawer(
         ],
       ),
     );
+  }
 
-Widget drawerHeader({
-  required String text,
-  Color? backgroundColor,
-}) {
-  return Container(
-    alignment: Alignment.topCenter,
-    color: backgroundColor ?? AppColors.appBar,
-    child: DrawerHeader(
-      child: Text(
-        text,
-        style: TextStyles.header,
+  Widget drawerHeader({
+    required String text,
+    Color? backgroundColor,
+  }) {
+    return Container(
+      alignment: Alignment.topCenter,
+      color: backgroundColor ?? AppColors.appBar,
+      child: DrawerHeader(
+        child: Text(
+          text,
+          style: TextStyles.header,
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget drawerListElement({
-  Color? backgroundColor,
-  required IconData icon,
-  required String text,
-  Alignment? alignment,
-}) {
-  return Align(
-    alignment: alignment ?? Alignment.topLeft,
-    child: Container(
-      height: 60,
-      color: backgroundColor ?? AppColors.mainBackground,
-      child: Row(
-        children: [
-          sb_w15(),
-          Icon(icon),
-          sb_w15(),
-          Text(
-            text,
-            style: TextStyles.text16black,
-          ),
-        ],
+  Widget drawerListElement({
+    Color? backgroundColor,
+    required IconData icon,
+    required String text,
+    Alignment? alignment,
+  }) {
+    return Align(
+      alignment: alignment ?? Alignment.topLeft,
+      child: Container(
+        height: 60,
+        color: backgroundColor ?? AppColors.mainBackground,
+        child: Row(
+          children: [
+            sb_w15(),
+            Icon(icon),
+            sb_w15(),
+            Text(
+              text,
+              style: TextStyles.text16black,
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
