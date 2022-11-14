@@ -21,56 +21,42 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
       {required this.searchRecipesByCategories,
       required this.searchRecipesByProducts,
       required this.searchRecipesByName})
-      : super(RecipeEmpty());
+      : super(RecipeEmpty()) {
+    on<SearchRecipesByNameBloc>((event, emit) async {
+      emit(SearchRecipeLoading());
 
-  Stream<SearchRecipeState> mapEventToState(SearchRecipeEvent event) async* {
-    if (event is SearchRecipesByNameBloc) {
-      yield* _mapFetchRecipesByNameToState(event.name);
-    }
-    if (event is SearchRecipesByProductsBloc) {
-      yield* _mapFetchRecipesByProductsToState(event.products);
-    }
-    if (event is SearchRecipesByCategoriesBloc) {
-      yield* _mapFetchRecipesByCategoriesToState(event.categories);
-    }
-  }
+      final failureOrRecipe = await searchRecipesByName(
+          SearchRecipesByNameParams(name: event.name));
 
-  Stream<SearchRecipeState> _mapFetchRecipesByNameToState(String name) async* {
-    yield SearchRecipeLoading();
+      failureOrRecipe.fold(
+          (_failure) => emit(
+              SearchRecipeFailure(message: _mapFailureToMessage(_failure))),
+          (_recipes) => emit(SearchRecipeLoaded(recipes: _recipes)));
+    });
 
-    final failureOrRecipe =
-        await searchRecipesByName(SearchRecipesByNameParams(name: name));
+    on<SearchRecipesByCategoriesBloc>((event, emit) async {
+      emit(SearchRecipeLoading());
 
-    yield failureOrRecipe.fold(
-        (_failure) =>
-            SearchRecipeError(message: _mapFailureToMessage(_failure)),
-        (_recipes) => SearchRecipeLoaded(recipes: _recipes));
-  }
+      final failureOrRecipe = await searchRecipesByCategories(
+          SearchRecipesByCategoriesParams(categories: event.categories));
 
-  Stream<SearchRecipeState> _mapFetchRecipesByProductsToState(
-      List<ProductEntity> products) async* {
-    yield SearchRecipeLoading();
+      failureOrRecipe.fold(
+          (_failure) => emit(
+              SearchRecipeFailure(message: _mapFailureToMessage(_failure))),
+          (_recipes) => emit(SearchRecipeLoaded(recipes: _recipes)));
+    });
 
-    final failureOrRecipe = await searchRecipesByProducts(
-        SearchRecipesByProductsParams(products: products));
+    on<SearchRecipesByProductsBloc>((event, emit) async {
+      emit(SearchRecipeLoading());
 
-    yield failureOrRecipe.fold(
-        (_failure) =>
-            SearchRecipeError(message: _mapFailureToMessage(_failure)),
-        (_recipes) => SearchRecipeLoaded(recipes: _recipes));
-  }
+      final failureOrRecipe = await searchRecipesByProducts(
+          SearchRecipesByProductsParams(products: event.products));
 
-  Stream<SearchRecipeState> _mapFetchRecipesByCategoriesToState(
-      List<CategoryEntity> categories) async* {
-    yield SearchRecipeLoading();
-
-    final failureOrRecipe = await searchRecipesByCategories(
-        SearchRecipesByCategoriesParams(categories: categories));
-
-    yield failureOrRecipe.fold(
-        (_failure) =>
-            SearchRecipeError(message: _mapFailureToMessage(_failure)),
-        (_recipes) => SearchRecipeLoaded(recipes: _recipes));
+      failureOrRecipe.fold(
+          (_failure) => emit(
+              SearchRecipeFailure(message: _mapFailureToMessage(_failure))),
+          (_recipes) => emit(SearchRecipeLoaded(recipes: _recipes)));
+    });
   }
 
   String _mapFailureToMessage(Failure failure) {

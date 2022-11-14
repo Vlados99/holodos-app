@@ -20,10 +20,10 @@ class SearchRecipeLoaded extends SearchRecipeState {
   List<Object?> get props => [recipes];
 }
 
-class SearchRecipeError extends SearchRecipeState {
+class SearchRecipeFailure extends SearchRecipeState {
   final String message;
 
-  SearchRecipeError({required this.message});
+  SearchRecipeFailure({required this.message});
 
   @override
   List<Object?> get props => [message];

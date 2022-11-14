@@ -92,29 +92,8 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget _products(ProductLoaded productLoadedState) {
     return Column(
       children: [
-        // search(),
         ProductList(),
       ],
     );
   }
-/*
-  Widget search() {
-    return GestureDetector(
-      onTap: () {
-        showSearch(context: context, delegate: CustomSearchDelegate());
-        snackBarSuccess(context: context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-        width: MediaQuery.of(context).size.width,
-        height: 80,
-        child: SearchTextField(
-          width: MediaQuery.of(context).size.width - 80,
-          context: context,
-          controller: _productSearchController,
-          labelText: "Enter product name",
-        ),
-      ),
-    );
-  }*/
 }

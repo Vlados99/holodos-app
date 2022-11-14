@@ -1,13 +1,12 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
-import 'package:holodos/common/storage.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/app_bar.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
-import 'package:holodos/presentation/widgets/recipe_item.dart';
+import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
+import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart';
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({
@@ -62,63 +61,30 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
 
   Widget _bodyWidget(RecipeLoaded recipeLoadedState) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: SafeArea(
           child: AppDrawer(
               routeName: PageConst.recipesPage,
               width: MediaQuery.of(context).size.width - 80,
               context: context)),
       key: _scaffolGlobalKey,
-      appBar: MainAppBar(title: "Recipes"),
+      appBar: MainAppBar(
+        title: "Recipes",
+        search: true,
+        delegate: RecipeSearchDelegate(),
+      ),
       body: Container(
         alignment: Alignment.topCenter,
         child: recipeLoadedState.recipes.isEmpty
             ? _noRecipesWidget()
-            : _recipesList(recipeLoadedState),
+            : _recipes(recipeLoadedState),
       ),
     );
   }
 
-  Widget _recipesList(RecipeLoaded recipeLoadedState) {
+  Widget _recipes(RecipeLoaded recipeLoadedState) {
     return Container(
-      child: ListView.builder(
-        itemCount: recipeLoadedState.recipes.length,
-        itemBuilder: (_, index) {
-          return RecipeItem(
-              context: context, state: recipeLoadedState, index: index);
-          /* ADD THIS FUNCTIONAL TO FAVORITES RECIPES FOR USER
-            onLongPress: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("Remove recipe"),
-                    content:
-                        const Text("Do you really want to remove this recipe?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          /* BlocProvider.of<RecipeCubit>(context)
-                              .removeRecipeFromFavorites();
-                              
-                              REMOVE RECIPE FROM FAVORITES
-                              */
-                          Navigator.pop(context);
-                        },
-                        child: const Text("Remove"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("No"),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },*/
-        },
-      ),
+      child: RecipeList(),
     );
   }
 }

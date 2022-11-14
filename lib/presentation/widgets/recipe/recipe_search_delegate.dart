@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
-import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
+import 'package:holodos/presentation/bloc/search_recipe/search_recipe_bloc.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
-import 'package:holodos/presentation/widgets/product/product_list.dart';
+import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
 
-class ProductSearchDelegate extends SearchDelegate {
-  ProductSearchDelegate() : super(searchFieldLabel: 'Enter product name');
+class RecipeSearchDelegate extends SearchDelegate {
+  RecipeSearchDelegate() : super(searchFieldLabel: 'Enter recipe name');
 
   final _suggestions = [
-    "Salt",
-    "Olive oil",
-    "Flour",
-    "Onion",
-    "Egg",
+    "Onion rings",
   ];
 
   @override
@@ -60,17 +56,17 @@ class ProductSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    BlocProvider.of<SearchProductBloc>(context, listen: false)
-      ..add(SearchProductsByNameBloc(query));
-    return BlocBuilder<SearchProductBloc, SearchProductState>(
+    BlocProvider.of<SearchRecipeBloc>(context, listen: false)
+      ..add(SearchRecipesByNameBloc(query));
+    return BlocBuilder<SearchRecipeBloc, SearchRecipeState>(
         builder: (context, state) {
-      if (state is SearchProductLoaded) {
-        final product = state.products;
+      if (state is SearchRecipeLoaded) {
+        final recipe = state.recipes;
         return Container(
-            child: ProductList(
-          products: product,
+            child: RecipeList(
+          recipes: recipe,
         ));
-      } else if (state is SearchProductFailure) {
+      } else if (state is SearchRecipeFailure) {
         return ErrorPage();
       }
 

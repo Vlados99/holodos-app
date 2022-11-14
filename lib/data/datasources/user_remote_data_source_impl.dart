@@ -388,9 +388,19 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<List<RecipeEntity>> searchRecipesByName(String name) {
-    // TODO: implement searchRecipeByName
-    throw UnimplementedError();
+  Future<List<RecipeEntity>> searchRecipesByName(String name) async {
+    const fieldName = "name";
+    final productsCollectionRef = firestore
+        .collection("recipes")
+        .orderBy(fieldName)
+        .where(fieldName, isGreaterThanOrEqualTo: name)
+        .where(fieldName, isLessThan: '${name}z');
+
+    QuerySnapshot querySnapshot = await productsCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => RecipeModel.fromSnapshot(doc))
+        .toList();
   }
 
   @override
