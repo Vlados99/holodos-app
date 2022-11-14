@@ -65,10 +65,10 @@ class ProductSearchDelegate extends SearchDelegate {
     return BlocBuilder<SearchProductBloc, SearchProductState>(
         builder: (context, state) {
       if (state is SearchProductLoaded) {
-        final product = state.products;
+        final products = state.products;
         return Container(
             child: ProductList(
-          products: product,
+          products: products,
         ));
       } else if (state is SearchProductFailure) {
         return ErrorPage();

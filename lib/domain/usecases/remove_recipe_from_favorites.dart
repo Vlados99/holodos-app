@@ -14,17 +14,15 @@ class RemoveRecipeFromFavorites
   @override
   Future<Either<Failure, void>> call(
       RemoveRecipeFromFavoritesParams params) async {
-    return await repository.removeRecipeFromFavorites(
-        params.uId, params.recipe);
+    return await repository.removeRecipeFromFavorites(params.recipe);
   }
 }
 
 class RemoveRecipeFromFavoritesParams extends Equatable {
-  final String uId;
   final RecipeEntity recipe;
 
-  RemoveRecipeFromFavoritesParams({required this.uId, required this.recipe});
+  RemoveRecipeFromFavoritesParams({required this.recipe});
 
   @override
-  List<Object?> get props => [uId, recipe];
+  List<Object?> get props => [recipe];
 }

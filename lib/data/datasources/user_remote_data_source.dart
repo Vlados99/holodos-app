@@ -15,14 +15,14 @@ abstract class UserRemoteDataSource {
 
   Future<List<ProductEntity>> getAllProducts();
   Future<void> addProductToUserList(ProductEntity product);
-  Future<void> updateProductFromUserList(String uId, ProductEntity product);
-  Future<void> removeProductFromUserList(String uId, ProductEntity product);
-  Future<List<ProductEntity>> getListOfUsersProducts(String uId);
+  Future<void> updateProductFromUserList(ProductEntity product);
+  Future<void> removeProductFromUserList(ProductEntity product);
+  Future<List<ProductEntity>> getListOfUsersProducts();
 
   Future<List<RecipeEntity>> getAllRecipes();
-  Future<void> addRecipeToFavorites(String uId, RecipeEntity recipe);
-  Future<void> removeRecipeFromFavorites(String uId, RecipeEntity recipe);
-  Future<List<RecipeEntity>> getRecipesFromFavorites(String uId);
+  Future<void> addRecipeToFavorites(RecipeEntity recipe);
+  Future<void> removeRecipeFromFavorites(RecipeEntity recipe);
+  Future<List<RecipeEntity>> getRecipesFromFavorites();
 
   Future<List<ProductEntity>> searchProductsByName(String name);
 

@@ -13,18 +13,15 @@ class UpdateProductFromUserList
 
   @override
   Future<Either<Failure, void>> call(params) async {
-    return await repository.updateProductFromUserList(
-        params.uId, params.product);
+    return await repository.updateProductFromUserList(params.product);
   }
 }
 
 class UpdateProductFromUserListParams extends Equatable {
-  final String uId;
   final ProductEntity product;
 
-  UpdateProductFromUserListParams({required this.uId, required this.product});
+  UpdateProductFromUserListParams({required this.product});
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [uId, product];
+  List<Object?> get props => [product];
 }

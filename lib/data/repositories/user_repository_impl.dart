@@ -52,9 +52,9 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, void>> addRecipeToFavorites(
-      String uId, RecipeEntity recipe) async {
+      RecipeEntity recipe) async {
     return await _call<void>(
-        () => remoteDataSource.addRecipeToFavorites(uId, recipe));
+        () => remoteDataSource.addRecipeToFavorites(recipe));
   }
 
   /*
@@ -96,17 +96,15 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites(
-      String uId) async {
+  Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites() async {
     return await _call<List<RecipeEntity>>(
-        () => remoteDataSource.getRecipesFromFavorites(uId));
+        () => remoteDataSource.getRecipesFromFavorites());
   }
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts(
-      String uId) async {
+  Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts() async {
     return await _call<List<ProductEntity>>(
-        () => remoteDataSource.getListOfUsersProducts(uId));
+        () => remoteDataSource.getListOfUsersProducts());
   }
 
   @override
@@ -116,16 +114,16 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, void>> removeProductFromUserList(
-      String uId, ProductEntity product) async {
+      ProductEntity product) async {
     return await _call<void>(
-        () => remoteDataSource.removeProductFromUserList(uId, product));
+        () => remoteDataSource.removeProductFromUserList(product));
   }
 
   @override
   Future<Either<Failure, void>> removeRecipeFromFavorites(
-      String uId, RecipeEntity recipe) async {
+      RecipeEntity recipe) async {
     return await _call<void>(
-        () => remoteDataSource.removeRecipeFromFavorites(uId, recipe));
+        () => remoteDataSource.removeRecipeFromFavorites(recipe));
   }
 
   @override
@@ -171,9 +169,9 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, void>> updateProductFromUserList(
-      String uId, ProductEntity product) async {
+      ProductEntity product) async {
     return await _call<void>(
-        () => remoteDataSource.updateProductFromUserList(uId, product));
+        () => remoteDataSource.updateProductFromUserList(product));
   }
 
   @override

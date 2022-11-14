@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 routeName: PageConst.recipesPage,
                 width: MediaQuery.of(context).size.width - 80,
                 context: context)),
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: MainAppBar(title: "Sign up"),
         key: _scaffoldGLobalKey,
         body: Container(
@@ -96,7 +96,6 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               sb_h50(),
               SimpleTextField(
-                context: context,
                 controller: _usernameController,
                 labelText: "Enter your username",
                 icon: Icon(
@@ -106,7 +105,6 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               sb_h15(),
               SimpleTextField(
-                context: context,
                 controller: _emailController,
                 labelText: "Enter your email",
                 icon: Icon(

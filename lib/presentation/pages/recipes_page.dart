@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/app_bar.dart';
@@ -9,7 +10,7 @@ import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart';
 
 class RecipesPage extends StatefulWidget {
-  const RecipesPage({
+  RecipesPage({
     Key? key,
   }) : super(key: key);
 
@@ -29,14 +30,14 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return _scaffold();
+    return _builder();
   }
 
-  Widget _scaffold() {
+  Widget _builder() {
     return BlocBuilder<RecipeCubit, RecipeState>(
       builder: (context, recipeState) {
         if (recipeState is RecipeLoaded) {
-          return _bodyWidget(recipeState);
+          return _bodyWidget(recipeState.recipes);
         }
         if (recipeState is RecipeFailure) {
           return ErrorPage();
@@ -59,9 +60,9 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
     );
   }
 
-  Widget _bodyWidget(RecipeLoaded recipeLoadedState) {
+  Widget _bodyWidget(List<RecipeEntity> recipes) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
               routeName: PageConst.recipesPage,
@@ -75,14 +76,12 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
       ),
       body: Container(
         alignment: Alignment.topCenter,
-        child: recipeLoadedState.recipes.isEmpty
-            ? _noRecipesWidget()
-            : _recipes(recipeLoadedState),
+        child: recipes.isEmpty ? _noRecipesWidget() : _recipes(),
       ),
     );
   }
 
-  Widget _recipes(RecipeLoaded recipeLoadedState) {
+  Widget _recipes() {
     return Container(
       child: RecipeList(),
     );

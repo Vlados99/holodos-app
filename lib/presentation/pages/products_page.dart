@@ -9,7 +9,7 @@ import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/product/product_list.dart';
 
 class ProductsPage extends StatefulWidget {
-  const ProductsPage({Key? key}) : super(key: key);
+  ProductsPage({Key? key}) : super(key: key);
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -36,10 +36,10 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _scaffold();
+    return _builder();
   }
 
-  Widget _scaffold() {
+  Widget _builder() {
     return BlocBuilder<ProductCubit, ProductState>(
       builder: (context, productState) {
         if (productState is ProductLoaded) {
@@ -68,7 +68,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Widget _bodyWidget(ProductLoaded productLoadedState) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
               routeName: PageConst.productsPage,

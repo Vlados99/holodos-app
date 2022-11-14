@@ -13,16 +13,15 @@ class AddRecipeToFavorites
 
   @override
   Future<Either<Failure, void>> call(AddRecipeToFavoritesParams params) async {
-    return await repository.addRecipeToFavorites(params.uId, params.recipe);
+    return await repository.addRecipeToFavorites(params.recipe);
   }
 }
 
 class AddRecipeToFavoritesParams extends Equatable {
-  final String uId;
   final RecipeEntity recipe;
 
-  AddRecipeToFavoritesParams({required this.uId, required this.recipe});
+  AddRecipeToFavoritesParams({required this.recipe});
 
   @override
-  List<Object?> get props => [uId, recipe];
+  List<Object?> get props => [recipe];
 }

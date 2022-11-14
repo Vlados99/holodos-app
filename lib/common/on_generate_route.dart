@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
+import 'package:holodos/presentation/pages/available_products_page.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
+import 'package:holodos/presentation/pages/favorite_recipes_page.dart';
 import 'package:holodos/presentation/pages/products_page.dart';
 import 'package:holodos/presentation/pages/recipe_detail_page.dart';
 import 'package:holodos/presentation/pages/recipes_page.dart';
@@ -36,6 +38,12 @@ class OnGenerateRoute {
 
       case PageConst.recipesPage:
         return materialBuilder(widget: RecipesPage());
+
+      case PageConst.favoriteRecipesPage:
+        return materialBuilder(widget: FavoriteRecipesPage());
+
+      case PageConst.availableProductsPage:
+        return materialBuilder(widget: AvailableProductsPage());
 
       default:
         return materialBuilder(widget: ErrorPage());

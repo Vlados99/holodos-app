@@ -1,40 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/domain/entities/product_entity.dart';
 
-class ProductItem extends StatelessWidget {
-  String name;
+class ProductItem extends StatefulWidget {
+  final ProductEntity product;
 
   ProductItem({
     Key? key,
-    required this.name,
+    required this.product,
   }) : super(key: key);
 
   @override
+  State<ProductItem> createState() => _ProductItemState();
+}
+
+class _ProductItemState extends State<ProductItem> {
+  @override
   Widget build(BuildContext context) {
-    return productItem(name: name);
+    return productItem(name: widget.product.name, unit: widget.product.unit);
   }
 
-  Widget productItem({required String name}) {
+  Widget productItem({String? unit, required String name}) {
     return Container(
-      padding: EdgeInsets.only(bottom: 8, left: 10),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            AppColors.button,
-            AppColors.mainBackground,
-          ],
-          stops: [
-            0.1,
-            0.7,
-          ],
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(bottom: 8, left: 10),
+      decoration: const BoxDecoration(color: AppColors.orange),
+      child: txt(name: name, unit: unit),
+    );
+  }
+
+  Widget txt({required String name, String? unit}) {
+    return Row(
+      children: [
+        Text(
+          name,
+          style: TextStyles.text32black,
         ),
-      ),
-      child: Text(
-        "${name}",
-        style: TextStyles.text32black,
-      ),
+        unit != ""
+            ? Text(
+                " - $unit",
+                style: TextStyles.text32black,
+              )
+            : Container(),
+      ],
     );
   }
 }

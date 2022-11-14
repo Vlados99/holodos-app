@@ -13,17 +13,15 @@ class RemoveProductFromUserList
 
   @override
   Future<Either<Failure, void>> call(params) async {
-    return await repository.removeProductFromUserList(
-        params.uId, params.product);
+    return await repository.removeProductFromUserList(params.product);
   }
 }
 
 class RemoveProductFromUserListParams extends Equatable {
-  final String uId;
   final ProductEntity product;
 
-  RemoveProductFromUserListParams({required this.uId, required this.product});
+  RemoveProductFromUserListParams({required this.product});
 
   @override
-  List<Object?> get props => [uId, product];
+  List<Object?> get props => [product];
 }

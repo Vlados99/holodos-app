@@ -58,6 +58,37 @@ class AppDrawer extends StatelessWidget {
               text: "Products",
             ),
           ),
+          GestureDetector(
+            onTap: () {
+              if (routeName != PageConst.favoriteRecipesPage) {
+                BlocProvider.of<RecipeCubit>(context)
+                    .getRecipesFromFavoritesUseCase();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, PageConst.favoriteRecipesPage, (route) => false);
+              } else {
+                Navigator.pop(context);
+              }
+            },
+            child: drawerListElement(
+              icon: Icons.star,
+              text: "Favorite recipes",
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              if (routeName != PageConst.availableProductsPage) {
+                BlocProvider.of<ProductCubit>(context).getProductsFromList();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, PageConst.availableProductsPage, (route) => false);
+              } else {
+                Navigator.pop(context);
+              }
+            },
+            child: drawerListElement(
+              icon: Icons.favorite_border,
+              text: "My products",
+            ),
+          ),
           Expanded(
               child: GestureDetector(
             onTap: () => BlocProvider.of<AuthCubit>(context).loggedOut(),
@@ -67,29 +98,6 @@ class AppDrawer extends StatelessWidget {
               alignment: Alignment.bottomCenter,
             ),
           )),
-          /*
-          Expanded(
-            child: BlocProvider.of<AuthCubit>(context).isSignedIn
-                ? GestureDetector(
-                    onTap: () =>
-                        BlocProvider.of<AuthCubit>(context).loggedOut(),
-                    child: drawerListElement(
-                      icon: Icons.logout,
-                      text: "Sign out",
-                      alignment: Alignment.bottomCenter,
-                    ),
-                  )
-                : GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, PageConst.signInPage);
-                    },
-                    child: drawerListElement(
-                      icon: Icons.login,
-                      text: "Sign in",
-                      alignment: Alignment.bottomCenter,
-                    ),
-                  ),
-          ),*/
         ],
       ),
     );

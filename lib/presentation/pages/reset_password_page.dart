@@ -40,6 +40,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       appBar: MainAppBar(
         title: "Reset password",
       ),
+      resizeToAvoidBottomInset: true,
       key: _scaffoldGlobalKey,
       body: BlocConsumer<UserCubit, UserState>(
         builder: (context, userState) {
@@ -80,7 +81,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
           sb_h50(),
           SimpleTextField(
-            context: context,
             controller: _emailController,
             labelText: "Enter your email",
             icon: const Icon(

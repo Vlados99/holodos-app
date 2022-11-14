@@ -39,12 +39,16 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  Future<void> removeProductFromList(
-      {required ProductEntity product, required String userId}) async {
+  Future<void> removeProductFromList({required ProductEntity product}) async {
+    emit(ProductLoading());
     try {
       RemoveProductFromUserListParams params =
-          RemoveProductFromUserListParams(uId: userId, product: product);
+          RemoveProductFromUserListParams(product: product);
       await removeProductFromUserListUseCase(params);
+
+      final products = await getListOfUsersProductsUseCase();
+      products.fold((_) => emit(ProductFailure()),
+          (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
       emit(ProductFailure());
     } catch (_) {
@@ -52,12 +56,10 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  Future<void> getProductsFromList({required String userId}) async {
+  Future<void> getProductsFromList() async {
     emit(ProductLoading());
     try {
-      GetListOfUsersProductsParams params =
-          GetListOfUsersProductsParams(uId: userId);
-      final products = await getListOfUsersProductsUseCase(params);
+      final products = await getListOfUsersProductsUseCase();
       products.fold((_) => emit(ProductFailure()),
           (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
@@ -71,6 +73,24 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductLoading());
     try {
       final products = await getAllProductsUseCase();
+      products.fold((_) => emit(ProductFailure()),
+          (value) => emit(ProductLoaded(products: value)));
+    } on SocketException catch (_) {
+      emit(ProductFailure());
+    } catch (_) {
+      emit(ProductFailure());
+    }
+  }
+
+  Future<void> updateProductFromUserList(
+      {required ProductEntity product}) async {
+    emit(ProductLoading());
+    try {
+      UpdateProductFromUserListParams params =
+          UpdateProductFromUserListParams(product: product);
+      await updateProductFromUserListUseCase(params);
+
+      final products = await getListOfUsersProductsUseCase();
       products.fold((_) => emit(ProductFailure()),
           (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {

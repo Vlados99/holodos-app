@@ -19,19 +19,15 @@ abstract class UserRepository {
   Future<Either<Failure, List<ProductEntity>>> getAllProducts();
   Future<Either<Failure, void>> addProductToUserList(ProductEntity product);
   Future<Either<Failure, void>> updateProductFromUserList(
-      String uId, ProductEntity product);
+      ProductEntity product);
   Future<Either<Failure, void>> removeProductFromUserList(
-      String uId, ProductEntity product);
-  Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts(
-      String uId);
+      ProductEntity product);
+  Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts();
 
   Future<Either<Failure, List<RecipeEntity>>> getAllRecipes();
-  Future<Either<Failure, void>> addRecipeToFavorites(
-      String uId, RecipeEntity recipe);
-  Future<Either<Failure, void>> removeRecipeFromFavorites(
-      String uId, RecipeEntity recipe);
-  Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites(
-      String uId);
+  Future<Either<Failure, void>> addRecipeToFavorites(RecipeEntity recipe);
+  Future<Either<Failure, void>> removeRecipeFromFavorites(RecipeEntity recipe);
+  Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites();
 
   Future<Either<Failure, List<ProductEntity>>> searchProductsByName(
       String name);

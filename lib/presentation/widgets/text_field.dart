@@ -3,9 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'package:holodos/common/app_const.dart';
 
-class SimpleTextField extends StatelessWidget {
+class SimpleTextField extends StatefulWidget {
   double? width;
-  BuildContext context;
   TextEditingController controller;
   String? labelText;
   List<TextInputFormatter>? formatters;
@@ -14,7 +13,6 @@ class SimpleTextField extends StatelessWidget {
   SimpleTextField({
     Key? key,
     this.width,
-    required this.context,
     required this.controller,
     this.labelText,
     this.formatters,
@@ -22,18 +20,23 @@ class SimpleTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SimpleTextField> createState() => _SimpleTextFieldState();
+}
+
+class _SimpleTextFieldState extends State<SimpleTextField> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? MediaQuery.of(context).size.width - 30,
+      width: widget.width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
-        inputFormatters:
-            formatters ?? [FilteringTextInputFormatter.singleLineFormatter],
+        inputFormatters: widget.formatters ??
+            [FilteringTextInputFormatter.singleLineFormatter],
         cursorColor: AppColors.appBar,
-        controller: controller,
+        controller: widget.controller,
         decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            icon: icon,
-            labelText: labelText,
+            icon: widget.icon,
+            labelText: widget.labelText,
             labelStyle: TextStyles.text16gray,
             focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: AppColors.appBar))),

@@ -24,11 +24,10 @@ class RecipeCubit extends Cubit<RecipeState> {
     required this.getAllRecipesUseCase,
   }) : super(RecipeInitial());
 
-  Future<void> addRecipeToFavorites(
-      {required RecipeEntity recipe, required String userId}) async {
+  Future<void> addRecipeToFavorites({required RecipeEntity recipe}) async {
     try {
       AddRecipeToFavoritesParams params =
-          AddRecipeToFavoritesParams(uId: userId, recipe: recipe);
+          AddRecipeToFavoritesParams(recipe: recipe);
       await addRecipeToFavoritesUseCase(params);
     } on SocketException catch (_) {
       emit(RecipeFailure());
@@ -37,11 +36,10 @@ class RecipeCubit extends Cubit<RecipeState> {
     }
   }
 
-  Future<void> removeRecipeFromFavorites(
-      {required RecipeEntity recipe, required String userId}) async {
+  Future<void> removeRecipeFromFavorites({required RecipeEntity recipe}) async {
     try {
       RemoveRecipeFromFavoritesParams params =
-          RemoveRecipeFromFavoritesParams(uId: userId, recipe: recipe);
+          RemoveRecipeFromFavoritesParams(recipe: recipe);
       await removeRecipeFromFavoritesUseCase(params);
     } on SocketException catch (_) {
       emit(RecipeFailure());
@@ -50,12 +48,10 @@ class RecipeCubit extends Cubit<RecipeState> {
     }
   }
 
-  Future<void> getRecipesFromFavorites({required String userId}) async {
+  Future<void> getRecipesFromFavorites() async {
     emit(RecipeLoading());
     try {
-      GetRecipesFromFavoritesParams params =
-          GetRecipesFromFavoritesParams(uId: userId);
-      final recipes = await getRecipesFromFavoritesUseCase(params);
+      final recipes = await getRecipesFromFavoritesUseCase();
       recipes.fold((_) => emit(RecipeFailure()),
           (value) => emit(RecipeLoaded(recipes: value)));
     } on SocketException catch (_) {
