@@ -65,9 +65,9 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
-              routeName: PageConst.recipesPage,
-              width: MediaQuery.of(context).size.width - 80,
-              context: context)),
+        routeName: PageConst.recipesPage,
+        width: MediaQuery.of(context).size.width - 80,
+      )),
       key: _scaffolGlobalKey,
       appBar: MainAppBar(
         title: "Recipes",

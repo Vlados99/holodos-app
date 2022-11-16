@@ -5,102 +5,135 @@ import 'package:holodos/common/app_const.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
+import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
+import 'package:holodos/presentation/widgets/snack_bar.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
   String routeName;
   double width;
-  BuildContext context;
 
   AppDrawer({
     Key? key,
     required this.routeName,
     required this.width,
-    required this.context,
   }) : super(key: key);
 
   @override
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
+  @override
   Widget build(BuildContext context) {
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        return authState is Authenticated ? _drawer(true) : _drawer(false);
+      },
+    );
+  }
+
+  Widget _drawer(bool isSignIn) {
     return Drawer(
       backgroundColor: AppColors.mainBackground,
-      width: width,
+      width: widget.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           drawerHeader(text: "Holodos"),
           GestureDetector(
             onTap: () {
-              if (routeName != PageConst.recipesPage) {
-                BlocProvider.of<RecipeCubit>(context).getRecipes();
+              if (widget.routeName != PageConst.recipesPage) {
                 Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.recipesPage, (route) => false);
               } else {
                 Navigator.pop(context);
               }
             },
-            child: drawerListElement(
+            child: drawerItem(
               icon: Icons.receipt_long_rounded,
               text: "Recipes",
             ),
           ),
           GestureDetector(
             onTap: () {
-              if (routeName != PageConst.productsPage) {
-                BlocProvider.of<ProductCubit>(context).getProducts();
+              if (widget.routeName != PageConst.productsPage) {
                 Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.productsPage, (route) => false);
               } else {
                 Navigator.pop(context);
               }
             },
-            child: drawerListElement(
+            child: drawerItem(
               icon: Icons.list_alt_rounded,
               text: "Products",
             ),
           ),
           GestureDetector(
             onTap: () {
-              if (routeName != PageConst.favoriteRecipesPage) {
-                BlocProvider.of<RecipeCubit>(context)
-                    .getRecipesFromFavoritesUseCase();
+              if (widget.routeName != PageConst.favoriteRecipesPage) {
                 Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.favoriteRecipesPage, (route) => false);
               } else {
                 Navigator.pop(context);
               }
             },
-            child: drawerListElement(
+            child: drawerItem(
               icon: Icons.star,
               text: "Favorite recipes",
             ),
           ),
           GestureDetector(
             onTap: () {
-              if (routeName != PageConst.availableProductsPage) {
-                BlocProvider.of<ProductCubit>(context).getProductsFromList();
+              if (widget.routeName != PageConst.availableProductsPage) {
                 Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.availableProductsPage, (route) => false);
               } else {
                 Navigator.pop(context);
               }
             },
-            child: drawerListElement(
+            child: drawerItem(
               icon: Icons.favorite_border,
               text: "My products",
             ),
           ),
-          Expanded(
-              child: GestureDetector(
-            onTap: () => BlocProvider.of<AuthCubit>(context).loggedOut(),
-            child: drawerListElement(
-              icon: Icons.logout,
-              text: "Sign out",
-              alignment: Alignment.bottomCenter,
-            ),
-          )),
+          Container(
+            child: isSignIn
+                ? bottomDrawerItemSignOut(context)
+                : bottomDrawerItemSignIn(context),
+          ),
         ],
       ),
     );
+  }
+
+  Expanded bottomDrawerItemSignIn(BuildContext context) {
+    return Expanded(
+        child: GestureDetector(
+      onTap: () => Navigator.pushNamedAndRemoveUntil(
+          context, PageConst.signInPage, (route) => false),
+      child: drawerItem(
+        icon: Icons.logout,
+        text: "Sign in",
+        alignment: Alignment.bottomCenter,
+      ),
+    ));
+  }
+
+  Expanded bottomDrawerItemSignOut(BuildContext context) {
+    return Expanded(
+        child: GestureDetector(
+      onTap: () {
+        BlocProvider.of<AuthCubit>(context).loggedOut();
+        Navigator.pushNamedAndRemoveUntil(
+            context, PageConst.signInPage, (route) => false);
+      },
+      child: drawerItem(
+        icon: Icons.logout,
+        text: "Sign out",
+        alignment: Alignment.bottomCenter,
+      ),
+    ));
   }
 
   Widget drawerHeader({
@@ -119,7 +152,7 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget drawerListElement({
+  Widget drawerItem({
     Color? backgroundColor,
     required IconData icon,
     required String text,

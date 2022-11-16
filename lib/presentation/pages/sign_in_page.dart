@@ -98,12 +98,14 @@ class _SignInPageState extends State<SignInPage> {
   }*/
 
   Widget _bodyWidget() {
+    double buttonWidth = MediaQuery.of(context).size.width / 1.5;
+
     return Scaffold(
         drawer: SafeArea(
             child: AppDrawer(
-                routeName: PageConst.recipesPage,
-                width: MediaQuery.of(context).size.width - 80,
-                context: context)),
+          routeName: PageConst.signInPage,
+          width: MediaQuery.of(context).size.width - 80,
+        )),
         resizeToAvoidBottomInset: true,
         appBar: MainAppBar(title: "Sign in"),
         key: _scaffoldGlobalKey,
@@ -139,7 +141,7 @@ class _SignInPageState extends State<SignInPage> {
               GestureDetector(
                 onTap: () => submitSignIn(),
                 child: Button(
-                  context: context,
+                  width: buttonWidth,
                   backgroundColor: AppColors.button,
                   fontColor: AppColors.textColorWhite,
                   text: "Login",
@@ -150,7 +152,7 @@ class _SignInPageState extends State<SignInPage> {
                 onTap: () => Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.resetPasswordPage, ((route) => false)),
                 child: Button(
-                  context: context,
+                  width: buttonWidth,
                   text: "Forgot password?",
                   fontColor: AppColors.textColorDirtyGreen,
                 ),
@@ -160,7 +162,7 @@ class _SignInPageState extends State<SignInPage> {
                 onTap: () => Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.recipesPage, ((route) => false)),
                 child: Button(
-                  context: context,
+                  width: buttonWidth,
                   text: "Continue without login",
                   fontColor: AppColors.textColorDirtyGreen,
                 ),
@@ -182,7 +184,6 @@ class _SignInPageState extends State<SignInPage> {
                             context, PageConst.signUpPage, ((route) => false)),
                         child: Button(
                           width: 75,
-                          context: context,
                           text: "Sign up",
                           fontColor: AppColors.textColorDirtyGreen,
                         ),

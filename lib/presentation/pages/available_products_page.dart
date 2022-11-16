@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/domain/entities/product_entity.dart';
+import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/app_bar.dart';
@@ -39,10 +41,39 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
   }
 
   Widget _builder() {
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        return authState is Authenticated ? productBuilder() : notLoggedIn();
+      },
+    );
+  }
+
+  Widget notLoggedIn() {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      drawer: SafeArea(
+          child: AppDrawer(
+        routeName: PageConst.availableProductsPage,
+        width: MediaQuery.of(context).size.width - 80,
+      )),
+      key: _scaffolGlobalKey,
+      appBar: MainAppBar(
+        title: "Holodos",
+      ),
+      body: centerWidget(
+        icon: Icon(Icons.no_accounts),
+        mainText: "Unfortunately, you are not logged in. ",
+        buttonText: "Sign in",
+        page: PageConst.signInPage,
+      ),
+    );
+  }
+
+  BlocBuilder<ProductCubit, ProductState> productBuilder() {
     return BlocBuilder<ProductCubit, ProductState>(
       builder: (context, productState) {
         if (productState is ProductLoaded) {
-          return _bodyWidget(productState);
+          return _bodyWidget(productState.products);
         }
         if (productState is ProductFailure) {
           return ErrorPage();
@@ -55,27 +86,30 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
     );
   }
 
-  Widget _noProductsWidget() {
+  Widget centerWidget({
+    required Icon icon,
+    required String mainText,
+    required String buttonText,
+    required String page,
+  }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.no_food),
+        icon,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "You don't have food in Holodos? ",
+            Text(
+              mainText,
               style: TextStyles.text16black,
             ),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.productsPage, (route) => false);
+                    context, page, (route) => false);
               },
               child: Button(
-                width: 90,
-                context: context,
-                text: "Add them!",
+                text: buttonText,
                 fontColor: AppColors.textColorDirtyGreen,
               ),
             ),
@@ -85,14 +119,22 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
     );
   }
 
-  Widget _bodyWidget(ProductLoaded productLoadedState) {
+  Widget _noProductsWidget() {
+    return centerWidget(
+        icon: Icon(Icons.no_food),
+        mainText: "You don't have food in Holodos? ",
+        buttonText: "Add them!",
+        page: PageConst.productsPage);
+  }
+
+  Widget _bodyWidget(List<ProductEntity> products) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
-              routeName: PageConst.availableProductsPage,
-              width: MediaQuery.of(context).size.width - 80,
-              context: context)),
+        routeName: PageConst.availableProductsPage,
+        width: MediaQuery.of(context).size.width - 80,
+      )),
       key: _scaffolGlobalKey,
       appBar: MainAppBar(
         title: "Holodos",
@@ -101,14 +143,12 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
       ),
       body: Container(
         alignment: Alignment.topCenter,
-        child: productLoadedState.products.isEmpty
-            ? _noProductsWidget()
-            : _products(productLoadedState),
+        child: products.isEmpty ? _noProductsWidget() : _products(),
       ),
     );
   }
 
-  Widget _products(ProductLoaded productLoadedState) {
+  Widget _products() {
     return Column(
       children: [
         ProductList(

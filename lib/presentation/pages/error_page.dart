@@ -10,9 +10,9 @@ class ErrorPage extends StatelessWidget {
       appBar: MainAppBar(title: "Error"),
       drawer: SafeArea(
           child: AppDrawer(
-              routeName: PageConst.recipesPage,
-              width: MediaQuery.of(context).size.width - 80,
-              context: context)),
+        routeName: PageConst.errorPage,
+        width: MediaQuery.of(context).size.width - 80,
+      )),
       body: Container(
         alignment: Alignment.topCenter,
         child: Text("${context.toString()}"),

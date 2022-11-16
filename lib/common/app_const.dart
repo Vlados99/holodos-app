@@ -9,6 +9,7 @@ class PageConst {
   static const String favoriteRecipesPage = "favoriteRecipesPage";
   static const String productsPage = "productsPage";
   static const String resetPasswordPage = "resetPasswordPage";
+  static const String errorPage = "errorPage";
 }
 
 class AppColors {

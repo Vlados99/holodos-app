@@ -70,6 +70,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   Widget _bodyWidget() {
+    double buttonWidth = MediaQuery.of(context).size.width / 1.5;
+
     return Container(
       alignment: Alignment.center,
       child: Column(
@@ -92,7 +94,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           GestureDetector(
             onTap: () => submitReset(),
             child: Button(
-              context: context,
+              width: buttonWidth,
               backgroundColor: AppColors.button,
               fontColor: AppColors.textColorWhite,
               text: "Reset",
@@ -103,7 +105,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             onTap: () => Navigator.pushNamedAndRemoveUntil(
                 context, PageConst.signInPage, ((route) => false)),
             child: Button(
-              context: context,
+              width: buttonWidth,
               text: "Go back",
               fontColor: AppColors.textColorDirtyGreen,
             ),

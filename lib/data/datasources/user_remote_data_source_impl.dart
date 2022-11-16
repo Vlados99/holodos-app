@@ -196,54 +196,28 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     // });
   }
 
-  void _getRecipeIngredients(String docId) async {
-    await firestore
-        .collection("recipes")
-        .doc(docId)
-        .collection("ingredients")
-        .get()
-        .then((querySnapshot) => querySnapshot.docs.map((docSnapshot) {
-              ingredients.add(ProductModel.fromSnapshot(docSnapshot));
-            }).toList());
-    // ingredients = await firestore.collectionGroup("ingredients").get().then(
-    //     (querySnapshot) => querySnapshot.docs
-    //         .map((docSnapshot) => ProductModel.fromSnapshot(docSnapshot))
-    //         .toList());
+  Future<List<ProductEntity>> _getRecipeIngredients(String docId) async {
+    final ingredientsRef =
+        firestore.collection("recipes").doc(docId).collection("ingredients");
+
+    QuerySnapshot querySnapshot = await ingredientsRef.get();
+
+    return querySnapshot.docs.map((doc) {
+      return ProductModel.fromSnapshot(doc);
+    }).toList();
   }
 
-  void _getCategories() async {
-    categories = await firestore.collectionGroup("categories").get().then(
-        (querySnapshot) => querySnapshot.docs
-            .map((docSnapshot) => CategoryModel.fromSnapshot(docSnapshot))
-            .toList());
-  }
+  @override
+  Future<List<ProductEntity>> getRecipeIngredients(String recipeId) async {
+    final ingredientsRef =
+        firestore.collection("recipes").doc(recipeId).collection("ingredients");
 
-  void _getSteps() async {
-    steps = await firestore.collectionGroup("steps").get().then(
-        (querySnapshot) => querySnapshot.docs
-            .map((docSnapshot) => StepModel.fromSnapshot(docSnapshot))
-            .toList());
-  }
+    QuerySnapshot querySnapshot = await ingredientsRef.get();
 
-  void _getComments() async {
-    comments = await firestore.collectionGroup("comments").get().then(
-        (querySnapshot) => querySnapshot.docs
-            .map((docSnapshot) => CommentModel.fromSnapshot(docSnapshot))
-            .toList());
+    return querySnapshot.docs.map((doc) {
+      return ProductModel.fromSnapshot(doc);
+    }).toList();
   }
-
-  void _getTags() async {
-    tags = await firestore.collectionGroup("tags").get().then((querySnapshot) =>
-        querySnapshot.docs
-            .map((docSnapshot) => TagModel.fromSnapshot(docSnapshot))
-            .toList());
-  }
-
-  List<ProductModel> ingredients = [];
-  List<CategoryModel> categories = [];
-  List<CommentModel> comments = [];
-  List<TagModel> tags = [];
-  List<StepModel> steps = [];
 
   @override
   Future<List<RecipeEntity>> getAllRecipes() async {
@@ -251,9 +225,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     QuerySnapshot querySnapshot = await recipesCollectionRef.get();
 
-    return querySnapshot.docs
-        .map((doc) => RecipeModel.fromSnapshot(doc))
-        .toList();
+    return querySnapshot.docs.map((doc) {
+      return RecipeModel.fromSnapshot(
+        doc,
+      );
+    }).toList();
 /*
     final result = recipesCollectionRef.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((docSnapshot) {

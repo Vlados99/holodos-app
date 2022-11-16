@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/app_bar.dart';
@@ -43,13 +44,13 @@ class _ProductsPageState extends State<ProductsPage> {
     return BlocBuilder<ProductCubit, ProductState>(
       builder: (context, productState) {
         if (productState is ProductLoaded) {
-          return _bodyWidget(productState);
+          return _bodyWidget(productState.products);
         }
         if (productState is ProductFailure) {
           return ErrorPage();
         }
 
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -66,14 +67,14 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  Widget _bodyWidget(ProductLoaded productLoadedState) {
+  Widget _bodyWidget(List<ProductEntity> products) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
-              routeName: PageConst.productsPage,
-              width: MediaQuery.of(context).size.width - 80,
-              context: context)),
+        routeName: PageConst.productsPage,
+        width: MediaQuery.of(context).size.width - 80,
+      )),
       key: _scaffolGlobalKey,
       appBar: MainAppBar(
         title: "Products",
@@ -82,14 +83,12 @@ class _ProductsPageState extends State<ProductsPage> {
       ),
       body: Container(
         alignment: Alignment.topCenter,
-        child: productLoadedState.products.isEmpty
-            ? _noProductsWidget()
-            : _products(productLoadedState),
+        child: products.isEmpty ? _noProductsWidget() : _products(),
       ),
     );
   }
 
-  Widget _products(ProductLoaded productLoadedState) {
+  Widget _products() {
     return Column(
       children: [
         ProductList(),

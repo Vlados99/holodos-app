@@ -4,7 +4,6 @@ import 'package:holodos/common/app_const.dart';
 
 class Button extends StatelessWidget {
   double? width;
-  BuildContext context;
   Color? backgroundColor;
   String text;
   Color? fontColor;
@@ -12,7 +11,6 @@ class Button extends StatelessWidget {
   Button({
     Key? key,
     this.width,
-    required this.context,
     this.backgroundColor,
     required this.text,
     this.fontColor,
@@ -29,12 +27,12 @@ class Button extends StatelessWidget {
         ),
       ),
       height: 40,
-      width: width ?? MediaQuery.of(context).size.width / 1.5,
+      width: width,
       child: Text(
-        "${text}",
+        text,
         style: TextStyle(
           color: fontColor ?? AppColors.textColorBlack,
-          fontSize: 18,
+          fontSize: 16,
         ),
       ),
     );

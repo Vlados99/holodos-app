@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
+import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/app_bar.dart';
@@ -27,10 +28,35 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _builder();
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        return authState is Authenticated ? recipeBuilder() : notLoggedIn();
+      },
+    );
   }
 
-  Widget _builder() {
+  Widget notLoggedIn() {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      drawer: SafeArea(
+          child: AppDrawer(
+        routeName: PageConst.favoriteRecipesPage,
+        width: MediaQuery.of(context).size.width - 80,
+      )),
+      key: _scaffolGlobalKey,
+      appBar: MainAppBar(
+        title: "Favorite recipes",
+      ),
+      body: centerWidget(
+        icon: Icon(Icons.no_accounts),
+        mainText: "Unfortunately, you are not logged in. ",
+        buttonText: "Sign in",
+        page: PageConst.signInPage,
+      ),
+    );
+  }
+
+  BlocBuilder<RecipeCubit, RecipeState> recipeBuilder() {
     return BlocBuilder<RecipeCubit, RecipeState>(
       builder: (context, recipeState) {
         if (recipeState is RecipeLoaded) {
@@ -48,26 +74,38 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   }
 
   Widget _noRecipesWidget() {
+    return centerWidget(
+      icon: Icon(Icons.no_food),
+      mainText: "Do you have any favorite recipes? ",
+      buttonText: "Add them!",
+      page: PageConst.recipesPage,
+    );
+  }
+
+  Widget centerWidget({
+    required Icon icon,
+    required String mainText,
+    required String buttonText,
+    required String page,
+  }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.no_food),
+        icon,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "Do you have any favorite recipes? ",
+            Text(
+              mainText,
               style: TextStyles.text16black,
             ),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.recipesPage, (route) => false);
+                    context, page, (route) => false);
               },
               child: Button(
-                width: 90,
-                context: context,
-                text: "Add them!",
+                text: buttonText,
                 fontColor: AppColors.textColorDirtyGreen,
               ),
             ),
@@ -82,19 +120,23 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
-              routeName: PageConst.recipesPage,
-              width: MediaQuery.of(context).size.width - 80,
-              context: context)),
+        routeName: PageConst.favoriteRecipesPage,
+        width: MediaQuery.of(context).size.width - 80,
+      )),
       key: _scaffolGlobalKey,
       appBar: MainAppBar(
         title: "Favorite recipes",
         search: true,
         delegate: RecipeSearchDelegate(),
       ),
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: recipes.isEmpty ? _noRecipesWidget() : _recipes(),
-      ),
+      body: scaffoldBody(recipes),
+    );
+  }
+
+  Container scaffoldBody(List<RecipeEntity> recipes) {
+    return Container(
+      alignment: Alignment.topCenter,
+      child: recipes.isEmpty ? _noRecipesWidget() : _recipes(),
     );
   }
 

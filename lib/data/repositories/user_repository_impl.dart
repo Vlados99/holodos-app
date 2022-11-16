@@ -185,4 +185,11 @@ class UserRepositoryImpl extends UserRepository {
   Future<Either<Failure, void>> resetPassword(UserEntity user) async {
     return await _call<void>(() => remoteDataSource.resetPassword(user));
   }
+
+  @override
+  Future<Either<Failure, List<ProductEntity>>> getRecipeIngredients(
+      String recipeId) async {
+    return await _call<List<ProductEntity>>(
+        () => remoteDataSource.getRecipeIngredients(recipeId));
+  }
 }

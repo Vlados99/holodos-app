@@ -58,7 +58,7 @@ class RecipeModel extends RecipeEntity {
 
   factory RecipeModel.fromSnapshot(
     DocumentSnapshot snapshot, {
-    List<ProductModel>? ingredients,
+    List<ProductEntity>? ingredients,
     List<StepModel>? steps,
     List<CategoryModel>? categories,
     List<CommentModel>? comments,

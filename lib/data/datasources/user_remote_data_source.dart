@@ -20,6 +20,7 @@ abstract class UserRemoteDataSource {
   Future<List<ProductEntity>> getListOfUsersProducts();
 
   Future<List<RecipeEntity>> getAllRecipes();
+  Future<List<ProductEntity>> getRecipeIngredients(String recipeId);
   Future<void> addRecipeToFavorites(RecipeEntity recipe);
   Future<void> removeRecipeFromFavorites(RecipeEntity recipe);
   Future<List<RecipeEntity>> getRecipesFromFavorites();

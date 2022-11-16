@@ -25,6 +25,8 @@ abstract class UserRepository {
   Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts();
 
   Future<Either<Failure, List<RecipeEntity>>> getAllRecipes();
+  Future<Either<Failure, List<ProductEntity>>> getRecipeIngredients(
+      String recipeId);
   Future<Either<Failure, void>> addRecipeToFavorites(RecipeEntity recipe);
   Future<Either<Failure, void>> removeRecipeFromFavorites(RecipeEntity recipe);
   Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites();

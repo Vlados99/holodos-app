@@ -75,12 +75,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _bodyWidget() {
+    double buttonWidth = MediaQuery.of(context).size.width / 1.5;
+
     return Scaffold(
         drawer: SafeArea(
             child: AppDrawer(
-                routeName: PageConst.recipesPage,
-                width: MediaQuery.of(context).size.width - 80,
-                context: context)),
+          routeName: PageConst.signUpPage,
+          width: MediaQuery.of(context).size.width - 80,
+        )),
         resizeToAvoidBottomInset: true,
         appBar: MainAppBar(title: "Sign up"),
         key: _scaffoldGLobalKey,
@@ -126,7 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
               GestureDetector(
                 onTap: () => submitCreateAccount(),
                 child: Button(
-                  context: context,
+                  width: buttonWidth,
                   text: "Create account",
                   backgroundColor: AppColors.button,
                   fontColor: AppColors.textColorWhite,
@@ -137,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 onTap: () => Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.signInPage, ((route) => false)),
                 child: Button(
-                  context: context,
+                  width: buttonWidth,
                   text: "Sign in",
                   fontColor: AppColors.textColorDirtyGreen,
                 ),
@@ -147,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 onTap: () => Navigator.pushNamedAndRemoveUntil(
                     context, PageConst.recipesPage, ((route) => false)),
                 child: Button(
-                  context: context,
+                  width: buttonWidth,
                   text: "Continue without registation",
                   fontColor: AppColors.textColorDirtyGreen,
                 ),
