@@ -13,6 +13,11 @@ import 'package:holodos/domain/usecases/get_all_products.dart';
 import 'package:holodos/domain/usecases/get_all_recipes.dart';
 import 'package:holodos/domain/usecases/get_current_user_id.dart';
 import 'package:holodos/domain/usecases/get_list_of_users_products.dart';
+import 'package:holodos/domain/usecases/get_recipe_categories.dart';
+import 'package:holodos/domain/usecases/get_recipe_comments.dart';
+import 'package:holodos/domain/usecases/get_recipe_ingredients.dart';
+import 'package:holodos/domain/usecases/get_recipe_steps.dart';
+import 'package:holodos/domain/usecases/get_recipe_tags.dart';
 import 'package:holodos/domain/usecases/get_recipes_from_favorites.dart';
 import 'package:holodos/domain/usecases/is_sign_in.dart';
 import 'package:holodos/domain/usecases/remove_product_from_user_list.dart';
@@ -43,20 +48,22 @@ init() {
       searchRecipesByCategories: sl(),
       searchRecipesByProducts: sl(),
       searchRecipesByName: sl()));
-  sl.registerFactory(
-      () => SearchProductBloc(searchProductsByName: sl()));
+
+  sl.registerFactory(() => SearchProductBloc(searchProductsByName: sl()));
 
   sl.registerFactory(() => AuthCubit(
         isSignIn: sl(),
         signOut: sl(),
         getCurrentUserId: sl(),
       ));
+
   sl.registerFactory(() => UserCubit(
         signInUseCase: sl(),
         signUpUseCase: sl(),
         createCurrentUserUseCase: sl(),
         resetPasswordUseCase: sl(),
       ));
+
   sl.registerFactory(() => RecipeCubit(
         removeRecipeFromFavoritesUseCase: sl(),
         getRecipesFromFavoritesUseCase: sl(),
@@ -71,6 +78,7 @@ init() {
         updateProductFromUserListUseCase: sl(),
         getAllProductsUseCase: sl(),
       ));
+
   // UseCases
   sl.registerLazySingleton(() => AddProductToUserList(repository: sl()));
   sl.registerLazySingleton(() => AddRecipeToFavorites(repository: sl()));
@@ -94,6 +102,11 @@ init() {
   sl.registerLazySingleton(() => UpdateProductFromUserList(repository: sl()));
   sl.registerLazySingleton(() => SearchProductsByName(repository: sl()));
   sl.registerLazySingleton(() => ResetPassword(repository: sl()));
+  sl.registerLazySingleton(() => GetRecipeCategories(repository: sl()));
+  sl.registerLazySingleton(() => GetRecipeComments(repository: sl()));
+  sl.registerLazySingleton(() => GetRecipeIngredients(repository: sl()));
+  sl.registerLazySingleton(() => GetRecipeSteps(repository: sl()));
+  sl.registerLazySingleton(() => GetRecipeTags(repository: sl()));
 
   // Repository
   sl.registerLazySingleton<UserRepository>(

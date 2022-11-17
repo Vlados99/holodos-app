@@ -1,3 +1,6 @@
+import 'package:holodos/domain/entities/step_entity.dart';
+import 'package:holodos/domain/entities/tag_entity.dart';
+
 import '../../domain/entities/category_entity.dart';
 import '../../domain/entities/comment_entity.dart';
 import '../../domain/entities/product_entity.dart';
@@ -21,6 +24,10 @@ abstract class UserRemoteDataSource {
 
   Future<List<RecipeEntity>> getAllRecipes();
   Future<List<ProductEntity>> getRecipeIngredients(String recipeId);
+  Future<List<CategoryEntity>> getRecipeCategories(String recipeId);
+  Future<List<CommentEntity>> getRecipeComments(String recipeId);
+  Future<List<StepEntity>> getRecipeSteps(String recipeId);
+  Future<List<TagEntity>> getRecipeTags(String recipeId);
   Future<void> addRecipeToFavorites(RecipeEntity recipe);
   Future<void> removeRecipeFromFavorites(RecipeEntity recipe);
   Future<List<RecipeEntity>> getRecipesFromFavorites();

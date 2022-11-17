@@ -1,9 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:holodos/data/models/category_model.dart';
-import 'package:holodos/data/models/comment_model.dart';
-import 'package:holodos/data/models/product_model.dart';
-import 'package:holodos/data/models/step_model.dart';
-import 'package:holodos/data/models/tag_model.dart';
 import 'package:holodos/domain/entities/category_entity.dart';
 import 'package:holodos/domain/entities/comment_entity.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
@@ -41,28 +36,14 @@ class RecipeModel extends RecipeEntity {
           comments: comments,
           tags: tags,
         );
-/*
-  factory RecipeModel.fromSnapshot(DocumentSnapshot snapshot) {
-    return RecipeModel(
-      name: snapshot.get('name'),
-      cookTime: snapshot.get('cookTime'),
-      complexity: snapshot.get('complexity'),
-      serves: snapshot.get('serves'),
-      categories: snapshot.get('categories'),
-      ingredients: snapshot.get('ingredients'),
-      steps: snapshot.get('steps'),
-      comments: snapshot.get('comments'),
-    );
-  }
-*/
 
   factory RecipeModel.fromSnapshot(
     DocumentSnapshot snapshot, {
     List<ProductEntity>? ingredients,
-    List<StepModel>? steps,
-    List<CategoryModel>? categories,
-    List<CommentModel>? comments,
-    List<TagModel>? tags,
+    List<StepEntity>? steps,
+    List<CategoryEntity>? categories,
+    List<CommentEntity>? comments,
+    List<TagEntity>? tags,
   }) {
     return RecipeModel(
       id: snapshot.id,
@@ -113,30 +94,5 @@ class RecipeModel extends RecipeEntity {
       'comments': comments,
       'tags': tags,
     };
-  }
-
-  //?????????????????????????????????????????????????????????????????
-  factory RecipeModel.fromJson(Map<String, dynamic> json) {
-    return RecipeModel(
-      id: json["id"],
-      name: json["name"],
-      cuisines: json["cuisines"],
-      cookTime: json["cookTime"],
-      complexity: json["complexity"],
-      serves: json["serves"],
-      imageLocation: json["imageLocation"],
-      description: json["description"],
-      categories: json["categories"] != null
-          ? CategoryModel.fromJson(json['categories'])
-          : null,
-      ingredients: json["ingridients"] != null
-          ? ProductModel.fromJson(json['ingridients'])
-          : null,
-      steps: json["steps"] != null ? StepModel.fromJson(json['steps']) : null,
-      comments: json["comments"] != null
-          ? CommentModel.fromJson(json['comments'])
-          : null,
-      tags: json["tags"] != null ? TagModel.fromJson(json['tags']) : null,
-    );
   }
 }

@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:holodos/data/models/product_model.dart';
-import 'package:holodos/data/models/recipe_model.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
@@ -54,20 +52,5 @@ class UserModel extends UserEntity {
       'products': products,
       'favoriteRecipes': favoriteRecipes,
     };
-  }
-
-  //?????????????????????????????????????????????????????????????????
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      name: json["name"],
-      email: json["email"],
-      password: json["password"],
-      products: json["products"] != null
-          ? ProductModel.fromJson(json["products"])
-          : null,
-      favoriteRecipes: json["favoriteRecipes"] != null
-          ? RecipeModel.fromJson(json["favoriteRecipes"])
-          : null,
-    );
   }
 }

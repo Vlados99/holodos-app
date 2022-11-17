@@ -1,8 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:holodos/core/error/failure.dart';
+import 'package:holodos/core/usecases/usecase.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
-
-import '../../core/usecases/usecase.dart';
 
 class SignOut extends UseCase<void> {
   final UserRepository repository;

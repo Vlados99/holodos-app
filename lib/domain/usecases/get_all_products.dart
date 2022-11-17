@@ -2,9 +2,8 @@ import 'package:dartz/dartz.dart';
 
 import 'package:holodos/core/error/failure.dart';
 import 'package:holodos/core/usecases/usecase.dart';
+import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
-
-import '../entities/product_entity.dart';
 
 class GetAllProducts extends UseCase<void> {
   final UserRepository repository;

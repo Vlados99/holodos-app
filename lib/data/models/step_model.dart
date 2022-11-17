@@ -6,12 +6,12 @@ class StepModel extends StepEntity {
       {required id,
       required title,
       required number,
-      required imgUri,
+      required imageLocation,
       required description})
       : super(
             id: id,
             title: title,
-            imgUri: imgUri,
+            imageLocation: imageLocation,
             number: number,
             description: description);
 
@@ -24,8 +24,9 @@ class StepModel extends StepEntity {
       number: snapshot.data().toString().contains("number")
           ? snapshot.get("number")
           : 0,
-      imgUri: snapshot.data().toString().contains("imgUri")
-          ? (snapshot.get("imgUri") as DocumentReference<Map<String, dynamic>>)
+      imageLocation: snapshot.data().toString().contains("imageLocation")
+          ? (snapshot.get("imageLocation")
+                  as DocumentReference<Map<String, dynamic>>)
               .id
           : '',
       description: snapshot.data().toString().contains("description")
@@ -39,19 +40,8 @@ class StepModel extends StepEntity {
       'id': id,
       'title': title,
       'number': number,
-      'imgUri': imgUri,
+      'imageLocation': imageLocation,
       'description': description,
     };
-  }
-
-  //?????????????????????????????????????????????????????????????????
-  factory StepModel.fromJson(Map<String, dynamic> json) {
-    return StepModel(
-      id: json["id"],
-      title: json["title"],
-      number: json["number"],
-      imgUri: json["imgUri"],
-      description: json["description"],
-    );
   }
 }

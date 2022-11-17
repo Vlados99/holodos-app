@@ -1,5 +1,7 @@
 import 'package:holodos/core/error/exception.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
+import 'package:holodos/domain/entities/tag_entity.dart';
+import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
@@ -191,5 +193,33 @@ class UserRepositoryImpl extends UserRepository {
       String recipeId) async {
     return await _call<List<ProductEntity>>(
         () => remoteDataSource.getRecipeIngredients(recipeId));
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryEntity>>> getRecipeCategories(
+      String recipeId) async {
+    return await _call<List<CategoryEntity>>(
+        () => remoteDataSource.getRecipeCategories(recipeId));
+  }
+
+  @override
+  Future<Either<Failure, List<CommentEntity>>> getRecipeComments(
+      String recipeId) async {
+    return await _call<List<CommentEntity>>(
+        () => remoteDataSource.getRecipeComments(recipeId));
+  }
+
+  @override
+  Future<Either<Failure, List<StepEntity>>> getRecipeSteps(
+      String recipeId) async {
+    return await _call<List<StepEntity>>(
+        () => remoteDataSource.getRecipeSteps(recipeId));
+  }
+
+  @override
+  Future<Either<Failure, List<TagEntity>>> getRecipeTags(
+      String recipeId) async {
+    return await _call<List<TagEntity>>(
+        () => remoteDataSource.getRecipeTags(recipeId));
   }
 }
