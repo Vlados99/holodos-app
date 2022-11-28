@@ -124,21 +124,14 @@ class _SignInPageState extends State<SignInPage> {
                 SimpleTextField(
                   controller: _emailController,
                   labelText: "Enter your email",
-                  icon: const Icon(
-                    Icons.email,
-                    color: AppColors.dirtyGreen,
-                  ),
                 ),
                 sb_h15(),
                 PasswordTextField(
                   context: context,
                   controller: _passwordController,
                   labelText: "Enter your password",
-                  icon: const Icon(
-                    Icons.lock,
-                    color: AppColors.dirtyGreen,
-                  ),
                 ),
+                sb_h1(),
                 GestureDetector(
                   onTap: () => Navigator.pushNamedAndRemoveUntil(
                       context, PageConst.resetPasswordPage, ((route) => false)),
@@ -153,7 +146,7 @@ class _SignInPageState extends State<SignInPage> {
                 GestureDetector(
                   onTap: () => submitSignIn(),
                   child: Button(
-                    width: buttonWidth,
+                    width: MediaQuery.of(context).size.width / 4,
                     backgroundColor: AppColors.button,
                     fontColor: AppColors.textColorWhite,
                     text: "Log in",

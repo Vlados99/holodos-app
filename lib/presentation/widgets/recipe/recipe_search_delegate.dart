@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/app_theme.dart';
 import 'package:holodos/presentation/bloc/search_recipe/search_recipe_bloc.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
@@ -17,7 +18,7 @@ class RecipeSearchDelegate extends SearchDelegate {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return ThemeData.light();
+    return AppTheme().lightTheme;
   }
 
   @override

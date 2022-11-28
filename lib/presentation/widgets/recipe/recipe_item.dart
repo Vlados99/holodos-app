@@ -76,7 +76,7 @@ class _RecipeItemState extends State<RecipeItem> {
           end: FractionalOffset.bottomCenter,
           colors: [
             Colors.white.withOpacity(0.0),
-            AppColors.black.withOpacity(0.4),
+            AppColors.black.withOpacity(0.7),
           ],
           stops: const [
             0.1,

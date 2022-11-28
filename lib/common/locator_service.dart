@@ -39,6 +39,7 @@ import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/cuisine/cuisine_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
+import 'package:holodos/presentation/cubit/recipe_comments/recipe_comments_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 
 final sl = GetIt.instance;
@@ -71,6 +72,7 @@ init() {
         getRecipesFromFavoritesUseCase: sl(),
         addRecipeToFavoritesUseCase: sl(),
         getAllRecipesUseCase: sl(),
+        commentOnRecipe: sl(),
       ));
 
   sl.registerFactory(() => ProductCubit(
@@ -82,6 +84,9 @@ init() {
       ));
 
   sl.registerFactory(() => CuisineCubit(getAllCuisinesUseCase: sl()));
+
+  sl.registerFactory(() => CommentsCubit(
+      getRecipeCommentsUseCase: sl(), commentOnRecipeUseCase: sl()));
 
   // UseCases
   sl.registerLazySingleton(() => AddProductToUserList(repository: sl()));

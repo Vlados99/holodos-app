@@ -23,7 +23,7 @@ class _RecipeListState extends State<RecipeList> {
   Widget build(BuildContext context) {
     final recipes = widget.recipes;
     return BlocBuilder<RecipeCubit, RecipeState>(builder: (context, state) {
-      if (state is RecipeLoaded) {
+      if (state is RecipesLoaded) {
         return listView(recipes ?? state.recipes);
       }
       if (state is RecipeFailure) {
@@ -40,7 +40,8 @@ class _RecipeListState extends State<RecipeList> {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, PageConst.recipePage,
+            Navigator.pushNamedAndRemoveUntil(
+                context, PageConst.recipePage, ((route) => true),
                 arguments: recipes[index]);
           },
           child: RecipeItem(

@@ -23,31 +23,10 @@ class UserRepositoryImpl extends UserRepository {
     try {
       final remoteObj = await callVoidFunc();
       return Right(remoteObj);
-    } on ServerException catch (e) {
-      print(e);
-      return Left(ServerFailure());
-    }
-  }
-/*
-  Future<Either<Failure, void>> _callVoidFunc(
-      Future<void> Function() callVoidFunc) async {
-    try {
-      final remoteObj = await callVoidFunc();
-      return Right(remoteObj);
     } on ServerException {
       return Left(ServerFailure());
     }
   }
-
-  Future<Either<Failure, Stream<List<ProductEntity>>>> _callProductsFunc(
-      Future<Stream<List<ProductEntity>>> Function() callProductsFunc) async {
-    try {
-      final remoteObj = await callProductsFunc();
-      return Right(remoteObj);
-    } on ServerException {
-      return Left(ServerFailure());
-    }
-  }*/
 
   @override
   Future<Either<Failure, void>> addProductToUserList(
@@ -74,9 +53,9 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, void>> commentOnRecipe(
-      UserEntity user, CommentEntity comment, RecipeEntity recipe) async {
+      String comment, RecipeEntity recipe) async {
     return await _call<void>(
-        () => remoteDataSource.commentOnRecipe(user, comment, recipe));
+        () => remoteDataSource.commentOnRecipe(comment, recipe));
   }
 
   @override

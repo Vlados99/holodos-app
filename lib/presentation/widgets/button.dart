@@ -25,10 +25,10 @@ class Button extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? Colors.white,
         borderRadius: const BorderRadius.all(
-          Radius.circular(10),
+          Radius.circular(20),
         ),
       ),
-      height: 40,
+      height: 35,
       width: width,
       child: Text(
         text,

@@ -54,7 +54,7 @@ abstract class UserRepository {
 
   Future<Either<Failure, void>> shareRecipe(RecipeEntity recipe);
   Future<Either<Failure, void>> commentOnRecipe(
-      UserEntity user, CommentEntity comment, RecipeEntity recipe);
+      String comment, RecipeEntity recipe);
 
   /*
   Future<Either<Failure, void>> commentOnComment(

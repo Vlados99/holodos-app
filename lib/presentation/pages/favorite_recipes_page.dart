@@ -59,7 +59,7 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   BlocBuilder<RecipeCubit, RecipeState> recipeBuilder() {
     return BlocBuilder<RecipeCubit, RecipeState>(
       builder: (context, recipeState) {
-        if (recipeState is RecipeLoaded) {
+        if (recipeState is RecipesLoaded) {
           return _bodyWidget(recipeState.recipes);
         }
         if (recipeState is RecipeFailure) {

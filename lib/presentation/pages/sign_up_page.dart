@@ -102,35 +102,23 @@ class _SignUpPageState extends State<SignUpPage> {
                 SimpleTextField(
                   controller: _usernameController,
                   labelText: "Enter your username",
-                  icon: const Icon(
-                    Icons.person,
-                    color: AppColors.dirtyGreen,
-                  ),
                 ),
                 sb_h15(),
                 SimpleTextField(
                   controller: _emailController,
                   labelText: "Enter your email",
-                  icon: const Icon(
-                    Icons.email,
-                    color: AppColors.dirtyGreen,
-                  ),
                 ),
                 sb_h15(),
                 PasswordTextField(
                   context: context,
                   controller: _passwordController,
                   labelText: "Enter your password",
-                  icon: const Icon(
-                    Icons.lock,
-                    color: AppColors.dirtyGreen,
-                  ),
                 ),
                 sb_h50(),
                 GestureDetector(
                   onTap: () => submitCreateAccount(),
                   child: Button(
-                    width: buttonWidth,
+                    width: MediaQuery.of(context).size.width - 240,
                     text: "Create account",
                     backgroundColor: AppColors.button,
                     fontColor: AppColors.textColorWhite,

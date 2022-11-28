@@ -19,10 +19,19 @@ class RecipeFailure extends RecipeState {
   List<Object> get props => [];
 }
 
-class RecipeLoaded extends RecipeState {
+class RecipesLoaded extends RecipeState {
   final List<RecipeEntity> recipes;
 
-  RecipeLoaded({required this.recipes});
+  RecipesLoaded({required this.recipes});
+
+  @override
+  List<Object> get props => [];
+}
+
+class RecipeLoaded extends RecipeState {
+  final RecipeEntity recipe;
+
+  RecipeLoaded({required this.recipe});
 
   @override
   List<Object> get props => [];

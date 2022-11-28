@@ -44,8 +44,7 @@ abstract class UserRemoteDataSource {
       List<CategoryEntity> categories);
 
   Future<void> shareRecipe(RecipeEntity recipe);
-  Future<void> commentOnRecipe(
-      UserEntity user, CommentEntity comment, RecipeEntity recipe);
+  Future<void> commentOnRecipe(String comment, RecipeEntity recipe);
   /*
   Future<void> commentOnComment(
       String uId, CommentEntity response, CommentEntity comment);*/

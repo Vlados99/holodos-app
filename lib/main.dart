@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/app_theme.dart';
 import 'package:holodos/common/locator_service.dart' as di;
 import 'package:holodos/common/on_generate_route.dart';
 import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/cuisine/cuisine_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
+import 'package:holodos/presentation/cubit/recipe_comments/recipe_comments_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 import 'package:holodos/presentation/pages/recipes_page.dart';
 import 'package:holodos/presentation/pages/sign_in_page.dart';
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<RecipeCubit>(create: (_) => di.sl<RecipeCubit>()),
         BlocProvider<ProductCubit>(create: (_) => di.sl<ProductCubit>()),
         BlocProvider<CuisineCubit>(create: (_) => di.sl<CuisineCubit>()),
+        BlocProvider<CommentsCubit>(create: (_) => di.sl<CommentsCubit>()),
         BlocProvider<SearchRecipeBloc>(
             create: (_) => di.sl<SearchRecipeBloc>()),
         BlocProvider<SearchProductBloc>(
@@ -41,12 +44,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.light().copyWith(
-          appBarTheme: AppBarTheme(
-              color: AppColors.appBar, foregroundColor: AppColors.orange),
-          backgroundColor: AppColors.mainBackground,
-          scaffoldBackgroundColor: AppColors.mainBackground,
-        ),
+        theme: AppTheme().lightTheme,
+        darkTheme: AppTheme().darkTheme,
         title: "Holodos",
         initialRoute: '/',
         onGenerateRoute: OnGenerateRoute.route,

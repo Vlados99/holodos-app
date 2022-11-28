@@ -2,9 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:holodos/domain/entities/comment_entity.dart';
 
 class CommentModel extends CommentEntity {
-  CommentModel(
-      {required id, required userName, required comment, required date})
-      : super(id: id, userName: userName, comment: comment, date: date);
+  CommentModel({
+    required id,
+    required userName,
+    required comment,
+    required date,
+  }) : super(
+          id: id,
+          userName: userName,
+          comment: comment,
+          date: date,
+        );
 
   factory CommentModel.fromSnapshot(DocumentSnapshot snapshot) {
     return CommentModel(

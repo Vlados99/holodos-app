@@ -179,8 +179,14 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }*/
 
   @override
-  Future<void> commentOnRecipe(
-      UserEntity user, CommentEntity comment, RecipeEntity recipe) async {
+  Future<void> commentOnRecipe(String comment, RecipeEntity recipe) async {
+    final String uId = await getCurrentUId();
+
+    final user =
+        await firestore.collection("users").doc(uId).get().then((value) {
+      return value.data()!["name"];
+    });
+
     final recipesCommentsCollectionRef =
         firestore.collection("recipes").doc(recipe.id).collection("comments");
     final commentId = recipesCommentsCollectionRef.doc().id;
@@ -191,9 +197,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         .then((_comment) async {
       final newComment = CommentModel(
         id: commentId,
-        userName: user.name,
-        comment: comment.comment,
-        date: DateTime.now(),
+        userName: user,
+        comment: comment,
+        date: Timestamp.fromDate(DateTime.now()),
       ).toDocument();
 
       await recipesCommentsCollectionRef.doc(commentId).set(newComment);
@@ -261,7 +267,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final ingredientsRef =
         firestore.collection("recipes").doc(recipeId).collection("comments");
 
-    QuerySnapshot querySnapshot = await ingredientsRef.get();
+    QuerySnapshot querySnapshot =
+        await ingredientsRef.orderBy("date", descending: true).get();
 
     return querySnapshot.docs.map((doc) {
       return CommentModel.fromSnapshot(doc);
@@ -273,7 +280,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final ingredientsRef =
         firestore.collection("recipes").doc(recipeId).collection("steps");
 
-    QuerySnapshot querySnapshot = await ingredientsRef.get();
+    QuerySnapshot querySnapshot = await ingredientsRef.orderBy("number").get();
 
     return querySnapshot.docs.map((doc) {
       return StepModel.fromSnapshot(doc);

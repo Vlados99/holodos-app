@@ -68,7 +68,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   Widget _bodyWidget() {
-    double buttonWidth = MediaQuery.of(context).size.width / 1.5;
+    double buttonWidth = MediaQuery.of(context).size.width / 3.5;
 
     return Container(
       alignment: Alignment.center,
@@ -83,10 +83,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           SimpleTextField(
             controller: _emailController,
             labelText: "Enter your email",
-            icon: const Icon(
-              Icons.lock,
-              color: AppColors.dirtyGreen,
-            ),
           ),
           sb_h50(),
           GestureDetector(
@@ -95,7 +91,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               width: buttonWidth,
               backgroundColor: AppColors.button,
               fontColor: AppColors.textColorWhite,
-              text: "Reset",
+              text: "Recover",
             ),
           ),
           Expanded(

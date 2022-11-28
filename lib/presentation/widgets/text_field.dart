@@ -31,15 +31,17 @@ class _SimpleTextFieldState extends State<SimpleTextField> {
       child: TextField(
         inputFormatters: widget.formatters ??
             [FilteringTextInputFormatter.singleLineFormatter],
-        cursorColor: AppColors.appBar,
+        cursorColor: AppColors.orange,
         controller: widget.controller,
         decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            icon: widget.icon,
-            labelText: widget.labelText,
-            labelStyle: TextStyles.text16gray,
-            focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.appBar))),
+          enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.black)),
+          focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.black)),
+          icon: widget.icon,
+          labelText: widget.labelText,
+          labelStyle: TextStyles.text16gray,
+        ),
       ),
     );
   }
@@ -51,7 +53,7 @@ class PasswordTextField extends StatefulWidget {
   TextEditingController controller;
   String? labelText;
   List<TextInputFormatter>? formatters;
-  Icon icon;
+  Icon? icon;
 
   PasswordTextField({
     Key? key,
@@ -60,7 +62,7 @@ class PasswordTextField extends StatefulWidget {
     required this.controller,
     this.labelText,
     this.formatters,
-    required this.icon,
+    this.icon,
   }) : super(key: key);
 
   @override
@@ -76,22 +78,23 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       width: widget.width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
         obscureText: passenable,
+        obscuringCharacter: "*",
         enableSuggestions: false,
         autocorrect: false,
         inputFormatters: widget.formatters ??
             [FilteringTextInputFormatter.singleLineFormatter],
-        cursorColor: AppColors.appBar,
+        cursorColor: AppColors.orange,
         controller: widget.controller,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
+          enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.black)),
+          focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.black)),
           labelStyle: TextStyles.text16gray,
           icon: widget.icon,
           labelText: widget.labelText,
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: AppColors.appBar),
-          ),
           suffix: Container(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: GestureDetector(
               onTap: () {
                 setState(() {

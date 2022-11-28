@@ -36,7 +36,7 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   Widget _builder() {
     return BlocBuilder<RecipeCubit, RecipeState>(
       builder: (context, recipeState) {
-        if (recipeState is RecipeLoaded) {
+        if (recipeState is RecipesLoaded) {
           return _bodyWidget(recipeState.recipes);
         }
         if (recipeState is RecipeFailure) {
