@@ -86,75 +86,110 @@ class _SignUpPageState extends State<SignUpPage> {
         resizeToAvoidBottomInset: true,
         appBar: MainAppBar(),
         key: _scaffoldGLobalKey,
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              sb_h50(),
-              const Text(
-                "Registration",
-                style: TextStyles.header,
-              ),
-              sb_h50(),
-              SimpleTextField(
-                controller: _usernameController,
-                labelText: "Enter your username",
-                icon: Icon(
-                  Icons.person,
-                  color: AppColors.dirtyGreen,
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height - 80,
+            width: MediaQuery.of(context).size.width,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                sb_h50(),
+                const Text(
+                  "Registration",
+                  style: TextStyles.header,
                 ),
-              ),
-              sb_h15(),
-              SimpleTextField(
-                controller: _emailController,
-                labelText: "Enter your email",
-                icon: Icon(
-                  Icons.email,
-                  color: AppColors.dirtyGreen,
+                sb_h50(),
+                SimpleTextField(
+                  controller: _usernameController,
+                  labelText: "Enter your username",
+                  icon: const Icon(
+                    Icons.person,
+                    color: AppColors.dirtyGreen,
+                  ),
                 ),
-              ),
-              sb_h15(),
-              PasswordTextField(
-                context: context,
-                controller: _passwordController,
-                labelText: "Enter your password",
-                icon: Icon(
-                  Icons.lock,
-                  color: AppColors.dirtyGreen,
+                sb_h15(),
+                SimpleTextField(
+                  controller: _emailController,
+                  labelText: "Enter your email",
+                  icon: const Icon(
+                    Icons.email,
+                    color: AppColors.dirtyGreen,
+                  ),
                 ),
-              ),
-              sb_h50(),
-              GestureDetector(
-                onTap: () => submitCreateAccount(),
-                child: Button(
-                  width: buttonWidth,
-                  text: "Create account",
-                  backgroundColor: AppColors.button,
-                  fontColor: AppColors.textColorWhite,
+                sb_h15(),
+                PasswordTextField(
+                  context: context,
+                  controller: _passwordController,
+                  labelText: "Enter your password",
+                  icon: const Icon(
+                    Icons.lock,
+                    color: AppColors.dirtyGreen,
+                  ),
                 ),
-              ),
-              sb_h15(),
-              GestureDetector(
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.signInPage, ((route) => false)),
-                child: Button(
-                  width: buttonWidth,
-                  text: "Sign in",
-                  fontColor: AppColors.textColorDirtyGreen,
+                sb_h50(),
+                GestureDetector(
+                  onTap: () => submitCreateAccount(),
+                  child: Button(
+                    width: buttonWidth,
+                    text: "Create account",
+                    backgroundColor: AppColors.button,
+                    fontColor: AppColors.textColorWhite,
+                  ),
                 ),
-              ),
-              sb_h15(),
-              GestureDetector(
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.recipesPage, ((route) => false)),
-                child: Button(
-                  width: buttonWidth,
-                  text: "Continue without registation",
-                  fontColor: AppColors.textColorDirtyGreen,
+                sb_h15(),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context, PageConst.recipesPage, ((route) => false)),
+                  child: Button(
+                    width: buttonWidth,
+                    text: "Continue without registation",
+                    fontColor: AppColors.textColorDirtyGreen,
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 0.0,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Already have an account?",
+                              style: TextStyles.text16gray,
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  PageConst.signInPage,
+                                  ((route) => false)),
+                              child: Row(
+                                children: [
+                                  Button(
+                                    width:
+                                        MediaQuery.of(context).size.width - 335,
+                                    text: "Log in",
+                                    fontColor: AppColors.textColorDirtyGreen,
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right,
+                                    color: AppColors.dirtyGreen,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                sb_h15(),
+              ],
+            ),
           ),
         ));
   }

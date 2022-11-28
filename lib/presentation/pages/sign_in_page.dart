@@ -109,91 +109,110 @@ class _SignInPageState extends State<SignInPage> {
         resizeToAvoidBottomInset: true,
         appBar: MainAppBar(),
         key: _scaffoldGlobalKey,
-        body: Container(
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              sb_h50(),
-              const Text(
-                "Welcome to Holodos",
-                style: TextStyles.header,
-              ),
-              sb_h50(),
-              SimpleTextField(
-                controller: _emailController,
-                labelText: "Enter your email",
-                icon: const Icon(
-                  Icons.email,
-                  color: AppColors.dirtyGreen,
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height - 80,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                sb_h50(),
+                const Text(
+                  "Welcome to Holodos",
+                  style: TextStyles.header,
                 ),
-              ),
-              sb_h15(),
-              PasswordTextField(
-                context: context,
-                controller: _passwordController,
-                labelText: "Enter your password",
-                icon: const Icon(
-                  Icons.lock,
-                  color: AppColors.dirtyGreen,
-                ),
-              ),
-              sb_h50(),
-              GestureDetector(
-                onTap: () => submitSignIn(),
-                child: Button(
-                  width: buttonWidth,
-                  backgroundColor: AppColors.button,
-                  fontColor: AppColors.textColorWhite,
-                  text: "Login",
-                ),
-              ),
-              sb_h15(),
-              GestureDetector(
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.resetPasswordPage, ((route) => false)),
-                child: Button(
-                  width: buttonWidth,
-                  text: "Forgot password?",
-                  fontColor: AppColors.textColorDirtyGreen,
-                ),
-              ),
-              sb_h15(),
-              GestureDetector(
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.recipesPage, ((route) => false)),
-                child: Button(
-                  width: buttonWidth,
-                  text: "Continue without login",
-                  fontColor: AppColors.textColorDirtyGreen,
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 0.0,
-                    children: [
-                      const Text(
-                        "New Holodos?",
-                        style: TextStyles.text16black,
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamedAndRemoveUntil(
-                            context, PageConst.signUpPage, ((route) => false)),
-                        child: Button(
-                          width: 75,
-                          text: "Sign up",
-                          fontColor: AppColors.textColorDirtyGreen,
-                        ),
-                      ),
-                    ],
+                sb_h50(),
+                SimpleTextField(
+                  controller: _emailController,
+                  labelText: "Enter your email",
+                  icon: const Icon(
+                    Icons.email,
+                    color: AppColors.dirtyGreen,
                   ),
                 ),
-              ),
-              sb_h15(),
-            ],
+                sb_h15(),
+                PasswordTextField(
+                  context: context,
+                  controller: _passwordController,
+                  labelText: "Enter your password",
+                  icon: const Icon(
+                    Icons.lock,
+                    color: AppColors.dirtyGreen,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context, PageConst.resetPasswordPage, ((route) => false)),
+                  child: Button(
+                    width: MediaQuery.of(context).size.width - 50,
+                    text: "Forgot password?",
+                    fontColor: AppColors.textColorDirtyGreen,
+                    alignment: Alignment.centerRight,
+                  ),
+                ),
+                sb_h50(),
+                GestureDetector(
+                  onTap: () => submitSignIn(),
+                  child: Button(
+                    width: buttonWidth,
+                    backgroundColor: AppColors.button,
+                    fontColor: AppColors.textColorWhite,
+                    text: "Log in",
+                  ),
+                ),
+                sb_h15(),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context, PageConst.recipesPage, ((route) => false)),
+                  child: Button(
+                    width: buttonWidth,
+                    text: "Continue without login",
+                    fontColor: AppColors.textColorDirtyGreen,
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 0.0,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "New Holodos?",
+                              style: TextStyles.text16gray,
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  PageConst.signUpPage,
+                                  ((route) => false)),
+                              child: Row(
+                                children: [
+                                  Button(
+                                    width:
+                                        MediaQuery.of(context).size.width - 270,
+                                    text: "Create Account",
+                                    fontColor: AppColors.textColorDirtyGreen,
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right,
+                                    color: AppColors.dirtyGreen,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                sb_h15(),
+              ],
+            ),
           ),
         ));
   }

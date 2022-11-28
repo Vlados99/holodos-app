@@ -7,6 +7,7 @@ class Button extends StatelessWidget {
   Color? backgroundColor;
   String text;
   Color? fontColor;
+  Alignment? alignment;
 
   Button({
     Key? key,
@@ -14,12 +15,13 @@ class Button extends StatelessWidget {
     this.backgroundColor,
     required this.text,
     this.fontColor,
+    this.alignment,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
+      alignment: alignment ?? Alignment.center,
       decoration: BoxDecoration(
         color: backgroundColor ?? Colors.white,
         borderRadius: const BorderRadius.all(
