@@ -26,7 +26,7 @@ class SimpleTextField extends StatefulWidget {
 class _SimpleTextFieldState extends State<SimpleTextField> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widget.width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
         inputFormatters: widget.formatters ??
@@ -72,7 +72,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widget.width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
         obscureText: passenable,
@@ -130,7 +130,7 @@ class SearchTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
         inputFormatters:

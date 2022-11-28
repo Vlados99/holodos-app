@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:holodos/domain/entities/category_entity.dart';
 import 'package:holodos/domain/entities/comment_entity.dart';
+import 'package:holodos/domain/entities/cuisine_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/tag_entity.dart';
@@ -26,7 +27,8 @@ abstract class UserRepository {
       ProductEntity product);
   Future<Either<Failure, List<ProductEntity>>> getListOfUsersProducts();
 
-  Future<Either<Failure, List<RecipeEntity>>> getAllRecipes();
+  Future<Either<Failure, List<RecipeEntity>>> getAllRecipes(
+      Map<String, dynamic>? params);
   Future<Either<Failure, List<ProductEntity>>> getRecipeIngredients(
       String recipeId);
   Future<Either<Failure, List<CategoryEntity>>> getRecipeCategories(
@@ -38,6 +40,8 @@ abstract class UserRepository {
   Future<Either<Failure, void>> addRecipeToFavorites(RecipeEntity recipe);
   Future<Either<Failure, void>> removeRecipeFromFavorites(RecipeEntity recipe);
   Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites();
+
+  Future<Either<Failure, List<CuisineEntity>>> getAllCuisines();
 
   Future<Either<Failure, List<ProductEntity>>> searchProductsByName(
       String name);

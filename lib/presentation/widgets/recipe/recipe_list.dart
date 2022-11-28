@@ -7,11 +7,9 @@ import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_item.dart';
 
-import '../../../common/storage.dart';
-
 class RecipeList extends StatefulWidget {
   final List<RecipeEntity>? recipes;
-  RecipeList({
+  const RecipeList({
     Key? key,
     this.recipes,
   }) : super(key: key);

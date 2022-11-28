@@ -72,7 +72,8 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
       appBar: MainAppBar(
         title: "Recipes",
         search: true,
-        delegate: RecipeSearchDelegate(),
+        searchDelegate: RecipeSearchDelegate(),
+        filter: true,
       ),
       body: Container(
         alignment: Alignment.topCenter,

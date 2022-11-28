@@ -127,7 +127,7 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
       appBar: MainAppBar(
         title: "Favorite recipes",
         search: true,
-        delegate: RecipeSearchDelegate(),
+        searchDelegate: RecipeSearchDelegate(),
       ),
       body: scaffoldBody(recipes),
     );

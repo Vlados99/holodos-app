@@ -7,6 +7,7 @@ import 'package:holodos/common/on_generate_route.dart';
 import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
 import 'package:holodos/presentation/bloc/search_recipe/search_recipe_bloc.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
+import 'package:holodos/presentation/cubit/cuisine/cuisine_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserCubit>(create: (_) => di.sl<UserCubit>()),
         BlocProvider<RecipeCubit>(create: (_) => di.sl<RecipeCubit>()),
         BlocProvider<ProductCubit>(create: (_) => di.sl<ProductCubit>()),
+        BlocProvider<CuisineCubit>(create: (_) => di.sl<CuisineCubit>()),
         BlocProvider<SearchRecipeBloc>(
             create: (_) => di.sl<SearchRecipeBloc>()),
         BlocProvider<SearchProductBloc>(
@@ -40,7 +42,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light().copyWith(
-          appBarTheme: AppBarTheme(color: AppColors.appBar),
+          appBarTheme: AppBarTheme(
+              color: AppColors.appBar, foregroundColor: AppColors.orange),
           backgroundColor: AppColors.mainBackground,
           scaffoldBackgroundColor: AppColors.mainBackground,
         ),

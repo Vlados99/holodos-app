@@ -15,7 +15,7 @@ class ErrorPage extends StatelessWidget {
       )),
       body: Container(
         alignment: Alignment.topCenter,
-        child: Text("${context.toString()}"),
+        child: const Text("Sorry but you got to a page with an error"),
       ),
     );
   }

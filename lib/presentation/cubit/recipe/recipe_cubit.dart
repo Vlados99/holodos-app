@@ -61,10 +61,11 @@ class RecipeCubit extends Cubit<RecipeState> {
     }
   }
 
-  Future<void> getRecipes() async {
+  Future<void> getRecipes({Map<String, dynamic>? recipeParams}) async {
     emit(RecipeLoading());
     try {
-      final recipes = await getAllRecipesUseCase();
+      GetAllRecipesParams params = GetAllRecipesParams(params: recipeParams);
+      final recipes = await getAllRecipesUseCase(params);
       recipes.fold((_) => emit(RecipeFailure()),
           (value) => emit(RecipeLoaded(recipes: value)));
     } on SocketException catch (_) {

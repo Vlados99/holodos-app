@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:holodos/common/app_const.dart';
 
 void snackBarError({required BuildContext context, String? message}) {
   ScaffoldMessenger.of(context).showSnackBar(

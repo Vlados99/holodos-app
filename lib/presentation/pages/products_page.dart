@@ -79,7 +79,7 @@ class _ProductsPageState extends State<ProductsPage> {
       appBar: MainAppBar(
         title: "Products",
         search: true,
-        delegate: ProductSearchDelegate(),
+        searchDelegate: ProductSearchDelegate(),
       ),
       body: Container(
         alignment: Alignment.topCenter,

@@ -88,6 +88,9 @@ flutter:
     - family: DancingScript
       fonts:
         - asset: assets/fonts/DancingScript-VariableFont_wght.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

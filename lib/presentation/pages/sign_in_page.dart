@@ -107,7 +107,7 @@ class _SignInPageState extends State<SignInPage> {
           width: MediaQuery.of(context).size.width - 80,
         )),
         resizeToAvoidBottomInset: true,
-        appBar: MainAppBar(title: "Sign in"),
+        appBar: MainAppBar(),
         key: _scaffoldGlobalKey,
         body: Container(
           alignment: Alignment.center,

@@ -139,7 +139,7 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
       appBar: MainAppBar(
         title: "Holodos",
         search: true,
-        delegate: ProductSearchDelegate(),
+        searchDelegate: ProductSearchDelegate(),
       ),
       body: Container(
         alignment: Alignment.topCenter,

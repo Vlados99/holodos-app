@@ -9,6 +9,7 @@ import 'package:holodos/domain/usecases/add_product_to_user_list.dart';
 import 'package:holodos/domain/usecases/add_recipe_to_favorites.dart';
 import 'package:holodos/domain/usecases/commentOnRecipe.dart';
 import 'package:holodos/domain/usecases/create_current_user.dart';
+import 'package:holodos/domain/usecases/get_all_cuisines.dart';
 import 'package:holodos/domain/usecases/get_all_products.dart';
 import 'package:holodos/domain/usecases/get_all_recipes.dart';
 import 'package:holodos/domain/usecases/get_current_user_id.dart';
@@ -35,6 +36,7 @@ import 'package:holodos/domain/usecases/update_product_from_user_list.dart';
 import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
 import 'package:holodos/presentation/bloc/search_recipe/search_recipe_bloc.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
+import 'package:holodos/presentation/cubit/cuisine/cuisine_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
@@ -79,6 +81,8 @@ init() {
         getAllProductsUseCase: sl(),
       ));
 
+  sl.registerFactory(() => CuisineCubit(getAllCuisinesUseCase: sl()));
+
   // UseCases
   sl.registerLazySingleton(() => AddProductToUserList(repository: sl()));
   sl.registerLazySingleton(() => AddRecipeToFavorites(repository: sl()));
@@ -107,6 +111,7 @@ init() {
   sl.registerLazySingleton(() => GetRecipeIngredients(repository: sl()));
   sl.registerLazySingleton(() => GetRecipeSteps(repository: sl()));
   sl.registerLazySingleton(() => GetRecipeTags(repository: sl()));
+  sl.registerLazySingleton(() => GetAllCuisines(repository: sl()));
 
   // Repository
   sl.registerLazySingleton<UserRepository>(

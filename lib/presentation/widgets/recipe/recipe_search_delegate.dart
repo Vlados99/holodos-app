@@ -24,7 +24,7 @@ class RecipeSearchDelegate extends SearchDelegate {
   List<Widget>? buildActions(BuildContext context) {
     return [
       Container(
-        padding: EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.only(right: 12),
         child: GestureDetector(
           onTap: () {
             query = '';
@@ -41,36 +41,33 @@ class RecipeSearchDelegate extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        child: const Icon(
-          Icons.arrow_back_ios_new_outlined,
-          color: AppColors.dirtyGreen,
-        ),
-        onTap: () {
-          return close(context, null);
-        },
+    return GestureDetector(
+      child: const Icon(
+        Icons.arrow_back_ios_new_outlined,
+        color: AppColors.dirtyGreen,
       ),
+      onTap: () {
+        return close(context, null);
+      },
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
     BlocProvider.of<SearchRecipeBloc>(context, listen: false)
-      ..add(SearchRecipesByNameBloc(query));
+        .add(SearchRecipesByNameBloc(query));
     return BlocBuilder<SearchRecipeBloc, SearchRecipeState>(
         builder: (context, state) {
       if (state is SearchRecipeLoaded) {
         final recipe = state.recipes;
-        return Container(
-            child: RecipeList(
+        return RecipeList(
           recipes: recipe,
-        ));
+        );
       } else if (state is SearchRecipeFailure) {
         return ErrorPage();
       }
 
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     });
@@ -89,7 +86,7 @@ class RecipeSearchDelegate extends SearchDelegate {
               query = _suggestions[index];
             },
             child: Container(
-              padding: EdgeInsets.only(left: 24, top: 12, bottom: 12),
+              padding: const EdgeInsets.only(left: 24, top: 12, bottom: 12),
               child: Text(
                 _suggestions[index],
                 style: TextStyles.text16black,
@@ -98,7 +95,7 @@ class RecipeSearchDelegate extends SearchDelegate {
           );
         },
         separatorBuilder: (context, index) {
-          return Divider();
+          return const Divider();
         },
         itemCount: _suggestions.length);
   }

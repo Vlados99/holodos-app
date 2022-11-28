@@ -84,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
           width: MediaQuery.of(context).size.width - 80,
         )),
         resizeToAvoidBottomInset: true,
-        appBar: MainAppBar(title: "Sign up"),
+        appBar: MainAppBar(),
         key: _scaffoldGLobalKey,
         body: Container(
           width: MediaQuery.of(context).size.width,

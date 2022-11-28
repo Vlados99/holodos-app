@@ -3,11 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
-import 'package:holodos/presentation/cubit/product/product_cubit.dart';
-import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
-import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
-import 'package:holodos/presentation/widgets/snack_bar.dart';
 
 class AppDrawer extends StatefulWidget {
   String routeName;

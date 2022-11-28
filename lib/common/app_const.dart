@@ -13,11 +13,11 @@ class PageConst {
 }
 
 class AppColors {
-  static const Color appBar = Color(0xFFF2822C);
+  static const Color appBar = Colors.white;
   static const Color button = Color(0xFFF2822C);
   static const Color mainBackground = Colors.white;
 
-  static const Color appBarTextColor = Colors.white;
+  static const Color appBarTextColor = Colors.black;
   static const Color textColorBlack = Colors.black;
   static const Color textColorDirtyGreen = Color(0xFF267B6B);
   static const Color textColorGray = Color(0xFF858d9d);
@@ -29,20 +29,27 @@ class AppColors {
 }
 
 class TextStyles {
-  static const TextStyle appBarTextStyle =
-      TextStyle(color: AppColors.appBarTextColor);
+  static const String poppins = "Poppins";
+  static const String dancingScript = "DancingScript";
+
+  static const TextStyle appBarTextStyle = TextStyle(
+      color: AppColors.appBarTextColor,
+      fontSize: 32,
+      fontFamily: dancingScript);
 
   static const TextStyle header = TextStyle(
-      fontSize: 42,
-      color: AppColors.textColorBlack,
-      fontFamily: "DancingScript");
+      fontSize: 42, color: AppColors.textColorBlack, fontFamily: dancingScript);
 
-  static const TextStyle text32black =
-      TextStyle(fontSize: 32, color: AppColors.textColorBlack);
-  static const TextStyle text32White =
-      TextStyle(fontSize: 32, color: AppColors.textColorWhite);
-  static const TextStyle text16black =
-      TextStyle(fontSize: 16, color: AppColors.textColorBlack);
-  static const TextStyle text16gray =
-      TextStyle(fontSize: 16, color: AppColors.textColorGray);
+  static const TextStyle text32black = TextStyle(
+      fontSize: 32, color: AppColors.textColorBlack, fontFamily: poppins);
+  static const TextStyle text32White = TextStyle(
+      fontSize: 32, color: AppColors.textColorWhite, fontFamily: poppins);
+  static const TextStyle text16black = TextStyle(
+      fontSize: 16, color: AppColors.textColorBlack, fontFamily: poppins);
+  static const TextStyle text16gray = TextStyle(
+      fontSize: 16, color: AppColors.textColorGray, fontFamily: poppins);
+  static const TextStyle text16white = TextStyle(
+      fontSize: 16, color: AppColors.textColorWhite, fontFamily: poppins);
+  static const TextStyle text12white = TextStyle(
+      fontSize: 12, color: AppColors.textColorWhite, fontFamily: poppins);
 }

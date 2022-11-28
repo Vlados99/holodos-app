@@ -37,9 +37,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   Widget _scaffold() {
     return Scaffold(
-      appBar: MainAppBar(
-        title: "Reset password",
-      ),
+      appBar: MainAppBar(),
       resizeToAvoidBottomInset: true,
       key: _scaffoldGlobalKey,
       body: BlocConsumer<UserCubit, UserState>(

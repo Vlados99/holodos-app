@@ -3,11 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
 import 'package:holodos/data/models/category_model.dart';
 import 'package:holodos/data/models/comment_model.dart';
+import 'package:holodos/data/models/cuisine_model.dart';
 import 'package:holodos/data/models/product_model.dart';
 import 'package:holodos/data/models/recipe_model.dart';
 import 'package:holodos/data/models/step_model.dart';
 import 'package:holodos/data/models/tag_model.dart';
 import 'package:holodos/data/models/user_model.dart';
+import 'package:holodos/domain/entities/cuisine_entity.dart';
 import 'package:holodos/domain/entities/tag_entity.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
@@ -15,6 +17,44 @@ import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/comment_entity.dart';
 import 'package:holodos/domain/entities/category_entity.dart';
+
+enum RecipeQuery {
+  main,
+  complexity,
+  cookTimeLess,
+  cookTimeGreater,
+  cuisines,
+  serves,
+  servesGreater,
+}
+
+extension on Query<Map<String, dynamic>> {
+  Query<Map<String, dynamic>> queryBy(
+      RecipeQuery query, Map<String, dynamic> params) {
+    switch (query) {
+      case RecipeQuery.main:
+        return where("name", isEqualTo: null);
+
+      case RecipeQuery.complexity:
+        return where("complexity", isEqualTo: params["complexity"]);
+
+      case RecipeQuery.cookTimeLess:
+        return where("cookTime", isLessThanOrEqualTo: params["cookTime"]);
+
+      case RecipeQuery.cookTimeGreater:
+        return where("cookTime", isGreaterThan: params["cookTime"]);
+
+      case RecipeQuery.cuisines:
+        return where("cuisines", isEqualTo: params["cuisines"]);
+
+      case RecipeQuery.serves:
+        return where("serves", isEqualTo: params["serves"]);
+
+      case RecipeQuery.servesGreater:
+        return where("serves", isGreaterThanOrEqualTo: params["serves"]);
+    }
+  }
+}
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final FirebaseAuth auth;
@@ -253,10 +293,53 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<List<RecipeEntity>> getAllRecipes() async {
+  Future<List<RecipeEntity>> getAllRecipes(Map<String, dynamic>? params) async {
     final recipesCollectionRef = firestore.collection("recipes");
 
-    QuerySnapshot querySnapshot = await recipesCollectionRef.get();
+    QuerySnapshot querySnapshot;
+    if (params == null || params.isEmpty) {
+      querySnapshot = await recipesCollectionRef.orderBy("name").get();
+    } else {
+      RecipeQuery complexityQuery = RecipeQuery.main;
+      RecipeQuery cookTimeQuery = RecipeQuery.main;
+      RecipeQuery servesQuery = RecipeQuery.main;
+      RecipeQuery cuisinesQuery = RecipeQuery.main;
+
+      if (params.containsKey("complexity") && params["complexity"] != null) {
+        complexityQuery = RecipeQuery.complexity;
+      }
+      if (params.containsKey("cookTime") &&
+          params.containsKey("cookTimeSymbol") &&
+          params["cookTime"] != null &&
+          params["cookTimeSymbol"] != null) {
+        if (params["cookTimeSymbol"] == "<") {
+          cookTimeQuery = RecipeQuery.cookTimeLess;
+        }
+        if (params["cookTimeSymbol"] == ">") {
+          cookTimeQuery = RecipeQuery.cookTimeGreater;
+        }
+      }
+      if (params.containsKey("serves") && params["serves"] != null) {
+        if (params["serves"] >= 3) {
+          servesQuery = RecipeQuery.servesGreater;
+        } else {
+          servesQuery = RecipeQuery.serves;
+        }
+      }
+      if (params.containsKey("cuisines") &&
+          params["cuisines"] != "" &&
+          params["cuisines"] != null) {
+        cuisinesQuery = RecipeQuery.cuisines;
+      }
+
+      querySnapshot = await recipesCollectionRef
+          .queryBy(RecipeQuery.main, params)
+          .queryBy(complexityQuery, params)
+          .queryBy(servesQuery, params)
+          .queryBy(cookTimeQuery, params)
+          .queryBy(cuisinesQuery, params)
+          .get();
+    }
 
     var result = querySnapshot.docs.map((doc) async {
       String recipeId = doc.id;
@@ -466,5 +549,16 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   Future<void> resetPassword(UserEntity user) async {
     auth.sendPasswordResetEmail(email: user.email!);
     return;
+  }
+
+  @override
+  Future<List<CuisineEntity>> getAllCuisines() async {
+    final cuisinesCollectionRef = firestore.collection("cuisines");
+
+    QuerySnapshot querySnapshot = await cuisinesCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => CuisineModel.fromSnapshot(doc))
+        .toList();
   }
 }
