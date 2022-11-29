@@ -29,9 +29,9 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
           SearchRecipesByNameParams(name: event.name));
 
       failureOrRecipe.fold(
-          (_failure) => emit(
-              SearchRecipeFailure(message: _mapFailureToMessage(_failure))),
-          (_recipes) => emit(SearchRecipeLoaded(recipes: _recipes)));
+          (failure) =>
+              emit(SearchRecipeFailure(message: _mapFailureToMessage(failure))),
+          (recipes) => emit(SearchRecipeLoaded(recipes: recipes)));
     });
 
     on<SearchRecipesByCategoriesBloc>((event, emit) async {
@@ -41,9 +41,9 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
           SearchRecipesByCategoriesParams(categories: event.categories));
 
       failureOrRecipe.fold(
-          (_failure) => emit(
-              SearchRecipeFailure(message: _mapFailureToMessage(_failure))),
-          (_recipes) => emit(SearchRecipeLoaded(recipes: _recipes)));
+          (failure) =>
+              emit(SearchRecipeFailure(message: _mapFailureToMessage(failure))),
+          (recipes) => emit(SearchRecipeLoaded(recipes: recipes)));
     });
 
     on<SearchRecipesByProductsBloc>((event, emit) async {
@@ -53,9 +53,9 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
           SearchRecipesByProductsParams(products: event.products));
 
       failureOrRecipe.fold(
-          (_failure) => emit(
-              SearchRecipeFailure(message: _mapFailureToMessage(_failure))),
-          (_recipes) => emit(SearchRecipeLoaded(recipes: _recipes)));
+          (failure) =>
+              emit(SearchRecipeFailure(message: _mapFailureToMessage(failure))),
+          (recipes) => emit(SearchRecipeLoaded(recipes: recipes)));
     });
   }
 

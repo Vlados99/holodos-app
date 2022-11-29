@@ -28,7 +28,7 @@ class ProductSearchDelegate extends SearchDelegate {
   List<Widget>? buildActions(BuildContext context) {
     return [
       Container(
-        padding: EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.only(right: 12),
         child: GestureDetector(
           onTap: () {
             query = '';
@@ -45,36 +45,33 @@ class ProductSearchDelegate extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        child: const Icon(
-          Icons.arrow_back_ios_new_outlined,
-          color: AppColors.dirtyGreen,
-        ),
-        onTap: () {
-          return close(context, null);
-        },
+    return GestureDetector(
+      child: const Icon(
+        Icons.arrow_back_ios_new_outlined,
+        color: AppColors.dirtyGreen,
       ),
+      onTap: () {
+        return close(context, null);
+      },
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
     BlocProvider.of<SearchProductBloc>(context, listen: false)
-      ..add(SearchProductsByNameBloc(query));
+        .add(SearchProductsByNameBloc(query));
     return BlocBuilder<SearchProductBloc, SearchProductState>(
         builder: (context, state) {
       if (state is SearchProductLoaded) {
         final products = state.products;
-        return Container(
-            child: ProductList(
+        return ProductList(
           products: products,
-        ));
+        );
       } else if (state is SearchProductFailure) {
-        return ErrorPage();
+        return const ErrorPage();
       }
 
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     });
@@ -93,7 +90,7 @@ class ProductSearchDelegate extends SearchDelegate {
               query = _suggestions[index];
             },
             child: Container(
-              padding: EdgeInsets.only(left: 24, top: 12, bottom: 12),
+              padding: const EdgeInsets.only(left: 24, top: 12, bottom: 12),
               child: Text(
                 _suggestions[index],
                 style: TextStyles.text16black,
@@ -102,7 +99,7 @@ class ProductSearchDelegate extends SearchDelegate {
           );
         },
         separatorBuilder: (context, index) {
-          return Divider();
+          return const Divider();
         },
         itemCount: _suggestions.length);
   }

@@ -21,7 +21,7 @@ class GetAllRecipes
 class GetAllRecipesParams extends Equatable {
   final Map<String, dynamic>? params;
 
-  GetAllRecipesParams({this.params});
+  const GetAllRecipesParams({this.params});
 
   @override
   List<Object?> get props => [params];

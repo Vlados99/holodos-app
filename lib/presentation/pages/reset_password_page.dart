@@ -5,23 +5,24 @@ import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 import 'package:holodos/presentation/pages/recipes_page.dart';
-import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  ResetPasswordPage({Key? key}) : super(key: key);
+  const ResetPasswordPage({Key? key}) : super(key: key);
 
   @override
   State<ResetPasswordPage> createState() => _ResetPasswordPageState();
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
-  GlobalKey<ScaffoldState> _scaffoldGlobalKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldGlobalKey =
+      GlobalKey<ScaffoldState>();
 
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   void dispose() {
@@ -37,7 +38,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   Widget _scaffold() {
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: const MainAppBar(),
       resizeToAvoidBottomInset: true,
       key: _scaffoldGlobalKey,
       body: BlocConsumer<UserCubit, UserState>(
@@ -46,7 +47,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             return BlocBuilder<AuthCubit, AuthState>(
               builder: (context, authState) {
                 return authState is Authenticated
-                    ? RecipesPage()
+                    ? const RecipesPage()
                     : _bodyWidget();
               },
             );
@@ -70,21 +71,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget _bodyWidget() {
     double buttonWidth = MediaQuery.of(context).size.width / 3.5;
 
+    final h50 = CustomSizedBox().h50();
+    final h15 = CustomSizedBox().h15();
+
     return Container(
       alignment: Alignment.center,
       child: Column(
         children: [
-          sb_h50(),
+          h50,
           const Text(
             "Reset your password",
             style: TextStyles.header,
           ),
-          sb_h50(),
+          h50,
           SimpleTextField(
             controller: _emailController,
             labelText: "Enter your email",
           ),
-          sb_h50(),
+          h50,
           GestureDetector(
             onTap: () => submitReset(),
             child: Button(
@@ -132,7 +136,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               ),
             ),
           ),
-          sb_h15(),
+          h15,
         ],
       ),
     );

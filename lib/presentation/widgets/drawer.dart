@@ -6,10 +6,10 @@ import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
 
 class AppDrawer extends StatefulWidget {
-  String routeName;
-  double width;
+  final String routeName;
+  final double width;
 
-  AppDrawer({
+  const AppDrawer({
     Key? key,
     required this.routeName,
     required this.width,
@@ -161,9 +161,9 @@ class _AppDrawerState extends State<AppDrawer> {
         color: backgroundColor ?? AppColors.mainBackground,
         child: Row(
           children: [
-            sb_w15(),
+            CustomSizedBox().w15(),
             Icon(icon),
-            sb_w15(),
+            CustomSizedBox().w15(),
             Text(
               text,
               style: TextStyles.text16black,

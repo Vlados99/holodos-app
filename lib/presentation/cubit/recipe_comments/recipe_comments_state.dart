@@ -22,14 +22,14 @@ class CommentFailure extends CommentState {
 class CommentsLoaded extends CommentState {
   final List<CommentEntity> comments;
 
-  CommentsLoaded({required this.comments});
+  const CommentsLoaded({required this.comments});
 
   @override
   List<Object> get props => [];
 }
 
 class CommentLoaded extends CommentState {
-  CommentLoaded();
+  const CommentLoaded();
 
   @override
   List<Object> get props => [];

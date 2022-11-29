@@ -5,21 +5,24 @@ import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
-import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/product/product_list.dart';
 import 'package:holodos/presentation/widgets/product/product_search_delegate.dart';
 
 class AvailableProductsPage extends StatefulWidget {
+  const AvailableProductsPage({Key? key}) : super(key: key);
+
   @override
   State<AvailableProductsPage> createState() => _AvailableProductsPageState();
 }
 
 class _AvailableProductsPageState extends State<AvailableProductsPage> {
-  GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController _productSearchController = TextEditingController();
+  final TextEditingController _productSearchController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -57,11 +60,11 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
         width: MediaQuery.of(context).size.width - 80,
       )),
       key: _scaffolGlobalKey,
-      appBar: MainAppBar(
+      appBar: const MainAppBar(
         title: "Holodos",
       ),
       body: centerWidget(
-        icon: Icon(Icons.no_accounts),
+        icon: const Icon(Icons.no_accounts),
         mainText: "Unfortunately, you are not logged in. ",
         buttonText: "Sign in",
         page: PageConst.signInPage,
@@ -76,10 +79,10 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
           return _bodyWidget(productState.products);
         }
         if (productState is ProductFailure) {
-          return ErrorPage();
+          return const ErrorPage();
         }
 
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -121,7 +124,7 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
 
   Widget _noProductsWidget() {
     return centerWidget(
-        icon: Icon(Icons.no_food),
+        icon: const Icon(Icons.no_food),
         mainText: "You don't have food in Holodos? ",
         buttonText: "Add them!",
         page: PageConst.productsPage);
@@ -150,7 +153,7 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
 
   Widget _products() {
     return Column(
-      children: [
+      children: const [
         ProductList(
           isFavorite: true,
         ),

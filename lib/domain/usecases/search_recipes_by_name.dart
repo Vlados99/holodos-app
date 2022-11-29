@@ -20,7 +20,7 @@ class SearchRecipesByName
 class SearchRecipesByNameParams extends Equatable {
   final String name;
 
-  SearchRecipesByNameParams({required this.name});
+  const SearchRecipesByNameParams({required this.name});
 
   @override
   List<Object?> get props => [name];

@@ -20,7 +20,7 @@ class UpdateProductFromUserList
 class UpdateProductFromUserListParams extends Equatable {
   final ProductEntity product;
 
-  UpdateProductFromUserListParams({required this.product});
+  const UpdateProductFromUserListParams({required this.product});
 
   @override
   List<Object?> get props => [product];

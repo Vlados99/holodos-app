@@ -12,7 +12,7 @@ class AuthInitial extends AuthState {
 class Authenticated extends AuthState {
   final String userId;
 
-  Authenticated({required this.userId});
+  const Authenticated({required this.userId});
 
   @override
   List<Object?> get props => [];

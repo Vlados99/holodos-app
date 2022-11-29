@@ -12,17 +12,17 @@ class LoadRecipes extends SearchRecipeEvent {}
 class SearchRecipesByNameBloc extends SearchRecipeEvent {
   final String name;
 
-  SearchRecipesByNameBloc(this.name);
+  const SearchRecipesByNameBloc(this.name);
 }
 
 class SearchRecipesByProductsBloc extends SearchRecipeEvent {
   final List<ProductEntity> products;
 
-  SearchRecipesByProductsBloc(this.products);
+  const SearchRecipesByProductsBloc(this.products);
 }
 
 class SearchRecipesByCategoriesBloc extends SearchRecipeEvent {
   final List<CategoryEntity> categories;
 
-  SearchRecipesByCategoriesBloc(this.categories);
+  const SearchRecipesByCategoriesBloc(this.categories);
 }

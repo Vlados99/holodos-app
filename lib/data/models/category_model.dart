@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:holodos/domain/entities/category_entity.dart';
 
 class CategoryModel extends CategoryEntity {
-  CategoryModel({required id, required name}) : super(id: id, name: name);
+  const CategoryModel({required id, required name}) : super(id: id, name: name);
 
   factory CategoryModel.fromSnapshot(DocumentSnapshot snapshot) {
     return CategoryModel(

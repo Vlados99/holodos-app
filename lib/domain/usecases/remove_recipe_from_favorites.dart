@@ -21,7 +21,7 @@ class RemoveRecipeFromFavorites
 class RemoveRecipeFromFavoritesParams extends Equatable {
   final RecipeEntity recipe;
 
-  RemoveRecipeFromFavoritesParams({required this.recipe});
+  const RemoveRecipeFromFavoritesParams({required this.recipe});
 
   @override
   List<Object?> get props => [recipe];

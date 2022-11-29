@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:holodos/common/app_const.dart';
 
 class SimpleTextField extends StatefulWidget {
-  double? width;
-  TextEditingController controller;
-  String? labelText;
-  List<TextInputFormatter>? formatters;
-  Icon? icon;
+  final double? width;
+  final TextEditingController controller;
+  final String? labelText;
+  final List<TextInputFormatter>? formatters;
+  final Icon? icon;
 
-  SimpleTextField({
+  const SimpleTextField({
     Key? key,
     this.width,
     required this.controller,
@@ -48,14 +48,14 @@ class _SimpleTextFieldState extends State<SimpleTextField> {
 }
 
 class PasswordTextField extends StatefulWidget {
-  double? width;
-  BuildContext context;
-  TextEditingController controller;
-  String? labelText;
-  List<TextInputFormatter>? formatters;
-  Icon? icon;
+  final double? width;
+  final BuildContext context;
+  final TextEditingController controller;
+  final String? labelText;
+  final List<TextInputFormatter>? formatters;
+  final Icon? icon;
 
-  PasswordTextField({
+  const PasswordTextField({
     Key? key,
     this.width,
     required this.context,
@@ -114,14 +114,14 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 }
 
 class SearchTextField extends StatelessWidget {
-  double? width;
-  BuildContext context;
-  TextEditingController controller;
-  String? labelText;
-  List<TextInputFormatter>? formatters;
-  Icon? icon;
+  final double? width;
+  final BuildContext context;
+  final TextEditingController controller;
+  final String? labelText;
+  final List<TextInputFormatter>? formatters;
+  final Icon? icon;
 
-  SearchTextField({
+  const SearchTextField({
     Key? key,
     this.width,
     required this.context,
@@ -148,7 +148,7 @@ class SearchTextField extends StatelessWidget {
             borderSide: BorderSide(color: AppColors.appBar),
           ),
           suffix: Container(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: GestureDetector(
               onTap: () {},
               child: const Icon(

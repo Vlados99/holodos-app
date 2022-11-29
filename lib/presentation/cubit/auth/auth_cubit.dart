@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/domain/usecases/get_current_user_id.dart';
@@ -10,22 +9,22 @@ import 'package:holodos/domain/usecases/sign_out.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final GetCurrentUserId getCurrentUserId;
-  final IsSignIn isSignIn;
-  final SignOut signOut;
+  final GetCurrentUserId getCurrentUserIdUseCase;
+  final IsSignIn isSignInUseCase;
+  final SignOut signOutUseCase;
 
   AuthCubit(
-      {required this.isSignIn,
-      required this.signOut,
-      required this.getCurrentUserId})
+      {required this.isSignInUseCase,
+      required this.signOutUseCase,
+      required this.getCurrentUserIdUseCase})
       : super(AuthInitial());
 
   Future<void> userIsSignIn() async {
-    final _isSignIn = await isSignIn();
+    final isSignIn = await isSignInUseCase();
 
-    _isSignIn.fold((failure) => emit(UnAuthenticated()), (value) async {
+    isSignIn.fold((failure) => emit(UnAuthenticated()), (value) async {
       if (value) {
-        final userId = await getCurrentUserId();
+        final userId = await getCurrentUserIdUseCase();
         emit(Authenticated(userId: userId.getOrElse(() => '')));
       } else {
         emit(UnAuthenticated());
@@ -35,7 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> loggedIn() async {
     try {
-      final userId = await getCurrentUserId();
+      final userId = await getCurrentUserIdUseCase();
       emit(Authenticated(userId: userId.getOrElse(() => '')));
     } on SocketException catch (_) {
       emit(UnAuthenticated());
@@ -44,7 +43,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> loggedOut() async {
     try {
-      await signOut();
+      await signOutUseCase();
       emit(UnAuthenticated());
     } on SocketException catch (_) {
       emit(UnAuthenticated());

@@ -1,10 +1,11 @@
 import 'dart:io';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/usecases/add_recipe_to_favorites.dart';
-import 'package:holodos/domain/usecases/commentOnRecipe.dart';
+import 'package:holodos/domain/usecases/comment_on_recipe.dart';
 import 'package:holodos/domain/usecases/get_all_recipes.dart';
 import 'package:holodos/domain/usecases/get_recipes_from_favorites.dart';
 import 'package:holodos/domain/usecases/remove_recipe_from_favorites.dart';
@@ -55,8 +56,8 @@ class RecipeCubit extends Cubit<RecipeState> {
   Future<void> getRecipesFromFavorites() async {
     emit(RecipeLoading());
     try {
-      final recipes = await getRecipesFromFavoritesUseCase();
-      recipes.fold((_) => emit(RecipeFailure()),
+      final failureOrRecipes = await getRecipesFromFavoritesUseCase();
+      failureOrRecipes.fold((_) => emit(RecipeFailure()),
           (value) => emit(RecipesLoaded(recipes: value)));
     } on SocketException catch (_) {
       emit(RecipeFailure());
@@ -69,8 +70,8 @@ class RecipeCubit extends Cubit<RecipeState> {
     emit(RecipeLoading());
     try {
       GetAllRecipesParams params = GetAllRecipesParams(params: recipeParams);
-      final recipes = await getAllRecipesUseCase(params);
-      recipes.fold((_) => emit(RecipeFailure()),
+      final failureOrRecipes = await getAllRecipesUseCase(params);
+      failureOrRecipes.fold((_) => emit(RecipeFailure()),
           (value) => emit(RecipesLoaded(recipes: value)));
     } on SocketException catch (_) {
       emit(RecipeFailure());

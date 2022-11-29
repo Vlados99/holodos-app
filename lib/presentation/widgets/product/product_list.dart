@@ -14,7 +14,7 @@ class ProductList extends StatefulWidget {
   final List<ProductEntity>? products;
   final bool? isFavorite;
 
-  ProductList({
+  const ProductList({
     Key? key,
     this.products,
     this.isFavorite = false,
@@ -25,7 +25,7 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
-  TextEditingController _productUnitController = TextEditingController();
+  final TextEditingController _productUnitController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class _ProductListState extends State<ProductList> {
           return separatedListView(products ?? state.products);
         }
         if (state is ProductFailure) {
-          return ErrorPage();
+          return const ErrorPage();
         }
 
         return const Center(child: CircularProgressIndicator());
@@ -52,7 +52,7 @@ class _ProductListState extends State<ProductList> {
           return productItem(products[index]);
         },
         separatorBuilder: (context, index) {
-          return Divider();
+          return const Divider();
         },
         itemCount: products.length);
   }
@@ -174,13 +174,11 @@ class _ProductListState extends State<ProductList> {
   }
 
   Widget inputRow() {
-    return Container(
-      child: SimpleTextField(
-          controller: _productUnitController,
-          labelText: "Enter quantity",
-          formatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ]),
-    );
+    return SimpleTextField(
+        controller: _productUnitController,
+        labelText: "Enter quantity",
+        formatters: [
+          FilteringTextInputFormatter.digitsOnly,
+        ]);
   }
 }

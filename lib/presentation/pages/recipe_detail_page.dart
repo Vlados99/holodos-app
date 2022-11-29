@@ -9,7 +9,7 @@ import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/tag_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe_comments/recipe_comments_cubit.dart';
-import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
@@ -52,6 +52,8 @@ class _RecipePageState extends State<RecipePage> {
   }
 
   Widget scaffoldBody() {
+    final h15 = CustomSizedBox().h15();
+
     return SingleChildScrollView(
       child: Container(
         alignment: Alignment.topCenter,
@@ -61,25 +63,25 @@ class _RecipePageState extends State<RecipePage> {
             style: TextStyles.text32black,
           ),
           recipeProducts(),
-          sb_h15(),
+          h15,
           const Text(
             "categories",
             style: TextStyles.text32black,
           ),
           recipeCategories(),
-          sb_h15(),
+          h15,
           const Text(
             "steps",
             style: TextStyles.text32black,
           ),
           recipeSteps(),
-          sb_h15(),
+          h15,
           const Text(
             "tags",
             style: TextStyles.text32black,
           ),
           recipeTags(),
-          sb_h15(),
+          h15,
           const Text(
             "comments",
             style: TextStyles.text32black,
@@ -98,21 +100,17 @@ class _RecipePageState extends State<RecipePage> {
       return Container();
     }
 
-    return Container(
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        padding: EdgeInsets.all(8),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          ProductEntity product = products[index];
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        ProductEntity product = products[index];
 
-          return Container(
-            child: Text("${product.name} - ${product.unit}"),
-          );
-        },
-      ),
+        return Text("${product.name} - ${product.unit}");
+      },
     );
   }
 
@@ -123,20 +121,16 @@ class _RecipePageState extends State<RecipePage> {
       return Container();
     }
 
-    return Container(
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        padding: EdgeInsets.all(8),
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          CategoryEntity category = categories[index];
-          return Container(
-            child: Text(category.name),
-          );
-        },
-      ),
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        CategoryEntity category = categories[index];
+        return Text(category.name);
+      },
     );
   }
 
@@ -159,24 +153,18 @@ class _RecipePageState extends State<RecipePage> {
 
   ListView listView(List<CommentEntity> comments) {
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       itemCount: comments.length,
       itemBuilder: (context, index) {
         CommentEntity comment = comments[index];
         return Column(
           children: [
-            Container(
-              child: Text(comment.userName),
-            ),
-            Container(
-              child: Text(comment.comment),
-            ),
-            Container(
-              child: Text(comment.date.toDate().toString()),
-            ),
+            Text(comment.userName),
+            Text(comment.comment),
+            Text(comment.date.toDate().toString()),
           ],
         );
       },
@@ -190,33 +178,23 @@ class _RecipePageState extends State<RecipePage> {
       return Container();
     }
 
-    return Container(
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        padding: EdgeInsets.all(8),
-        itemCount: steps.length,
-        itemBuilder: (context, index) {
-          StepEntity step = steps[index];
-          return Column(
-            children: [
-              Container(
-                child: Text(step.number.toString()),
-              ),
-              Container(
-                child: Text(step.title ?? ""),
-              ),
-              Container(
-                child: Text(step.description),
-              ),
-              Container(
-                child: Text(step.imageLocation ?? ""),
-              ),
-            ],
-          );
-        },
-      ),
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      itemCount: steps.length,
+      itemBuilder: (context, index) {
+        StepEntity step = steps[index];
+        return Column(
+          children: [
+            Text(step.number.toString()),
+            Text(step.title ?? ""),
+            Text(step.description),
+            Text(step.imageLocation ?? ""),
+          ],
+        );
+      },
     );
   }
 
@@ -227,20 +205,16 @@ class _RecipePageState extends State<RecipePage> {
       return Container();
     }
 
-    return Container(
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        padding: EdgeInsets.all(8),
-        itemCount: tags.length,
-        itemBuilder: (context, index) {
-          TagEntity tag = tags[index];
-          return Container(
-            child: Text(tag.name),
-          );
-        },
-      ),
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      itemCount: tags.length,
+      itemBuilder: (context, index) {
+        TagEntity tag = tags[index];
+        return Text(tag.name);
+      },
     );
   }
 

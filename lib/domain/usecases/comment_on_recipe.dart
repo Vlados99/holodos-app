@@ -20,7 +20,7 @@ class CommentOnRecipeParams extends Equatable {
   final String comment;
   final RecipeEntity recipe;
 
-  CommentOnRecipeParams({required this.comment, required this.recipe});
+  const CommentOnRecipeParams({required this.comment, required this.recipe});
 
   @override
   List<Object?> get props => [comment, recipe];

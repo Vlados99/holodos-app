@@ -20,7 +20,7 @@ class RemoveProductFromUserList
 class RemoveProductFromUserListParams extends Equatable {
   final ProductEntity product;
 
-  RemoveProductFromUserListParams({required this.product});
+  const RemoveProductFromUserListParams({required this.product});
 
   @override
   List<Object?> get props => [product];

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
-SizedBox sb_h1() => const SizedBox(height: 1);
-SizedBox sb_h15() => const SizedBox(height: 15);
-SizedBox sb_h30() => const SizedBox(height: 30);
-SizedBox sb_h50() => const SizedBox(height: 50);
-SizedBox sb_h100() => const SizedBox(height: 100);
-SizedBox sb_w15() => const SizedBox(width: 15);
+class CustomSizedBox {
+  SizedBox h1() => const SizedBox(height: 1);
+  SizedBox h15() => const SizedBox(height: 15);
+  SizedBox h30() => const SizedBox(height: 30);
+  SizedBox h50() => const SizedBox(height: 50);
+  SizedBox h100() => const SizedBox(height: 100);
+  SizedBox w15() => const SizedBox(width: 15);
+}

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
@@ -46,8 +47,8 @@ class ProductCubit extends Cubit<ProductState> {
           RemoveProductFromUserListParams(product: product);
       await removeProductFromUserListUseCase(params);
 
-      final products = await getListOfUsersProductsUseCase();
-      products.fold((_) => emit(ProductFailure()),
+      final failureOrProducts = await getListOfUsersProductsUseCase();
+      failureOrProducts.fold((_) => emit(ProductFailure()),
           (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
       emit(ProductFailure());
@@ -59,8 +60,8 @@ class ProductCubit extends Cubit<ProductState> {
   Future<void> getProductsFromList() async {
     emit(ProductLoading());
     try {
-      final products = await getListOfUsersProductsUseCase();
-      products.fold((_) => emit(ProductFailure()),
+      final failureOrProducts = await getListOfUsersProductsUseCase();
+      failureOrProducts.fold((_) => emit(ProductFailure()),
           (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
       emit(ProductFailure());
@@ -72,8 +73,8 @@ class ProductCubit extends Cubit<ProductState> {
   Future<void> getProducts() async {
     emit(ProductLoading());
     try {
-      final products = await getAllProductsUseCase();
-      products.fold((_) => emit(ProductFailure()),
+      final failureOrProducts = await getAllProductsUseCase();
+      failureOrProducts.fold((_) => emit(ProductFailure()),
           (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
       emit(ProductFailure());
@@ -90,8 +91,8 @@ class ProductCubit extends Cubit<ProductState> {
           UpdateProductFromUserListParams(product: product);
       await updateProductFromUserListUseCase(params);
 
-      final products = await getListOfUsersProductsUseCase();
-      products.fold((_) => emit(ProductFailure()),
+      final failureOrProducts = await getListOfUsersProductsUseCase();
+      failureOrProducts.fold((_) => emit(ProductFailure()),
           (value) => emit(ProductLoaded(products: value)));
     } on SocketException catch (_) {
       emit(ProductFailure());

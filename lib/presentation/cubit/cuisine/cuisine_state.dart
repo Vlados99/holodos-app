@@ -22,7 +22,7 @@ class CuisineFailure extends CuisineState {
 class CuisineLoaded extends CuisineState {
   final List<CuisineEntity> cuisines;
 
-  CuisineLoaded({required this.cuisines});
+  const CuisineLoaded({required this.cuisines});
 
   @override
   List<Object> get props => [cuisines];

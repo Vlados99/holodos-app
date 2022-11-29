@@ -12,5 +12,5 @@ class LoadProducts extends SearchProductEvent {}
 class SearchProductsByNameBloc extends SearchProductEvent {
   final String name;
 
-  SearchProductsByNameBloc(this.name);
+  const SearchProductsByNameBloc(this.name);
 }

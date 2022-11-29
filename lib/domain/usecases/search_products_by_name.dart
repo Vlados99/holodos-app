@@ -20,7 +20,7 @@ class SearchProductsByName
 class SearchProductsByNameParams extends Equatable {
   final String name;
 
-  SearchProductsByNameParams({required this.name});
+  const SearchProductsByNameParams({required this.name});
 
   @override
   List<Object?> get props => [name];

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:holodos/common/app_const.dart';
 
 class Button extends StatelessWidget {
-  double? width;
-  Color? backgroundColor;
-  String text;
-  Color? fontColor;
-  Alignment? alignment;
+  final double? width;
+  final Color? backgroundColor;
+  final String text;
+  final Color? fontColor;
+  final Alignment? alignment;
 
-  Button({
+  const Button({
     Key? key,
     this.width,
     this.backgroundColor,

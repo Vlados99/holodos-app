@@ -4,7 +4,7 @@ class TagEntity extends Equatable {
   final String id;
   final String name;
 
-  TagEntity({required this.id, required this.name});
+  const TagEntity({required this.id, required this.name});
 
   @override
   List<Object?> get props => [id, name];

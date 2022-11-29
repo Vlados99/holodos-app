@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
@@ -21,32 +20,32 @@ class OnGenerateRoute {
         {
           return args is RecipeEntity
               ? materialBuilder(widget: RecipePage(recipe: args))
-              : materialBuilder(widget: ErrorPage());
+              : materialBuilder(widget: const ErrorPage());
         }
 
       case PageConst.signUpPage:
-        return materialBuilder(widget: SignUpPage());
+        return materialBuilder(widget: const SignUpPage());
 
       case PageConst.signInPage:
-        return materialBuilder(widget: SignInPage());
+        return materialBuilder(widget: const SignInPage());
 
       case PageConst.resetPasswordPage:
-        return materialBuilder(widget: ResetPasswordPage());
+        return materialBuilder(widget: const ResetPasswordPage());
 
       case PageConst.productsPage:
-        return materialBuilder(widget: ProductsPage());
+        return materialBuilder(widget: const ProductsPage());
 
       case PageConst.recipesPage:
-        return materialBuilder(widget: RecipesPage());
+        return materialBuilder(widget: const RecipesPage());
 
       case PageConst.favoriteRecipesPage:
-        return materialBuilder(widget: FavoriteRecipesPage());
+        return materialBuilder(widget: const FavoriteRecipesPage());
 
       case PageConst.availableProductsPage:
-        return materialBuilder(widget: AvailableProductsPage());
+        return materialBuilder(widget: const AvailableProductsPage());
 
       default:
-        return materialBuilder(widget: ErrorPage());
+        return materialBuilder(widget: const ErrorPage());
     }
   }
 }

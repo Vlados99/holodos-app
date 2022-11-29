@@ -65,7 +65,7 @@ class RecipeSearchDelegate extends SearchDelegate {
           recipes: recipe,
         );
       } else if (state is SearchRecipeFailure) {
-        return ErrorPage();
+        return const ErrorPage();
       }
 
       return const Center(

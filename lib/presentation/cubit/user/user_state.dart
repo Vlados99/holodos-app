@@ -10,8 +10,8 @@ class UserInitial extends UserState {
 }
 
 class UserFailure extends UserState {
-  String errorMessage;
-  UserFailure({
+  final String errorMessage;
+  const UserFailure({
     required this.errorMessage,
   });
 

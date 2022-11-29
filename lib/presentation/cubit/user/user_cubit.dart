@@ -1,5 +1,4 @@
-import 'dart:io';
-
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,7 +32,7 @@ class UserCubit extends Cubit<UserState> {
     } on FirebaseException catch (e) {
       emit(UserFailure(errorMessage: e.message!));
     } catch (_) {
-      emit(UserFailure(errorMessage: "Unknown error"));
+      emit(const UserFailure(errorMessage: "Unknown error"));
     }
   }
 
@@ -51,7 +50,7 @@ class UserCubit extends Cubit<UserState> {
     } on FirebaseException catch (e) {
       emit(UserFailure(errorMessage: e.message!));
     } catch (_) {
-      emit(UserFailure(errorMessage: "Unknown error"));
+      emit(const UserFailure(errorMessage: "Unknown error"));
     }
   }
 
@@ -65,7 +64,7 @@ class UserCubit extends Cubit<UserState> {
     } on FirebaseException catch (e) {
       emit(UserFailure(errorMessage: e.message!));
     } catch (_) {
-      emit(UserFailure(errorMessage: "Unknown error"));
+      emit(const UserFailure(errorMessage: "Unknown error"));
     }
   }
 }

@@ -21,7 +21,7 @@ class SearchRecipesByCategories extends UseCaseWithParams<List<RecipeEntity>,
 class SearchRecipesByCategoriesParams extends Equatable {
   final List<CategoryEntity> categories;
 
-  SearchRecipesByCategoriesParams({required this.categories});
+  const SearchRecipesByCategoriesParams({required this.categories});
 
   @override
   List<Object?> get props => [categories];

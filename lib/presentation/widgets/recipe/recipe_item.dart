@@ -6,9 +6,9 @@ import 'package:holodos/presentation/widgets/sized_box.dart';
 import '../../../common/app_const.dart';
 
 class RecipeItem extends StatefulWidget {
-  RecipeEntity recipe;
+  final RecipeEntity recipe;
 
-  RecipeItem({
+  const RecipeItem({
     Key? key,
     required this.recipe,
   }) : super(key: key);
@@ -35,16 +35,17 @@ class _RecipeItemState extends State<RecipeItem> {
   }
 
   Widget recipeItem({required RecipeEntity recipe}) {
+    final h15 = CustomSizedBox().h15();
     return Container(
       width: itemWidth,
-      height: itemHeight + sb_h15().height! + 12,
+      height: itemHeight + h15.height! + 12,
       decoration: const BoxDecoration(
           border: Border(
         bottom: BorderSide(color: AppColors.orange),
       )),
       child: Column(
         children: [
-          sb_h15(),
+          h15,
           Stack(
             alignment: Alignment.bottomCenter,
             children: [

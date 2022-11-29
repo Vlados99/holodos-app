@@ -14,7 +14,7 @@ class SearchRecipeLoading extends SearchRecipeState {}
 class SearchRecipeLoaded extends SearchRecipeState {
   final List<RecipeEntity> recipes;
 
-  SearchRecipeLoaded({required this.recipes});
+  const SearchRecipeLoaded({required this.recipes});
 
   @override
   List<Object?> get props => [recipes];
@@ -23,7 +23,7 @@ class SearchRecipeLoaded extends SearchRecipeState {
 class SearchRecipeFailure extends SearchRecipeState {
   final String message;
 
-  SearchRecipeFailure({required this.message});
+  const SearchRecipeFailure({required this.message});
 
   @override
   List<Object?> get props => [message];

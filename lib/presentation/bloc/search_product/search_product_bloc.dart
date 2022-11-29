@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -21,9 +22,9 @@ class SearchProductBloc extends Bloc<SearchProductEvent, SearchProductState> {
           SearchProductsByNameParams(name: event.name));
 
       failureOrProduct.fold(
-          (_failure) => emit(
-              SearchProductFailure(message: _mapFailureToMessage(_failure))),
-          (_products) => emit(SearchProductLoaded(products: _products)));
+          (failure) => emit(
+              SearchProductFailure(message: _mapFailureToMessage(failure))),
+          (products) => emit(SearchProductLoaded(products: products)));
     });
   }
 

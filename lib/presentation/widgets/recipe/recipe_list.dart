@@ -27,7 +27,7 @@ class _RecipeListState extends State<RecipeList> {
         return listView(recipes ?? state.recipes);
       }
       if (state is RecipeFailure) {
-        return ErrorPage();
+        return const ErrorPage();
       }
 
       return const Center(child: CircularProgressIndicator());

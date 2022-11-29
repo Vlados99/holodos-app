@@ -7,7 +7,7 @@ import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/tag_entity.dart';
 
 class RecipeModel extends RecipeEntity {
-  RecipeModel(
+  const RecipeModel(
       {required id,
       required name,
       required cuisines,

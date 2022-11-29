@@ -7,7 +7,7 @@ import 'package:holodos/data/repositories/user_repository_impl.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
 import 'package:holodos/domain/usecases/add_product_to_user_list.dart';
 import 'package:holodos/domain/usecases/add_recipe_to_favorites.dart';
-import 'package:holodos/domain/usecases/commentOnRecipe.dart';
+import 'package:holodos/domain/usecases/comment_on_recipe.dart';
 import 'package:holodos/domain/usecases/create_current_user.dart';
 import 'package:holodos/domain/usecases/get_all_cuisines.dart';
 import 'package:holodos/domain/usecases/get_all_products.dart';
@@ -55,9 +55,9 @@ init() {
   sl.registerFactory(() => SearchProductBloc(searchProductsByName: sl()));
 
   sl.registerFactory(() => AuthCubit(
-        isSignIn: sl(),
-        signOut: sl(),
-        getCurrentUserId: sl(),
+        isSignInUseCase: sl(),
+        signOutUseCase: sl(),
+        getCurrentUserIdUseCase: sl(),
       ));
 
   sl.registerFactory(() => UserCubit(

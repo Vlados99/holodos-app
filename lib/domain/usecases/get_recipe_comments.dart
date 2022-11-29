@@ -18,9 +18,9 @@ class GetRecipeComments
 }
 
 class GetRecipeCommentsParams extends Equatable {
-  String recipeId;
+  final String recipeId;
 
-  GetRecipeCommentsParams({required this.recipeId});
+  const GetRecipeCommentsParams({required this.recipeId});
 
   @override
   List<Object?> get props => [recipeId];

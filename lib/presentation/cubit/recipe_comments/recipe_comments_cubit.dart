@@ -1,10 +1,11 @@
 import 'dart:io';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:holodos/domain/entities/comment_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
-import 'package:holodos/domain/usecases/commentOnRecipe.dart';
+import 'package:holodos/domain/usecases/comment_on_recipe.dart';
 import 'package:holodos/domain/usecases/get_recipe_comments.dart';
 
 part 'recipe_comments_state.dart';
@@ -24,8 +25,8 @@ class CommentsCubit extends Cubit<CommentState> {
     try {
       GetRecipeCommentsParams params =
           GetRecipeCommentsParams(recipeId: recipeId);
-      final comments = await getRecipeCommentsUseCase(params);
-      comments.fold((_) => emit(CommentFailure()),
+      final failureOrComments = await getRecipeCommentsUseCase(params);
+      failureOrComments.fold((_) => emit(CommentFailure()),
           (value) => emit(CommentsLoaded(comments: value)));
     } on SocketException catch (_) {
       emit(CommentFailure());
@@ -40,13 +41,13 @@ class CommentsCubit extends Cubit<CommentState> {
     try {
       CommentOnRecipeParams params =
           CommentOnRecipeParams(comment: comment, recipe: recipe);
-      final commentObj = await commentOnRecipeUseCase(params);
+      final failureOrVoid = await commentOnRecipeUseCase(params);
 
       GetRecipeCommentsParams recipeParams =
           GetRecipeCommentsParams(recipeId: recipe.id);
       final comments = await getRecipeCommentsUseCase(recipeParams);
       final temp = comments.getOrElse(() => []);
-      commentObj.fold((_) => emit(CommentFailure()),
+      failureOrVoid.fold((_) => emit(CommentFailure()),
           (value) => emit(CommentsLoaded(comments: temp)));
     } on SocketException catch (_) {
       emit(CommentFailure());

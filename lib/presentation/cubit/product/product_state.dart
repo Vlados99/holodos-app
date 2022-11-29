@@ -22,7 +22,7 @@ class ProductFailure extends ProductState {
 class ProductLoaded extends ProductState {
   final List<ProductEntity> products;
 
-  ProductLoaded({required this.products});
+  const ProductLoaded({required this.products});
 
   @override
   List<Object> get props => [products];

@@ -14,7 +14,7 @@ class SearchProductLoading extends SearchProductState {}
 class SearchProductLoaded extends SearchProductState {
   final List<ProductEntity> products;
 
-  SearchProductLoaded({required this.products});
+  const SearchProductLoaded({required this.products});
 
   @override
   List<Object?> get props => [products];
@@ -23,7 +23,7 @@ class SearchProductLoaded extends SearchProductState {
 class SearchProductFailure extends SearchProductState {
   final String message;
 
-  SearchProductFailure({required this.message});
+  const SearchProductFailure({required this.message});
 
   @override
   List<Object?> get props => [message];

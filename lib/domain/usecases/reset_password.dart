@@ -19,7 +19,7 @@ class ResetPassword extends UseCaseWithParams<void, ResetPasswordParams> {
 class ResetPasswordParams extends Equatable {
   final UserEntity user;
 
-  ResetPasswordParams({required this.user});
+  const ResetPasswordParams({required this.user});
 
   @override
   List<Object?> get props => [user];

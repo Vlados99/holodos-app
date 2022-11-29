@@ -18,9 +18,9 @@ class GetRecipeSteps
 }
 
 class GetRecipeStepsParams extends Equatable {
-  String recipeId;
+  final String recipeId;
 
-  GetRecipeStepsParams({required this.recipeId});
+  const GetRecipeStepsParams({required this.recipeId});
 
   @override
   List<Object?> get props => [recipeId];

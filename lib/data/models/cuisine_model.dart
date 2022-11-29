@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:holodos/domain/entities/cuisine_entity.dart';
 
 class CuisineModel extends CuisineEntity {
-  CuisineModel({required id, required name}) : super(id: id, name: name);
+  const CuisineModel({required id, required name}) : super(id: id, name: name);
 
   factory CuisineModel.fromSnapshot(DocumentSnapshot snapshot) {
     return CuisineModel(

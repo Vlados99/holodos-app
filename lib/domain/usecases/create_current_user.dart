@@ -20,7 +20,7 @@ class CreateCurrentUser
 class CreateCurrentUserParams extends Equatable {
   final UserEntity user;
 
-  CreateCurrentUserParams({required this.user});
+  const CreateCurrentUserParams({required this.user});
 
   @override
   List<Object?> get props => [user];

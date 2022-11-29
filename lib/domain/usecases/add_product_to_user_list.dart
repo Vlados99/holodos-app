@@ -20,7 +20,7 @@ class AddProductToUserList
 class AddProductToUserListParams extends Equatable {
   final ProductEntity product;
 
-  AddProductToUserListParams({required this.product});
+  const AddProductToUserListParams({required this.product});
 
   @override
   List<Object?> get props => [product];

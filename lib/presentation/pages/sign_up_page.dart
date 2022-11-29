@@ -5,7 +5,7 @@ import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
 import 'package:holodos/presentation/pages/recipes_page.dart';
-import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
@@ -14,18 +14,19 @@ import 'package:holodos/presentation/widgets/text_field.dart';
 import '../widgets/drawer.dart';
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  GlobalKey<ScaffoldState> _scaffoldGLobalKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldGLobalKey =
+      GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
@@ -56,7 +57,9 @@ class _SignUpPageState extends State<SignUpPage> {
         if (userState is UserSuccess) {
           return BlocBuilder<AuthCubit, AuthState>(
             builder: (context, authState) {
-              return authState is Authenticated ? RecipesPage() : _bodyWidget();
+              return authState is Authenticated
+                  ? const RecipesPage()
+                  : _bodyWidget();
             },
           );
         }
@@ -77,6 +80,9 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _bodyWidget() {
     double buttonWidth = MediaQuery.of(context).size.width / 1.5;
 
+    final h15 = CustomSizedBox().h15();
+    final h50 = CustomSizedBox().h50();
+
     return Scaffold(
         drawer: SafeArea(
             child: AppDrawer(
@@ -84,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
           width: MediaQuery.of(context).size.width - 80,
         )),
         resizeToAvoidBottomInset: true,
-        appBar: MainAppBar(),
+        appBar: const MainAppBar(),
         key: _scaffoldGLobalKey,
         body: SingleChildScrollView(
           child: Container(
@@ -93,28 +99,28 @@ class _SignUpPageState extends State<SignUpPage> {
             alignment: Alignment.center,
             child: Column(
               children: [
-                sb_h50(),
+                CustomSizedBox().h50(),
                 const Text(
                   "Registration",
                   style: TextStyles.header,
                 ),
-                sb_h50(),
+                h50,
                 SimpleTextField(
                   controller: _usernameController,
                   labelText: "Enter your username",
                 ),
-                sb_h15(),
+                h15,
                 SimpleTextField(
                   controller: _emailController,
                   labelText: "Enter your email",
                 ),
-                sb_h15(),
+                h15,
                 PasswordTextField(
                   context: context,
                   controller: _passwordController,
                   labelText: "Enter your password",
                 ),
-                sb_h50(),
+                h50,
                 GestureDetector(
                   onTap: () => submitCreateAccount(),
                   child: Button(
@@ -124,7 +130,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     fontColor: AppColors.textColorWhite,
                   ),
                 ),
-                sb_h15(),
+                h15,
                 GestureDetector(
                   onTap: () => Navigator.pushNamedAndRemoveUntil(
                       context, PageConst.recipesPage, ((route) => false)),
@@ -162,7 +168,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     text: "Log in",
                                     fontColor: AppColors.textColorDirtyGreen,
                                   ),
-                                  Icon(
+                                  const Icon(
                                     Icons.chevron_right,
                                     color: AppColors.dirtyGreen,
                                   ),
@@ -175,7 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
-                sb_h15(),
+                h15,
               ],
             ),
           ),

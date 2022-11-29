@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
 
 class StepModel extends StepEntity {
-  StepModel(
+  const StepModel(
       {required id,
       required title,
       required number,

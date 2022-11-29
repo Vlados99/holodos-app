@@ -19,7 +19,7 @@ class SignIn extends UseCaseWithParams<void, SignInParams> {
 class SignInParams extends Equatable {
   final UserEntity user;
 
-  SignInParams({required this.user});
+  const SignInParams({required this.user});
 
   @override
   List<Object?> get props => [user];

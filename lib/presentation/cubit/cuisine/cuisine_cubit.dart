@@ -15,8 +15,8 @@ class CuisineCubit extends Cubit<CuisineState> {
   Future<void> getCuisines() async {
     emit(CuisineLoading());
     try {
-      final cuisines = await getAllCuisinesUseCase();
-      cuisines.fold((_) => emit(CuisineFailure()),
+      final failureOrCuisines = await getAllCuisinesUseCase();
+      failureOrCuisines.fold((_) => emit(CuisineFailure()),
           (value) => emit(CuisineLoaded(cuisines: value)));
     } on SocketException catch (_) {
       emit(CuisineFailure());

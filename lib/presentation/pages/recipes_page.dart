@@ -4,13 +4,13 @@ import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
-import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart';
 
 class RecipesPage extends StatefulWidget {
-  RecipesPage({
+  const RecipesPage({
     Key? key,
   }) : super(key: key);
 
@@ -19,7 +19,7 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> with RouteAware {
-  GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -40,10 +40,10 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
           return _bodyWidget(recipeState.recipes);
         }
         if (recipeState is RecipeFailure) {
-          return ErrorPage();
+          return const ErrorPage();
         }
 
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -53,9 +53,10 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   Widget _noRecipesWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      // ignore: prefer_const_literals_to_create_immutables
       children: [
-        Icon(Icons.no_food),
-        Text("Recipes are not found!"),
+        const Icon(Icons.no_food),
+        const Text("Recipes are not found!"),
       ],
     );
   }
@@ -83,8 +84,6 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   }
 
   Widget _recipes() {
-    return Container(
-      child: RecipeList(),
-    );
+    return const RecipeList();
   }
 }

@@ -5,19 +5,21 @@ import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
-import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart';
 
 class FavoriteRecipesPage extends StatefulWidget {
+  const FavoriteRecipesPage({Key? key}) : super(key: key);
+
   @override
   State<FavoriteRecipesPage> createState() => _FavoriteRecipesPageState();
 }
 
 class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
-  GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -44,11 +46,11 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
         width: MediaQuery.of(context).size.width - 80,
       )),
       key: _scaffolGlobalKey,
-      appBar: MainAppBar(
+      appBar: const MainAppBar(
         title: "Favorite recipes",
       ),
       body: centerWidget(
-        icon: Icon(Icons.no_accounts),
+        icon: const Icon(Icons.no_accounts),
         mainText: "Unfortunately, you are not logged in. ",
         buttonText: "Sign in",
         page: PageConst.signInPage,
@@ -63,7 +65,7 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
           return _bodyWidget(recipeState.recipes);
         }
         if (recipeState is RecipeFailure) {
-          return ErrorPage();
+          return const ErrorPage();
         }
 
         return const Center(
@@ -75,7 +77,7 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
 
   Widget _noRecipesWidget() {
     return centerWidget(
-      icon: Icon(Icons.no_food),
+      icon: const Icon(Icons.no_food),
       mainText: "Do you have any favorite recipes? ",
       buttonText: "Add them!",
       page: PageConst.recipesPage,
@@ -141,8 +143,6 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   }
 
   Widget _recipes() {
-    return Container(
-      child: RecipeList(),
-    );
+    return const RecipeList();
   }
 }

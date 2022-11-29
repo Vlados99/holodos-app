@@ -20,7 +20,7 @@ class AddRecipeToFavorites
 class AddRecipeToFavoritesParams extends Equatable {
   final RecipeEntity recipe;
 
-  AddRecipeToFavoritesParams({required this.recipe});
+  const AddRecipeToFavoritesParams({required this.recipe});
 
   @override
   List<Object?> get props => [recipe];

@@ -5,7 +5,7 @@ import 'package:holodos/domain/entities/product_entity.dart';
 class ProductItem extends StatefulWidget {
   final ProductEntity product;
 
-  ProductItem({
+  const ProductItem({
     Key? key,
     required this.product,
   }) : super(key: key);

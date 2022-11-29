@@ -19,7 +19,7 @@ class ShareRecipe extends UseCaseWithParams<void, ShareRecipeParams> {
 class ShareRecipeParams extends Equatable {
   final RecipeEntity recipe;
 
-  ShareRecipeParams({required this.recipe});
+  const ShareRecipeParams({required this.recipe});
 
   @override
   List<Object?> get props => [recipe];

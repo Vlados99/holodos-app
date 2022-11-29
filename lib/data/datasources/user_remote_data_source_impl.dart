@@ -122,7 +122,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     await usersProductCollectionRef
         .doc(userProductDocId)
         .get()
-        .then((_product) async {
+        .then((docSnapshot) async {
       if (await _productExists(product)) {
         await _createAndAddProduct(
             product, usersProductCollectionRef, userProductDocId);
@@ -143,7 +143,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     await favoriteRecipesCollectionRef
         .doc(favoriteRecipeDocId)
         .get()
-        .then((_recipe) async {
+        .then((docSnapshot) async {
       final newRecipe = RecipeModel(
         id: favoriteRecipeDocId,
         name: recipe.name,
@@ -160,11 +160,12 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         tags: recipe.tags,
       ).toDocument();
 
-      if (!_recipe.exists) {
+      if (!docSnapshot.exists) {
         await favoriteRecipesCollectionRef
             .doc(favoriteRecipeDocId)
             .set(newRecipe);
       } else {
+        // ignore: avoid_print
         print("-----RECIPE EXISTS, SHOW FOR USER MESSAGE-----");
       }
       return;
@@ -174,7 +175,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<void> commentOnComment(
       String uId, CommentEntity response, CommentEntity comment) {
-    // TODO: implement commentOnComment
     throw UnimplementedError();
   }*/
 
@@ -194,7 +194,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     await recipesCommentsCollectionRef
         .doc(commentId)
         .get()
-        .then((_comment) async {
+        .then((docSnapshot) async {
       final newComment = CommentModel(
         id: commentId,
         userName: user,
@@ -212,14 +212,14 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final usersCollectionRef = firestore.collection("users");
     final uId = await getCurrentUId();
 
-    await usersCollectionRef.doc(uId).get().then((_user) async {
+    await usersCollectionRef.doc(uId).get().then((docSnapshot) async {
       var newUser = UserModel(
         password: user.password,
         email: user.email,
         name: user.name,
       ).createUser();
 
-      if (!_user.exists) {
+      if (!docSnapshot.exists) {
         await usersCollectionRef.doc(uId).set(newUser);
       }
       return;
@@ -428,8 +428,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     await usersProductCollectionRef
         .doc(product.id)
         .get()
-        .then((_product) async {
-      if (_product.exists) {
+        .then((docSnapshot) async {
+      if (docSnapshot.exists) {
         await usersProductCollectionRef.doc(product.id).delete();
       }
       return;
@@ -445,8 +445,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     await usersFavoriteRecipesCollectionRef
         .doc(recipe.id)
         .get()
-        .then((_recipe) {
-      if (_recipe.exists) {
+        .then((docSnapshot) {
+      if (docSnapshot.exists) {
         usersFavoriteRecipesCollectionRef.doc(recipe.id).delete();
       }
       return;
@@ -501,13 +501,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<List<RecipeEntity>> searchRecipesByProducts(
       List<ProductEntity> products) {
-    // TODO: implement searchRecipeByProducts
     throw UnimplementedError();
   }
 
   @override
   Future<void> shareRecipe(RecipeEntity recipe) {
-    // TODO: implement shareRecipe
     throw UnimplementedError();
   }
 

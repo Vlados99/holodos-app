@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:holodos/common/app_const.dart';
-import 'package:holodos/presentation/widgets/app_bar.dart';
+import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 
 class ErrorPage extends StatelessWidget {
+  const ErrorPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Error"),
+      appBar: const MainAppBar(title: "Error"),
       drawer: SafeArea(
           child: AppDrawer(
         routeName: PageConst.errorPage,

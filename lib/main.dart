@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:holodos/common/app_const.dart';
 import 'package:holodos/common/app_theme.dart';
 import 'package:holodos/common/locator_service.dart' as di;
 import 'package:holodos/common/on_generate_route.dart';
@@ -22,10 +22,15 @@ void main() async {
   await Firebase.initializeApp();
   await di.init();
 
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -54,12 +59,12 @@ class MyApp extends StatelessWidget {
             return BlocBuilder<AuthCubit, AuthState>(
                 builder: (context, authState) {
               if (authState is Authenticated) {
-                return RecipesPage();
+                return const RecipesPage();
               }
               if (authState is UnAuthenticated) {
-                return SignInPage();
+                return const SignInPage();
               }
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             });
           }
         },
