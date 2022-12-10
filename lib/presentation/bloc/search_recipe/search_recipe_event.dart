@@ -14,15 +14,3 @@ class SearchRecipesByNameBloc extends SearchRecipeEvent {
 
   const SearchRecipesByNameBloc(this.name);
 }
-
-class SearchRecipesByProductsBloc extends SearchRecipeEvent {
-  final List<ProductEntity> products;
-
-  const SearchRecipesByProductsBloc(this.products);
-}
-
-class SearchRecipesByCategoriesBloc extends SearchRecipeEvent {
-  final List<CategoryEntity> categories;
-
-  const SearchRecipesByCategoriesBloc(this.categories);
-}

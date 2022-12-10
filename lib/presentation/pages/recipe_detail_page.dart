@@ -19,13 +19,13 @@ import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
 class RecipePage extends StatefulWidget {
-  final String id;
-  final bool isFavorite;
+  final RecipeEntity recipe;
+  final String fromPageName;
 
   const RecipePage({
     Key? key,
-    required this.id,
-    required this.isFavorite,
+    required this.recipe,
+    required this.fromPageName,
   }) : super(key: key);
 
   @override
@@ -34,6 +34,7 @@ class RecipePage extends StatefulWidget {
 
 class _RecipePageState extends State<RecipePage> {
   final TextEditingController commentController = TextEditingController();
+  final pageName = PageConst.recipePage;
 
   double itemHeight = 200;
   late RecipeEntity recipe;
@@ -41,9 +42,9 @@ class _RecipePageState extends State<RecipePage> {
   var id = "";
   @override
   void initState() {
-    id = widget.id;
-
-    BlocProvider.of<RecipeCubit>(context).getRecipeById(id: id);
+    id = widget.recipe.id;
+    recipe = widget.recipe;
+    BlocProvider.of<RecipesCubit>(context).getRecipeById(id: id);
 
     BlocProvider.of<CommentsCubit>(context).getRecipeComments(recipeId: id);
     super.initState();
@@ -58,46 +59,47 @@ class _RecipePageState extends State<RecipePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RecipeCubit, RecipeState>(
-      builder: (context, recipeState) {
-        if (recipeState is RecipeLoaded) {
-          recipe = recipeState.recipe;
-          recipe.isFavorite = widget.isFavorite;
-
-          return _bodyWidget();
-        }
-        if (recipeState is RecipeFailure) {
-          return const ErrorPage();
-        }
-
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-  }
-
-  Widget _bodyWidget() {
     return Scaffold(
-      appBar: MainAppBar(title: recipe.name),
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.topCenter,
-          child: Column(
-            children: [
-              RecipeItem(recipe: recipe, pageName: PageConst.recipePage),
-              detailRow(),
-              recipeDescription(),
-              recipeProducts(),
-              // recipeCategories(),
-              // recipeTags(),
-              recipeSteps(),
-              sharedButton(),
-              recipeComments(),
-              postComment(),
-            ],
-          ),
-        ),
+      appBar: MainAppBar(
+        title: recipe.name,
+        leading: true,
+        pageName: widget.fromPageName,
+      ),
+      body: BlocBuilder<RecipesCubit, RecipesState>(
+        builder: (context, recipeState) {
+          if (recipeState is RecipeLoaded) {
+            recipe = recipeState.recipe;
+            return SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  children: [
+                    RecipeItem(
+                      recipe: recipe,
+                      pageName: PageConst.recipePage,
+                      callback: callback,
+                    ),
+                    detailRow(),
+                    recipeDescription(),
+                    recipeProducts(),
+                    // recipeCategories(),
+                    // recipeTags(),
+                    recipeSteps(),
+                    sharedButton(),
+                    recipeComments(),
+                  ],
+                ),
+              ),
+            );
+          }
+          if (recipeState is RecipesFailure) {
+            return const ErrorPage();
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
@@ -184,17 +186,28 @@ class _RecipePageState extends State<RecipePage> {
 
   Widget sharedButton() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.share),
-        txt16(text: "Share"),
+        txt24(text: "Share"),
+        const Icon(
+          Icons.share,
+          size: 24,
+        ),
       ],
     );
   }
 
-  Widget txt32(String text) {
+  Widget txt32({required String text}) {
     return Text(
       text,
       style: TextStyles.text32black,
+    );
+  }
+
+  Widget txt24({required String text}) {
+    return Text(
+      text,
+      style: TextStyles.text24black,
     );
   }
 
@@ -220,7 +233,7 @@ class _RecipePageState extends State<RecipePage> {
             children: [
               Container(
                 alignment: Alignment.centerLeft,
-                child: txt32("Ingredients:"),
+                child: txt32(text: "Ingredients:"),
               ),
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -261,7 +274,7 @@ class _RecipePageState extends State<RecipePage> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          txt32("Categories"),
+          txt32(text: "Categories"),
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -290,7 +303,7 @@ class _RecipePageState extends State<RecipePage> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          txt32("Tags"),
+          txt32(text: "Tags"),
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -404,13 +417,31 @@ class _RecipePageState extends State<RecipePage> {
   Widget comments(List<CommentEntity> comments) {
     return Column(
       children: [
-        txt32("Comments"),
+        Container(
+          padding: const EdgeInsets.only(left: 10),
+          alignment: Alignment.centerLeft,
+          child: txt32(text: "Comments"),
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(bottom: 25, left: 10),
+          child: Divider(
+            endIndent: MediaQuery.of(context).size.width / 2,
+            color: AppColors.orange,
+            thickness: 4,
+          ),
+        ),
+        postComment(),
         comments.isEmpty
             ? const Text(
                 "There are no comments for this recipe yet",
                 style: TextStyles.text16gray,
               )
-            : ListView.builder(
+            : ListView.separated(
+                separatorBuilder: (context, index) => const Divider(
+                  color: Colors.grey,
+                  thickness: 1,
+                ),
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -418,11 +449,18 @@ class _RecipePageState extends State<RecipePage> {
                 itemCount: comments.length,
                 itemBuilder: (context, index) {
                   CommentEntity comment = comments[index];
+
+                  var date = comment.date.toDate().toLocal();
+                  String showDate = "${date.day}.${date.month}.${date.year}";
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       txt16(text: comment.userName),
+                      txt16(
+                          // text: comment.date.toDate().toString(),
+                          text: showDate,
+                          style: TextStyles.text16green),
                       txt16(text: comment.comment),
-                      txt16(text: comment.date.toDate().toString()),
                     ],
                   );
                 },
@@ -443,11 +481,13 @@ class _RecipePageState extends State<RecipePage> {
     return Column(
       children: [
         SimpleTextField(
+          maxLines: 5,
+          keyboardType: TextInputType.multiline,
           controller: commentController,
           labelText: "Enter the comment",
         ),
         Container(
-          padding: const EdgeInsets.only(right: 16),
+          padding: const EdgeInsets.only(right: 16, top: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -480,5 +520,10 @@ class _RecipePageState extends State<RecipePage> {
     }
 
     commentController.clear();
+  }
+
+  void callback() {
+    BlocProvider.of<RecipesCubit>(context)
+        .update(name: pageName, id: recipe.id);
   }
 }

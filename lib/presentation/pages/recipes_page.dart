@@ -42,24 +42,7 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return _builder();
-  }
-
-  Widget _builder() {
-    return BlocBuilder<RecipesCubit, RecipesState>(
-      builder: (context, recipeState) {
-        if (recipeState is RecipesLoaded) {
-          return _bodyWidget(recipeState.recipes);
-        }
-        if (recipeState is RecipesFailure) {
-          return const ErrorPage();
-        }
-
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+    return _bodyWidget();
   }
 
   Widget _noRecipesWidget() {
@@ -72,7 +55,7 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
     );
   }
 
-  Widget _bodyWidget(List<RecipeEntity> recipes) {
+  Widget _bodyWidget() {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
@@ -87,9 +70,25 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
         searchDelegate: RecipeSearchDelegate(pageName: pageName),
         filter: true,
       ),
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: recipes.isEmpty ? _noRecipesWidget() : _recipes(recipes),
+      body: BlocBuilder<RecipesCubit, RecipesState>(
+        builder: (context, recipeState) {
+          if (recipeState is RecipesLoaded) {
+            List<RecipeEntity> recipes = recipeState.recipes;
+            return Container(
+              alignment: Alignment.topCenter,
+              child: recipes.isEmpty ? _noRecipesWidget() : _recipes(recipes),
+            );
+          }
+          if (recipeState is RecipesFailure) {
+            return const ErrorPage();
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+            ),
+          );
+        },
       ),
     );
   }
@@ -102,6 +101,7 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
           child: RecipeList(
             pageName: pageName,
             recipes: recipes,
+            callback: callback,
           ),
         ),
       ],
@@ -109,14 +109,12 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   }
 
   Widget searchByProducts() {
-    return Container(
-      child: Column(
-        children: [
-          products(),
-          selectedProducts(),
-          searchButton(),
-        ],
-      ),
+    return Column(
+      children: [
+        products(),
+        selectedProducts(),
+        searchButton(),
+      ],
     );
   }
 
@@ -142,5 +140,13 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
         ),
       ],
     );
+  }
+
+  void callback() {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   setState(() {});
+    // });
+
+    BlocProvider.of<RecipesCubit>(context).update(name: pageName);
   }
 }

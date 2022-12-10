@@ -10,6 +10,7 @@ class SimpleTextField extends StatefulWidget {
   final List<TextInputFormatter>? formatters;
   final Icon? icon;
   final TextInputType? keyboardType;
+  final int? maxLines;
 
   const SimpleTextField({
     Key? key,
@@ -19,6 +20,7 @@ class SimpleTextField extends StatefulWidget {
     this.formatters,
     this.icon,
     this.keyboardType,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,8 @@ class _SimpleTextFieldState extends State<SimpleTextField> {
     return SizedBox(
       width: widget.width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
+        maxLines: widget.maxLines ?? 1,
+        minLines: 1,
         keyboardType: widget.keyboardType ?? TextInputType.text,
         inputFormatters: widget.formatters ??
             [FilteringTextInputFormatter.singleLineFormatter],

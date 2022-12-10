@@ -29,29 +29,14 @@ class RecipesLoaded extends RecipesState {
   const RecipesLoaded({required this.recipes});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [recipes];
 }
 
-class RecipeLoaded extends RecipeState {
+class RecipeLoaded extends RecipesState {
   final RecipeEntity recipe;
 
   const RecipeLoaded({required this.recipe});
 
   @override
-  List<Object> get props => [];
-}
-
-class RecipeInitial extends RecipeState {
-  @override
-  List<Object> get props => [];
-}
-
-class RecipeLoading extends RecipeState {
-  @override
-  List<Object> get props => [];
-}
-
-class RecipeFailure extends RecipeState {
-  @override
-  List<Object> get props => [];
+  List<Object> get props => [recipe];
 }

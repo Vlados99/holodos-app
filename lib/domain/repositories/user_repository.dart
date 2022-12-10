@@ -43,6 +43,7 @@ abstract class UserRepository {
   Future<Either<Failure, List<RecipeEntity>>> getRecipesFromFavorites();
 
   Future<Either<Failure, List<CuisineEntity>>> getAllCuisines();
+  Future<Either<Failure, List<CategoryEntity>>> getAllCategories();
 
   Future<Either<Failure, List<ProductEntity>>> searchProductsByName(
       String name);
@@ -51,7 +52,7 @@ abstract class UserRepository {
   Future<Either<Failure, List<RecipeEntity>>> searchRecipesByProducts(
       List<ProductEntity> products);
   Future<Either<Failure, List<RecipeEntity>>> searchRecipesByCategories(
-      List<CategoryEntity> categories);
+      CategoryEntity categories);
 
   Future<Either<Failure, void>> shareRecipe(RecipeEntity recipe);
   Future<Either<Failure, void>> commentOnRecipe(

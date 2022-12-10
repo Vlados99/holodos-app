@@ -7,10 +7,13 @@ import 'package:holodos/presentation/widgets/recipe/recipe_item.dart';
 class RecipeList extends StatefulWidget {
   final List<RecipeEntity> recipes;
   final String pageName;
-  const RecipeList({
+  Function callback;
+
+  RecipeList({
     Key? key,
     required this.recipes,
     required this.pageName,
+    required this.callback,
   }) : super(key: key);
 
   @override
@@ -18,14 +21,17 @@ class RecipeList extends StatefulWidget {
 }
 
 class _RecipeListState extends State<RecipeList> {
-  @override
-  Widget build(BuildContext context) {
-    final recipes = widget.recipes;
+  List<RecipeEntity> recipes = [];
 
-    return listView(recipes: recipes);
+  @override
+  void initState() {
+    recipes = widget.recipes;
+
+    super.initState();
   }
 
-  ListView listView({required List<RecipeEntity> recipes}) {
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: recipes.length,
       itemBuilder: (context, index) {
@@ -33,8 +39,8 @@ class _RecipeListState extends State<RecipeList> {
           onTap: () {
             Navigator.pushNamedAndRemoveUntil(
                 context, PageConst.recipePage, ((route) => true), arguments: {
-              "id": recipes[index].id,
-              "isFavorite": recipes[index].isFavorite
+              "recipe": recipes[index],
+              "pageName": widget.pageName
             });
           },
           child: Column(
@@ -42,6 +48,7 @@ class _RecipeListState extends State<RecipeList> {
               RecipeItem(
                 recipe: recipes[index],
                 pageName: widget.pageName,
+                callback: () => widget.callback(),
               ),
               const Divider(
                 color: AppColors.orange,

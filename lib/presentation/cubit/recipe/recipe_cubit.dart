@@ -3,6 +3,8 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:holodos/common/app_const.dart';
+import 'package:holodos/domain/entities/category_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/usecases/add_recipe_to_favorites.dart';
 import 'package:holodos/domain/usecases/comment_on_recipe.dart';
@@ -10,6 +12,7 @@ import 'package:holodos/domain/usecases/get_all_recipes.dart';
 import 'package:holodos/domain/usecases/get_recipe_by_id.dart';
 import 'package:holodos/domain/usecases/get_recipes_from_favorites.dart';
 import 'package:holodos/domain/usecases/remove_recipe_from_favorites.dart';
+import 'package:holodos/domain/usecases/search_recipes_by_categories.dart';
 
 part 'recipe_state.dart';
 
@@ -17,8 +20,10 @@ class RecipesCubit extends Cubit<RecipesState> {
   final RemoveRecipeFromFavorites removeRecipeFromFavoritesUseCase;
   final GetRecipesFromFavorites getRecipesFromFavoritesUseCase;
   final AddRecipeToFavorites addRecipeToFavoritesUseCase;
+  final SearchRecipesByCategory searchRecipesByCategoriesUseCase;
 
   final GetAllRecipes getAllRecipesUseCase;
+  final GetRecipeById getRecipeByIdUseCase;
 
   final CommentOnRecipe commentOnRecipe;
 
@@ -27,7 +32,9 @@ class RecipesCubit extends Cubit<RecipesState> {
     required this.getRecipesFromFavoritesUseCase,
     required this.addRecipeToFavoritesUseCase,
     required this.getAllRecipesUseCase,
+    required this.getRecipeByIdUseCase,
     required this.commentOnRecipe,
+    required this.searchRecipesByCategoriesUseCase,
   }) : super(RecipesInitial());
 
   Future<void> addRecipeToFavorites({required RecipeEntity recipe}) async {
@@ -42,18 +49,11 @@ class RecipesCubit extends Cubit<RecipesState> {
     }
   }
 
-  Future<void> removeRecipeFromFavorites(
-      {required RecipeEntity recipe, bool? setState}) async {
-    emit(RecipesLoading());
+  Future<void> removeRecipeFromFavorites({required RecipeEntity recipe}) async {
     try {
       RemoveRecipeFromFavoritesParams params =
           RemoveRecipeFromFavoritesParams(recipe: recipe);
       await removeRecipeFromFavoritesUseCase(params);
-      if (setState == true) {
-        final failureOrRecipes = await getRecipesFromFavoritesUseCase();
-        failureOrRecipes.fold((_) => emit(RecipesFailure()),
-            (value) => emit(RecipesLoaded(recipes: value)));
-      }
     } on SocketException catch (_) {
       emit(RecipesFailure());
     } catch (_) {
@@ -88,26 +88,46 @@ class RecipesCubit extends Cubit<RecipesState> {
       emit(RecipesFailure());
     }
   }
-}
-
-class RecipeCubit extends Cubit<RecipeState> {
-  final GetRecipeById getRecipeByIdUseCase;
-
-  RecipeCubit({
-    required this.getRecipeByIdUseCase,
-  }) : super(RecipeInitial());
 
   Future<void> getRecipeById({required String id}) async {
-    emit(RecipeLoading());
+    emit(RecipesLoading());
     try {
       GetRecipeByIdParams params = GetRecipeByIdParams(id: id);
       final failureOrRecipe = await getRecipeByIdUseCase(params);
-      failureOrRecipe.fold((_) => emit(RecipeFailure()),
+      failureOrRecipe.fold((_) => emit(RecipesFailure()),
           (recipe) => emit(RecipeLoaded(recipe: recipe)));
     } on SocketException catch (_) {
-      emit(RecipeFailure());
+      emit(RecipesFailure());
     } catch (_) {
-      emit(RecipeFailure());
+      emit(RecipesFailure());
+    }
+  }
+
+  Future<void> update({required String name, String? id}) async {
+    if (name == PageConst.recipesPage) {
+      getRecipes();
+    }
+    if (name == PageConst.favoriteRecipesPage) {
+      getRecipesFromFavorites();
+    }
+    if (name == PageConst.recipePage) {
+      getRecipeById(id: id!);
+    }
+  }
+
+  Future<void> searchRecipesByCategories(
+      {required CategoryEntity category}) async {
+    emit(RecipesLoading());
+    try {
+      SearchRecipesByCategoryParams params =
+          SearchRecipesByCategoryParams(category: category);
+      final failureOrRecipe = await searchRecipesByCategoriesUseCase(params);
+      failureOrRecipe.fold((_) => emit(RecipesFailure()),
+          (recipes) => emit(RecipesLoaded(recipes: recipes)));
+    } on SocketException catch (_) {
+      emit(RecipesFailure());
+    } catch (_) {
+      emit(RecipesFailure());
     }
   }
 }

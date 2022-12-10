@@ -35,6 +35,7 @@ abstract class UserRemoteDataSource {
   Future<List<RecipeEntity>> getRecipesFromFavorites();
 
   Future<List<CuisineEntity>> getAllCuisines();
+  Future<List<CategoryEntity>> getAllCategories();
 
   Future<List<ProductEntity>> searchProductsByName(String name);
 
@@ -42,7 +43,7 @@ abstract class UserRemoteDataSource {
   Future<List<RecipeEntity>> searchRecipesByProducts(
       List<ProductEntity> products);
   Future<List<RecipeEntity>> searchRecipesByCategories(
-      List<CategoryEntity> categories);
+      CategoryEntity categories);
 
   Future<void> shareRecipe(RecipeEntity recipe);
   Future<void> commentOnRecipe(String comment, RecipeEntity recipe);

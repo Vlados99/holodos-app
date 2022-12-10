@@ -8,6 +8,7 @@ import 'package:holodos/common/on_generate_route.dart';
 import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
 import 'package:holodos/presentation/bloc/search_recipe/search_recipe_bloc.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
+import 'package:holodos/presentation/cubit/category/category_cubit.dart';
 import 'package:holodos/presentation/cubit/cuisine/cuisine_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
@@ -39,9 +40,9 @@ class MyApp extends StatelessWidget {
             create: (_) => di.sl<AuthCubit>()..userIsSignIn()),
         BlocProvider<UserCubit>(create: (_) => di.sl<UserCubit>()),
         BlocProvider<RecipesCubit>(create: (_) => di.sl<RecipesCubit>()),
-        BlocProvider<RecipeCubit>(create: (_) => di.sl<RecipeCubit>()),
         BlocProvider<ProductCubit>(create: (_) => di.sl<ProductCubit>()),
         BlocProvider<CuisineCubit>(create: (_) => di.sl<CuisineCubit>()),
+        BlocProvider<CategoryCubit>(create: (_) => di.sl<CategoryCubit>()),
         BlocProvider<CommentsCubit>(create: (_) => di.sl<CommentsCubit>()),
         BlocProvider<SearchRecipeBloc>(
             create: (_) => di.sl<SearchRecipeBloc>()),

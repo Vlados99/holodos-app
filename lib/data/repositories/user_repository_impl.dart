@@ -112,9 +112,9 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, List<RecipeEntity>>> searchRecipesByCategories(
-      List<CategoryEntity> categories) async {
+      CategoryEntity category) async {
     return await _call<List<RecipeEntity>>(
-        () => remoteDataSource.searchRecipesByCategories(categories));
+        () => remoteDataSource.searchRecipesByCategories(category));
   }
 
   @override
@@ -214,5 +214,11 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<Either<Failure, RecipeEntity>> getRecipeById(String id) async {
     return await _call<RecipeEntity>(() => remoteDataSource.getRecipeByid(id));
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryEntity>>> getAllCategories() async {
+    return await _call<List<CategoryEntity>>(
+        () => remoteDataSource.getAllCategories());
   }
 }

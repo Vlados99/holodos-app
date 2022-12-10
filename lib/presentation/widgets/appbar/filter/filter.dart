@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
+import 'package:holodos/presentation/widgets/appbar/filter/categoriy_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/complexity_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/cook_time_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/cuisines_filter.dart';
@@ -21,6 +22,7 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
 
   String cookTimeSymbol = "All";
   String cuisinesValue = "All";
+  String categoriesValue = "All";
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                const CategoriesFilter(),
                 filterItem(
                     name: "Cook time",
                     widget: CookTimeDropdownButton(
@@ -114,14 +117,4 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
           SizedBox(width: 100, child: widget),
         ],
       );
-  // bool isEmpty() {
-  //   if (servesValue != 0 ||
-  //       complexityValue != 0 ||
-  //       (cookTimeValue != 0 && cookTimeSymbol != "All") ||
-  //       cuisinesValue != "All") {
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
 }

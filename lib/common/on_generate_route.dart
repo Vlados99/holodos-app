@@ -20,8 +20,8 @@ class OnGenerateRoute {
           return args is Map
               ? materialBuilder(
                   widget: RecipePage(
-                  id: args["id"],
-                  isFavorite: args["isFavorite"],
+                  recipe: args["recipe"],
+                  fromPageName: args["pageName"],
                 ))
               : materialBuilder(widget: const ErrorPage());
         }

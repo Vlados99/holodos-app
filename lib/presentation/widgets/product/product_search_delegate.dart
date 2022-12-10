@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/common/app_theme.dart';
 import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
+import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/product/product_list.dart';
 
@@ -61,20 +62,26 @@ class ProductSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     BlocProvider.of<SearchProductBloc>(context, listen: false)
         .add(SearchProductsByNameBloc(query));
-    return BlocBuilder<SearchProductBloc, SearchProductState>(
-        builder: (context, state) {
-      if (state is SearchProductLoaded) {
-        final products = state.products;
-        return ProductList(
-          products: products,
-        );
-      } else if (state is SearchProductFailure) {
-        return const ErrorPage();
-      }
+    return BlocBuilder<AuthCubit, AuthState>(builder: (context, authState) {
+      return BlocBuilder<SearchProductBloc, SearchProductState>(
+          builder: (context, state) {
+        if (state is SearchProductLoaded) {
+          final products = state.products;
 
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+          bool isAuth = authState is Authenticated ? true : false;
+
+          return ProductList(
+            products: products,
+            isAuth: isAuth,
+          );
+        } else if (state is SearchProductFailure) {
+          return const ErrorPage();
+        }
+
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      });
     });
   }
 

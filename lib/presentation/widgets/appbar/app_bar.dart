@@ -8,6 +8,8 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
   final bool? search;
   final SearchDelegate? searchDelegate;
+  final bool? leading;
+  final String? pageName;
 
   final bool? filter;
 
@@ -15,6 +17,8 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
     Key? key,
     this.title,
     this.search = false,
+    this.leading,
+    this.pageName,
     this.searchDelegate,
     this.filter = false,
   }) : super(key: key);
@@ -27,9 +31,27 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _MainAppBarState extends State<MainAppBar> {
+  bool leading = false;
+
+  @override
+  void initState() {
+    leading = widget.leading ?? false;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: leading
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, widget.pageName!, ((route) => false));
+              },
+            )
+          : null,
       centerTitle: true,
       elevation: 0,
       title: Text(

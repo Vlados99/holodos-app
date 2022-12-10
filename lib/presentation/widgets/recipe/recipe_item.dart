@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:holodos/common/app_const.dart';
 import 'package:holodos/common/storage.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
@@ -8,16 +9,16 @@ import 'package:holodos/presentation/widgets/image_getter.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
 
-import '../../../common/app_const.dart';
-
 class RecipeItem extends StatefulWidget {
   final RecipeEntity recipe;
   final String pageName;
+  Function callback;
 
-  const RecipeItem({
+  RecipeItem({
     Key? key,
     required this.recipe,
     required this.pageName,
+    required this.callback,
   }) : super(key: key);
 
   @override
@@ -42,10 +43,6 @@ class _RecipeItemState extends State<RecipeItem> {
   Widget build(BuildContext context) {
     itemHeight = 200;
     itemWidth = MediaQuery.of(context).size.width;
-    return recipeItem(recipe: recipe);
-  }
-
-  Widget recipeItem({required RecipeEntity recipe}) {
     final h15 = CustomSizedBox().h15();
     return SizedBox(
       width: itemWidth,
@@ -128,30 +125,26 @@ class _RecipeItemState extends State<RecipeItem> {
     return GestureDetector(
       onTap: () {
         isFavorite ? removeRecipeFromFavorites() : addRecipeToFavorites();
-        if (widget.pageName == PageConst.recipesPage) {
-          BlocProvider.of<RecipesCubit>(context).getRecipes();
-        }
-        if (widget.pageName == PageConst.favoriteRecipesPage && isFavorite) {
-          BlocProvider.of<RecipesCubit>(context).getRecipesFromFavorites();
-        }
-        if (widget.pageName == PageConst.recipePage) {
-          BlocProvider.of<RecipeCubit>(context).getRecipeById(id: recipe.id);
-        }
+        widget.callback();
+
+        // if (widget.pageName == PageConst.recipesPage) {
+        //   BlocProvider.of<RecipesCubit>(context).getRecipes();
+        // }
+        // if (widget.pageName == PageConst.favoriteRecipesPage && isFavorite) {
+        //   BlocProvider.of<RecipesCubit>(context).getRecipesFromFavorites();
+        // }
       },
       child: isFavorite ? favorite() : notFavorite(),
     );
   }
 
   void removeRecipeFromFavorites() {
-    super.widget.recipe.isFavorite = true;
-    BlocProvider.of<RecipesCubit>(context).removeRecipeFromFavorites(
-        recipe: recipe,
-        setState: widget.pageName == PageConst.favoriteRecipesPage);
+    BlocProvider.of<RecipesCubit>(context)
+        .removeRecipeFromFavorites(recipe: recipe);
     snackBarSuccess(context: context, message: "Recipe removed from favorites");
   }
 
   void addRecipeToFavorites() {
-    super.widget.recipe.isFavorite = true;
     BlocProvider.of<RecipesCubit>(context).addRecipeToFavorites(recipe: recipe);
     snackBarSuccess(
         context: context,

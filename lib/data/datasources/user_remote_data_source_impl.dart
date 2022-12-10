@@ -203,16 +203,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         print("-----RECIPE EXISTS, SHOW FOR USER MESSAGE-----");
       }
       return;
-
-      // if (!docSnapshot.exists) {
-      //   await favoriteRecipesCollectionRef
-      //       .doc(favoriteRecipeDocId)
-      //       .set(newRecipe);
-      // } else {
-      //   // ignore: avoid_print
-      //   print("-----RECIPE EXISTS, SHOW FOR USER MESSAGE-----");
-      // }
-      // return;
     });
   }
 /*
@@ -505,8 +495,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<List<RecipeEntity>> searchRecipesByCategories(
-      List<CategoryEntity> selectedCategories) async {
-    final categoriesCollectionRef = firestore.collection("categories");
+      CategoryEntity category) async {
     final recipesCollectionRef = firestore.collection("recipes");
 
     QuerySnapshot querySnapshot = await recipesCollectionRef.get();
@@ -527,8 +516,15 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     for (var element in result) {
       final recipe = await element;
-      recipes.add(recipe);
+      if (recipe.categories != null) {
+        final categoriesNames = recipe.categories!.map((e) => e.name).toList();
+        if (categoriesNames.contains(category.name)) {
+          recipe.isFavorite = !await _recipeNotExists(recipe);
+          recipes.add(recipe);
+        }
+      }
     }
+
     return recipes;
   }
 
@@ -546,9 +542,18 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     QuerySnapshot querySnapshot = await productsCollectionRef.get();
 
-    return querySnapshot.docs
-        .map((doc) => RecipeModel.fromSnapshot(doc))
-        .toList();
+    var result = querySnapshot.docs.map((doc) {
+      return RecipeModel.fromSnapshot(doc);
+    }).toList();
+
+    List<RecipeEntity> recipes = [];
+
+    for (var element in result) {
+      final recipe = element;
+      recipe.isFavorite = !await _recipeNotExists(recipe);
+      recipes.add(recipe);
+    }
+    return recipes;
   }
 
   @override
@@ -638,6 +643,18 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       tags: await getRecipeTags(id),
     );
 
+    recipe.isFavorite = !await _recipeNotExists(recipe);
     return recipe;
+  }
+
+  @override
+  Future<List<CategoryEntity>> getAllCategories() async {
+    final categoriesCollectionRef = firestore.collection("categories");
+
+    QuerySnapshot querySnapshot = await categoriesCollectionRef.get();
+
+    return querySnapshot.docs
+        .map((doc) => CategoryModel.fromSnapshot(doc))
+        .toList();
   }
 }

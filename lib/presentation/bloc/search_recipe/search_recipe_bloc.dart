@@ -13,7 +13,7 @@ part 'search_recipe_event.dart';
 part 'search_recipe_state.dart';
 
 class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
-  final SearchRecipesByCategories searchRecipesByCategories;
+  final SearchRecipesByCategory searchRecipesByCategories;
   final SearchRecipesByProducts searchRecipesByProducts;
   final SearchRecipesByName searchRecipesByName;
 
@@ -27,30 +27,6 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
 
       final failureOrRecipe = await searchRecipesByName(
           SearchRecipesByNameParams(name: event.name));
-
-      failureOrRecipe.fold(
-          (failure) =>
-              emit(SearchRecipeFailure(message: _mapFailureToMessage(failure))),
-          (recipes) => emit(SearchRecipeLoaded(recipes: recipes)));
-    });
-
-    on<SearchRecipesByCategoriesBloc>((event, emit) async {
-      emit(SearchRecipeLoading());
-
-      final failureOrRecipe = await searchRecipesByCategories(
-          SearchRecipesByCategoriesParams(categories: event.categories));
-
-      failureOrRecipe.fold(
-          (failure) =>
-              emit(SearchRecipeFailure(message: _mapFailureToMessage(failure))),
-          (recipes) => emit(SearchRecipeLoaded(recipes: recipes)));
-    });
-
-    on<SearchRecipesByProductsBloc>((event, emit) async {
-      emit(SearchRecipeLoading());
-
-      final failureOrRecipe = await searchRecipesByProducts(
-          SearchRecipesByProductsParams(products: event.products));
 
       failureOrRecipe.fold(
           (failure) =>

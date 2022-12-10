@@ -66,6 +66,7 @@ class RecipeSearchDelegate extends SearchDelegate {
         return RecipeList(
           recipes: recipes,
           pageName: pageName,
+          callback: () {},
         );
       } else if (state is SearchRecipeFailure) {
         return const ErrorPage();

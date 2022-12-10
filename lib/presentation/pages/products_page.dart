@@ -39,24 +39,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _builder();
-  }
-
-  Widget _builder() {
-    return BlocBuilder<ProductCubit, ProductState>(
-      builder: (context, productState) {
-        if (productState is ProductLoaded) {
-          return _bodyWidget(productState.products);
-        }
-        if (productState is ProductFailure) {
-          return const ErrorPage();
-        }
-
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+    return _bodyWidget();
   }
 
   Widget _noProductsWidget() {
@@ -69,7 +52,7 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  Widget _bodyWidget(List<ProductEntity> products) {
+  Widget _bodyWidget() {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
@@ -83,9 +66,23 @@ class _ProductsPageState extends State<ProductsPage> {
         search: true,
         searchDelegate: ProductSearchDelegate(),
       ),
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: products.isEmpty ? _noProductsWidget() : _products(),
+      body: BlocBuilder<ProductCubit, ProductState>(
+        builder: (context, productState) {
+          if (productState is ProductLoaded) {
+            List<ProductEntity> products = productState.products;
+            return Container(
+              alignment: Alignment.topCenter,
+              child: products.isEmpty ? _noProductsWidget() : _products(),
+            );
+          }
+          if (productState is ProductFailure) {
+            return const ErrorPage();
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }

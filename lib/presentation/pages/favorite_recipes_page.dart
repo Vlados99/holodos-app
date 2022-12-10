@@ -32,7 +32,7 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
-        return authState is Authenticated ? recipeBuilder() : notLoggedIn();
+        return authState is Authenticated ? _bodyWidget() : notLoggedIn();
       },
     );
   }
@@ -55,23 +55,6 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
         buttonText: "Sign in",
         page: PageConst.signInPage,
       ),
-    );
-  }
-
-  Widget recipeBuilder() {
-    return BlocBuilder<RecipesCubit, RecipesState>(
-      builder: (context, recipeState) {
-        if (recipeState is RecipesLoaded) {
-          return _bodyWidget(recipeState.recipes);
-        }
-        if (recipeState is RecipesFailure) {
-          return const ErrorPage();
-        }
-
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
     );
   }
 
@@ -117,7 +100,7 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
     );
   }
 
-  Widget _bodyWidget(List<RecipeEntity> recipes) {
+  Widget _bodyWidget() {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
@@ -127,7 +110,21 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
       )),
       key: _scaffolGlobalKey,
       appBar: const MainAppBar(title: "Favorite recipes"),
-      body: scaffoldBody(recipes),
+      body: BlocBuilder<RecipesCubit, RecipesState>(
+        builder: (context, recipeState) {
+          if (recipeState is RecipesLoaded) {
+            List<RecipeEntity> recipes = recipeState.recipes;
+            return scaffoldBody(recipes);
+          }
+          if (recipeState is RecipesFailure) {
+            return const ErrorPage();
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
     );
   }
 
@@ -142,6 +139,12 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
     return RecipeList(
       pageName: pageName,
       recipes: recipes,
+      callback: callback,
     );
+  }
+
+  void callback() {
+    setState(() {});
+    BlocProvider.of<RecipesCubit>(context).update(name: pageName);
   }
 }
