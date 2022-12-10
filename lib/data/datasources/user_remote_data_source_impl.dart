@@ -62,7 +62,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   UserRemoteDataSourceImpl({required this.auth, required this.firestore});
 
-  Future<bool> _productExists(ProductEntity product) async {
+  Future<bool> _productNotExists(ProductEntity product) async {
     final uId = await getCurrentUId();
     final usersProductCollectionRef =
         firestore.collection("users").doc(uId).collection("products");
@@ -94,6 +94,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       id: userProductDocId,
       name: product.name,
       unit: product.unit,
+      imageLocation: product.imageLocation,
     ).toDocument();
 
     await usersProductCollectionRef.doc(userProductDocId).set(newProduct);
@@ -123,7 +124,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         .doc(userProductDocId)
         .get()
         .then((docSnapshot) async {
-      if (await _productExists(product)) {
+      if (await _productNotExists(product)) {
         await _createAndAddProduct(
             product, usersProductCollectionRef, userProductDocId);
       } else {
@@ -131,6 +132,57 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       }
       return;
     });
+  }
+
+  Future<bool> _recipeNotExists(RecipeEntity recipe) async {
+    final uId = await getCurrentUId();
+
+    if (uId.isNotEmpty) {
+      final favoriteRecipesCollectionRef =
+          firestore.collection("users").doc(uId).collection("favoriteRecipes");
+
+      List<dynamic> existsRecipe =
+          await _getExistsRecipe(favoriteRecipesCollectionRef, recipe);
+      if (existsRecipe.isEmpty) {
+        return true;
+      }
+      return existsRecipe.contains(recipe.name) ? true : false;
+    }
+    return true;
+  }
+
+  Future<List<dynamic>> _getExistsRecipe(
+      CollectionReference<Map<String, dynamic>> favoriteRecipesCollectionRef,
+      RecipeEntity recipe) async {
+    final existsRecipe = await favoriteRecipesCollectionRef
+        .where("name", isEqualTo: recipe.name)
+        .get()
+        .then((querySnapshot) =>
+            querySnapshot.docs.map((e) => e.data()).toList());
+    return existsRecipe;
+  }
+
+  Future<void> _createAndAddRecipe(
+      RecipeEntity recipe,
+      CollectionReference<Map<String, dynamic>> favoriteRecipesCollectionRef,
+      String favoriteRecipeDocId) async {
+    final newRecipe = RecipeModel(
+      id: recipe.id,
+      name: recipe.name,
+      cuisines: recipe.cuisines,
+      cookTime: recipe.cookTime,
+      complexity: recipe.complexity,
+      serves: recipe.serves,
+      imageLocation: recipe.imageLocation,
+      description: recipe.description,
+      categories: recipe.categories,
+      ingredients: recipe.ingredients,
+      steps: recipe.steps,
+      comments: recipe.comments,
+      tags: recipe.tags,
+    ).toFavoriteRecipe();
+
+    await favoriteRecipesCollectionRef.doc(recipe.id).set(newRecipe);
   }
 
   @override
@@ -144,31 +196,23 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         .doc(favoriteRecipeDocId)
         .get()
         .then((docSnapshot) async {
-      final newRecipe = RecipeModel(
-        id: favoriteRecipeDocId,
-        name: recipe.name,
-        cuisines: recipe.cuisines,
-        cookTime: recipe.cookTime,
-        complexity: recipe.complexity,
-        serves: recipe.serves,
-        imageLocation: recipe.imageLocation,
-        description: recipe.description,
-        categories: recipe.categories,
-        ingredients: recipe.ingredients,
-        steps: recipe.steps,
-        comments: recipe.comments,
-        tags: recipe.tags,
-      ).toDocument();
-
-      if (!docSnapshot.exists) {
-        await favoriteRecipesCollectionRef
-            .doc(favoriteRecipeDocId)
-            .set(newRecipe);
+      if (await _recipeNotExists(recipe)) {
+        await _createAndAddRecipe(
+            recipe, favoriteRecipesCollectionRef, favoriteRecipeDocId);
       } else {
-        // ignore: avoid_print
         print("-----RECIPE EXISTS, SHOW FOR USER MESSAGE-----");
       }
       return;
+
+      // if (!docSnapshot.exists) {
+      //   await favoriteRecipesCollectionRef
+      //       .doc(favoriteRecipeDocId)
+      //       .set(newRecipe);
+      // } else {
+      //   // ignore: avoid_print
+      //   print("-----RECIPE EXISTS, SHOW FOR USER MESSAGE-----");
+      // }
+      // return;
     });
   }
 /*
@@ -305,7 +349,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     QuerySnapshot querySnapshot;
     if (params == null || params.isEmpty) {
-      querySnapshot = await recipesCollectionRef.orderBy("name").get();
+      querySnapshot = await recipesCollectionRef.get();
     } else {
       RecipeQuery complexityQuery = RecipeQuery.main;
       RecipeQuery cookTimeQuery = RecipeQuery.main;
@@ -364,17 +408,21 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     for (var element in result) {
       final recipe = await element;
+      recipe.isFavorite = !await _recipeNotExists(recipe);
       recipes.add(recipe);
     }
     return recipes;
   }
 
   @override
-  Future<String> getCurrentUId() async => auth.currentUser!.uid;
+  Future<String> getCurrentUId() async {
+    return auth.currentUser == null ? "" : auth.currentUser!.uid;
+  }
 
   @override
   Future<List<RecipeEntity>> getRecipesFromFavorites() async {
     final uId = await getCurrentUId();
+    final recipesCollectionRef = firestore.collection("recipes");
     final usersRecipesCollectionRef =
         firestore.collection("users").doc(uId).collection("favoriteRecipes");
 
@@ -383,8 +431,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     var result = querySnapshot.docs.map((doc) async {
       String recipeId = doc.id;
+      final recipe = await recipesCollectionRef.doc(doc.id).get();
       return RecipeModel.fromSnapshot(
-        doc,
+        recipe,
         ingredients: await getRecipeIngredients(recipeId),
         categories: await getRecipeCategories(recipeId),
         comments: await getRecipeComments(recipeId),
@@ -397,6 +446,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     for (var element in result) {
       final recipe = await element;
+      recipe.isFavorite = !await _recipeNotExists(recipe);
       recipes.add(recipe);
     }
     return recipes;
@@ -485,6 +535,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<List<RecipeEntity>> searchRecipesByName(String name) async {
     const fieldName = "name";
+
+    name = name.substring(0, 1).toUpperCase() + name.substring(1);
+
     final productsCollectionRef = firestore
         .collection("recipes")
         .orderBy(fieldName)
@@ -537,6 +590,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<List<ProductEntity>> searchProductsByName(String name) async {
     const fieldName = "name";
+
+    name = name.substring(0, 1).toUpperCase() + name.substring(1);
+
     final productsCollectionRef = firestore
         .collection("products")
         .orderBy(fieldName)
@@ -565,5 +621,23 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     return querySnapshot.docs
         .map((doc) => CuisineModel.fromSnapshot(doc))
         .toList();
+  }
+
+  @override
+  Future<RecipeEntity> getRecipeByid(String id) async {
+    final recipeRef = firestore.collection("recipes").doc(id);
+
+    DocumentSnapshot docSnapshot = await recipeRef.get();
+
+    final recipe = RecipeModel.fromSnapshot(
+      docSnapshot,
+      ingredients: await getRecipeIngredients(id),
+      categories: await getRecipeCategories(id),
+      comments: await getRecipeComments(id),
+      steps: await getRecipeSteps(id),
+      tags: await getRecipeTags(id),
+    );
+
+    return recipe;
   }
 }

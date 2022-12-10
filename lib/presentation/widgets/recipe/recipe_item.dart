@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/storage.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
+import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
+import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
+import 'package:holodos/presentation/widgets/image_getter.dart';
 import 'package:holodos/presentation/widgets/sized_box.dart';
+import 'package:holodos/presentation/widgets/snack_bar.dart';
 
 import '../../../common/app_const.dart';
 
 class RecipeItem extends StatefulWidget {
   final RecipeEntity recipe;
+  final String pageName;
 
   const RecipeItem({
     Key? key,
     required this.recipe,
+    required this.pageName,
   }) : super(key: key);
 
   @override
@@ -20,9 +27,14 @@ class RecipeItem extends StatefulWidget {
 class _RecipeItemState extends State<RecipeItem> {
   double itemHeight = 0;
   double itemWidth = 0;
+  late RecipeEntity recipe;
+  late bool isFavorite;
 
   @override
   void initState() {
+    recipe = widget.recipe;
+    isFavorite = recipe.isFavorite ?? false;
+
     super.initState();
   }
 
@@ -30,19 +42,14 @@ class _RecipeItemState extends State<RecipeItem> {
   Widget build(BuildContext context) {
     itemHeight = 200;
     itemWidth = MediaQuery.of(context).size.width;
-
-    return recipeItem(recipe: widget.recipe);
+    return recipeItem(recipe: recipe);
   }
 
   Widget recipeItem({required RecipeEntity recipe}) {
     final h15 = CustomSizedBox().h15();
-    return Container(
+    return SizedBox(
       width: itemWidth,
       height: itemHeight + h15.height! + 12,
-      decoration: const BoxDecoration(
-          border: Border(
-        bottom: BorderSide(color: AppColors.orange),
-      )),
       child: Column(
         children: [
           h15,
@@ -57,7 +64,13 @@ class _RecipeItemState extends State<RecipeItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     recipeName(recipe),
-                    saveItButton(),
+                    BlocBuilder<AuthCubit, AuthState>(
+                      builder: (context, authState) {
+                        return authState is Authenticated
+                            ? saveItButton()
+                            : Container();
+                      },
+                    )
                   ],
                 ),
               ),
@@ -91,7 +104,12 @@ class _RecipeItemState extends State<RecipeItem> {
   Widget recipeImage(RecipeEntity recipe) {
     return SizedBox(
       height: itemHeight,
-      child: imageBuilder("recipes", recipe.imageLocation),
+      child: ImageGetter(
+        dir: "recipes",
+        imgName: recipe.imageLocation,
+        fit: BoxFit.fill,
+        width: MediaQuery.of(context).size.width,
+      ),
     );
   }
 
@@ -108,30 +126,81 @@ class _RecipeItemState extends State<RecipeItem> {
 
   Widget saveItButton() {
     return GestureDetector(
-      onTap: () {},
-      child: Container(
-        alignment: Alignment.bottomLeft,
-        decoration: const BoxDecoration(
-            color: AppColors.orange,
-            borderRadius: BorderRadius.all(Radius.circular(15))),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: const Icon(
-                Icons.favorite,
-                color: AppColors.textColorWhite,
-              ),
+      onTap: () {
+        isFavorite ? removeRecipeFromFavorites() : addRecipeToFavorites();
+        if (widget.pageName == PageConst.recipesPage) {
+          BlocProvider.of<RecipesCubit>(context).getRecipes();
+        }
+        if (widget.pageName == PageConst.favoriteRecipesPage && isFavorite) {
+          BlocProvider.of<RecipesCubit>(context).getRecipesFromFavorites();
+        }
+        if (widget.pageName == PageConst.recipePage) {
+          BlocProvider.of<RecipeCubit>(context).getRecipeById(id: recipe.id);
+        }
+      },
+      child: isFavorite ? favorite() : notFavorite(),
+    );
+  }
+
+  void removeRecipeFromFavorites() {
+    super.widget.recipe.isFavorite = true;
+    BlocProvider.of<RecipesCubit>(context).removeRecipeFromFavorites(
+        recipe: recipe,
+        setState: widget.pageName == PageConst.favoriteRecipesPage);
+    snackBarSuccess(context: context, message: "Recipe removed from favorites");
+  }
+
+  void addRecipeToFavorites() {
+    super.widget.recipe.isFavorite = true;
+    BlocProvider.of<RecipesCubit>(context).addRecipeToFavorites(recipe: recipe);
+    snackBarSuccess(
+        context: context,
+        message: "The recipe has been successfully added to your favorites");
+  }
+
+  Widget favorite() {
+    return Container(
+      alignment: Alignment.bottomLeft,
+      decoration: const BoxDecoration(
+          color: AppColors.orange,
+          borderRadius: BorderRadius.all(Radius.circular(15))),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: const Icon(
+              Icons.favorite,
+              color: Colors.red,
             ),
-            Container(
-              padding: const EdgeInsets.only(right: 12),
-              child: const Text(
-                "SAVE IT",
-                style: TextStyles.text12white,
-              ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget notFavorite() {
+    return Container(
+      alignment: Alignment.bottomLeft,
+      decoration: const BoxDecoration(
+          color: AppColors.orange,
+          borderRadius: BorderRadius.all(Radius.circular(15))),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: const Icon(
+              Icons.favorite,
+              color: AppColors.textColorWhite,
             ),
-          ],
-        ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(right: 12),
+            child: const Text(
+              "SAVE IT",
+              style: TextStyles.text12white,
+            ),
+          ),
+        ],
       ),
     );
   }

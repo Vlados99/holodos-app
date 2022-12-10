@@ -8,17 +8,25 @@ import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/tag_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
+import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe_comments/recipe_comments_cubit.dart';
+import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
-import 'package:holodos/presentation/widgets/sized_box.dart';
+import 'package:holodos/presentation/widgets/image_getter.dart';
+import 'package:holodos/presentation/widgets/recipe/recipe_item.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
 class RecipePage extends StatefulWidget {
-  final RecipeEntity recipe;
+  final String id;
+  final bool isFavorite;
 
-  const RecipePage({Key? key, required this.recipe}) : super(key: key);
+  const RecipePage({
+    Key? key,
+    required this.id,
+    required this.isFavorite,
+  }) : super(key: key);
 
   @override
   State<RecipePage> createState() => _RecipePageState();
@@ -27,69 +35,173 @@ class RecipePage extends StatefulWidget {
 class _RecipePageState extends State<RecipePage> {
   final TextEditingController commentController = TextEditingController();
 
+  double itemHeight = 200;
   late RecipeEntity recipe;
+
+  var id = "";
   @override
   void initState() {
-    recipe = widget.recipe;
+    id = widget.id;
 
-    BlocProvider.of<CommentsCubit>(context)
-        .getRecipeComments(recipeId: recipe.id);
+    BlocProvider.of<RecipeCubit>(context).getRecipeById(id: id);
+
+    BlocProvider.of<CommentsCubit>(context).getRecipeComments(recipeId: id);
     super.initState();
   }
 
   @override
   void dispose() {
     commentController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(title: recipe.name),
-      body: scaffoldBody(),
+    return BlocBuilder<RecipeCubit, RecipeState>(
+      builder: (context, recipeState) {
+        if (recipeState is RecipeLoaded) {
+          recipe = recipeState.recipe;
+          recipe.isFavorite = widget.isFavorite;
+
+          return _bodyWidget();
+        }
+        if (recipeState is RecipeFailure) {
+          return const ErrorPage();
+        }
+
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 
-  Widget scaffoldBody() {
-    final h15 = CustomSizedBox().h15();
-
-    return SingleChildScrollView(
-      child: Container(
-        alignment: Alignment.topCenter,
-        child: Column(children: [
-          const Text(
-            "Products",
-            style: TextStyles.text32black,
+  Widget _bodyWidget() {
+    return Scaffold(
+      appBar: MainAppBar(title: recipe.name),
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.topCenter,
+          child: Column(
+            children: [
+              RecipeItem(recipe: recipe, pageName: PageConst.recipePage),
+              detailRow(),
+              recipeDescription(),
+              recipeProducts(),
+              // recipeCategories(),
+              // recipeTags(),
+              recipeSteps(),
+              sharedButton(),
+              recipeComments(),
+              postComment(),
+            ],
           ),
-          recipeProducts(),
-          h15,
-          const Text(
-            "categories",
-            style: TextStyles.text32black,
-          ),
-          recipeCategories(),
-          h15,
-          const Text(
-            "steps",
-            style: TextStyles.text32black,
-          ),
-          recipeSteps(),
-          h15,
-          const Text(
-            "tags",
-            style: TextStyles.text32black,
-          ),
-          recipeTags(),
-          h15,
-          const Text(
-            "comments",
-            style: TextStyles.text32black,
-          ),
-          recipeComments(),
-          postComment(),
-        ]),
+        ),
       ),
+    );
+  }
+
+  Widget detailRow() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            complexity(),
+            cookTime(),
+            serves(),
+            cuisine(),
+          ],
+        ),
+        divider(),
+      ],
+    );
+  }
+
+  Widget divider() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: const Divider(
+        color: AppColors.orange,
+        thickness: 2,
+      ),
+    );
+  }
+
+  Widget complexity() {
+    return Column(
+      children: [
+        txt16(text: "Complexity"),
+        Row(
+          children: List.generate(
+              recipe.complexity,
+              (index) => const Icon(
+                    Icons.star,
+                    color: AppColors.orange,
+                  )).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget cookTime() {
+    return Column(
+      children: [txt16(text: "Time"), txt16(text: "${recipe.cookTime} min")],
+    );
+  }
+
+  Widget serves() {
+    return Column(
+      children: [
+        txt16(text: "Serves"),
+        txt16(
+          text: recipe.serves.toString(),
+        ),
+      ],
+    );
+  }
+
+  Widget cuisine() {
+    return Column(
+      children: [
+        txt16(text: "Cuisine"),
+        txt16(text: recipe.cuisines),
+      ],
+    );
+  }
+
+  Widget recipeDescription() {
+    return Column(
+      children: [
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: txt16(text: recipe.description)),
+        divider(),
+      ],
+    );
+  }
+
+  Widget sharedButton() {
+    return Row(
+      children: [
+        const Icon(Icons.share),
+        txt16(text: "Share"),
+      ],
+    );
+  }
+
+  Widget txt32(String text) {
+    return Text(
+      text,
+      style: TextStyles.text32black,
+    );
+  }
+
+  Widget txt16({required String text, TextStyle? style}) {
+    return Text(
+      text,
+      style: style ?? TextStyles.text16black,
     );
   }
 
@@ -100,17 +212,41 @@ class _RecipePageState extends State<RecipePage> {
       return Container();
     }
 
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        ProductEntity product = products[index];
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                child: txt32("Ingredients:"),
+              ),
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(8),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  ProductEntity product = products[index];
 
-        return Text("${product.name} - ${product.unit}");
-      },
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ImageGetter(
+                      //     dir: "recipes/ingredients/${recipe.name}",
+                      //     imgName: product.imageLocation!),
+                      txt16(text: "${product.name} - ${product.unit}"),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        divider(),
+      ],
     );
   }
 
@@ -121,16 +257,130 @@ class _RecipePageState extends State<RecipePage> {
       return Container();
     }
 
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        CategoryEntity category = categories[index];
-        return Text(category.name);
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        children: [
+          txt32("Categories"),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(8),
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              CategoryEntity category = categories[index];
+
+              return txt16(text: category.name);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget recipeTags() {
+    List<TagEntity> tags = recipe.tags!;
+
+    if (tags.isEmpty) {
+      return Container();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        children: [
+          txt32("Tags"),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(8),
+            itemCount: tags.length,
+            itemBuilder: (context, index) {
+              TagEntity tag = tags[index];
+
+              return txt16(text: tag.name);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget recipeSteps() {
+    List<StepEntity> steps = recipe.steps!;
+
+    if (steps.isEmpty) {
+      return Container();
+    }
+
+    return Column(
+      children: [
+        // txt32("Steps"),
+        ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: steps.length,
+          itemBuilder: (context, index) {
+            StepEntity step = steps[index];
+
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    stepNumber(step),
+                    stepTitle(step),
+                  ],
+                ),
+                stepImage(step: step),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: txt16(text: step.description),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 25),
+                  child: Divider(
+                    indent: MediaQuery.of(context).size.width / 2,
+                    color: AppColors.orange,
+                    thickness: 10,
+                  ),
+                )
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget stepImage({required StepEntity step}) {
+    if (step.imageLocation == "") {
+      return Container();
+    }
+    return ImageGetter(
+        dir: "recipes/steps/${recipe.name}", imgName: step.imageLocation!);
+  }
+
+  Widget stepTitle(StepEntity step) {
+    return Container(
+      padding: const EdgeInsets.only(left: 16),
+      child: txt16(text: step.title ?? "", style: TextStyles.text16blackBold),
+    );
+  }
+
+  Widget stepNumber(StepEntity step) {
+    return Align(
+      alignment: FractionalOffset.bottomLeft,
+      child: Container(
+        color: AppColors.orange,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 50, right: 10),
+          child: txt16(
+              text: step.number.toString(), style: TextStyles.text24white),
+        ),
+      ),
     );
   }
 
@@ -138,7 +388,7 @@ class _RecipePageState extends State<RecipePage> {
     return BlocBuilder<CommentsCubit, CommentState>(
       builder: (context, commentsState) {
         if (commentsState is CommentsLoaded) {
-          return listView(commentsState.comments);
+          return comments(commentsState.comments);
         }
         if (commentsState is CommentFailure) {
           return Container();
@@ -151,70 +401,33 @@ class _RecipePageState extends State<RecipePage> {
     );
   }
 
-  ListView listView(List<CommentEntity> comments) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
-      itemCount: comments.length,
-      itemBuilder: (context, index) {
-        CommentEntity comment = comments[index];
-        return Column(
-          children: [
-            Text(comment.userName),
-            Text(comment.comment),
-            Text(comment.date.toDate().toString()),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget recipeSteps() {
-    List<StepEntity> steps = recipe.steps!;
-
-    if (steps.isEmpty) {
-      return Container();
-    }
-
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
-      itemCount: steps.length,
-      itemBuilder: (context, index) {
-        StepEntity step = steps[index];
-        return Column(
-          children: [
-            Text(step.number.toString()),
-            Text(step.title ?? ""),
-            Text(step.description),
-            Text(step.imageLocation ?? ""),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget recipeTags() {
-    List<TagEntity> tags = recipe.tags!;
-
-    if (tags.isEmpty) {
-      return Container();
-    }
-
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
-      itemCount: tags.length,
-      itemBuilder: (context, index) {
-        TagEntity tag = tags[index];
-        return Text(tag.name);
-      },
+  Widget comments(List<CommentEntity> comments) {
+    return Column(
+      children: [
+        txt32("Comments"),
+        comments.isEmpty
+            ? const Text(
+                "There are no comments for this recipe yet",
+                style: TextStyles.text16gray,
+              )
+            : ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(8),
+                itemCount: comments.length,
+                itemBuilder: (context, index) {
+                  CommentEntity comment = comments[index];
+                  return Column(
+                    children: [
+                      txt16(text: comment.userName),
+                      txt16(text: comment.comment),
+                      txt16(text: comment.date.toDate().toString()),
+                    ],
+                  );
+                },
+              ),
+      ],
     );
   }
 

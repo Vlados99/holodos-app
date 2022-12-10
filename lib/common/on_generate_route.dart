@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:holodos/common/app_const.dart';
-import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/pages/available_products_page.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/pages/favorite_recipes_page.dart';
@@ -18,8 +17,12 @@ class OnGenerateRoute {
     switch (settings.name) {
       case PageConst.recipePage:
         {
-          return args is RecipeEntity
-              ? materialBuilder(widget: RecipePage(recipe: args))
+          return args is Map
+              ? materialBuilder(
+                  widget: RecipePage(
+                  id: args["id"],
+                  isFavorite: args["isFavorite"],
+                ))
               : materialBuilder(widget: const ErrorPage());
         }
 

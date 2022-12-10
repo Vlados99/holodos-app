@@ -9,7 +9,6 @@ import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
-import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart';
 
 class FavoriteRecipesPage extends StatefulWidget {
   const FavoriteRecipesPage({Key? key}) : super(key: key);
@@ -21,9 +20,10 @@ class FavoriteRecipesPage extends StatefulWidget {
 class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   final GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
 
+  final pageName = PageConst.favoriteRecipesPage;
   @override
   void initState() {
-    BlocProvider.of<RecipeCubit>(context).getRecipesFromFavorites();
+    BlocProvider.of<RecipesCubit>(context).getRecipesFromFavorites();
 
     super.initState();
   }
@@ -58,13 +58,13 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
     );
   }
 
-  BlocBuilder<RecipeCubit, RecipeState> recipeBuilder() {
-    return BlocBuilder<RecipeCubit, RecipeState>(
+  Widget recipeBuilder() {
+    return BlocBuilder<RecipesCubit, RecipesState>(
       builder: (context, recipeState) {
         if (recipeState is RecipesLoaded) {
           return _bodyWidget(recipeState.recipes);
         }
-        if (recipeState is RecipeFailure) {
+        if (recipeState is RecipesFailure) {
           return const ErrorPage();
         }
 
@@ -122,15 +122,11 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
-        routeName: PageConst.favoriteRecipesPage,
+        routeName: pageName,
         width: MediaQuery.of(context).size.width - 80,
       )),
       key: _scaffolGlobalKey,
-      appBar: MainAppBar(
-        title: "Favorite recipes",
-        search: true,
-        searchDelegate: RecipeSearchDelegate(),
-      ),
+      appBar: const MainAppBar(title: "Favorite recipes"),
       body: scaffoldBody(recipes),
     );
   }
@@ -138,11 +134,14 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   Container scaffoldBody(List<RecipeEntity> recipes) {
     return Container(
       alignment: Alignment.topCenter,
-      child: recipes.isEmpty ? _noRecipesWidget() : _recipes(),
+      child: recipes.isEmpty ? _noRecipesWidget() : _recipes(recipes),
     );
   }
 
-  Widget _recipes() {
-    return const RecipeList();
+  Widget _recipes(List<RecipeEntity> recipes) {
+    return RecipeList(
+      pageName: pageName,
+      recipes: recipes,
+    );
   }
 }

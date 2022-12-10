@@ -7,7 +7,9 @@ import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
 
 class RecipeSearchDelegate extends SearchDelegate {
-  RecipeSearchDelegate() : super(searchFieldLabel: 'Enter recipe name');
+  final String pageName;
+  RecipeSearchDelegate({required this.pageName})
+      : super(searchFieldLabel: 'Enter recipe name');
 
   final _suggestions = [
     "Onion rings",
@@ -60,9 +62,10 @@ class RecipeSearchDelegate extends SearchDelegate {
     return BlocBuilder<SearchRecipeBloc, SearchRecipeState>(
         builder: (context, state) {
       if (state is SearchRecipeLoaded) {
-        final recipe = state.recipes;
+        final recipes = state.recipes;
         return RecipeList(
-          recipes: recipe,
+          recipes: recipes,
+          pageName: pageName,
         );
       } else if (state is SearchRecipeFailure) {
         return const ErrorPage();

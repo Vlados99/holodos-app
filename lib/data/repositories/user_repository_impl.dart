@@ -210,4 +210,9 @@ class UserRepositoryImpl extends UserRepository {
     return await _call<List<CuisineEntity>>(
         () => remoteDataSource.getAllCuisines());
   }
+
+  @override
+  Future<Either<Failure, RecipeEntity>> getRecipeById(String id) async {
+    return await _call<RecipeEntity>(() => remoteDataSource.getRecipeByid(id));
+  }
 }

@@ -5,9 +5,11 @@ import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
+import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart';
+import 'package:holodos/presentation/widgets/text_field.dart';
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({
@@ -19,11 +21,21 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> with RouteAware {
+  final TextEditingController productController = TextEditingController();
+
   final GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
+  final pageName = PageConst.recipesPage;
+
+  @override
+  void dispose() {
+    productController.dispose();
+
+    super.dispose();
+  }
 
   @override
   void initState() {
-    BlocProvider.of<RecipeCubit>(context).getRecipes();
+    BlocProvider.of<RecipesCubit>(context).getRecipes();
 
     super.initState();
   }
@@ -34,12 +46,12 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   }
 
   Widget _builder() {
-    return BlocBuilder<RecipeCubit, RecipeState>(
+    return BlocBuilder<RecipesCubit, RecipesState>(
       builder: (context, recipeState) {
         if (recipeState is RecipesLoaded) {
           return _bodyWidget(recipeState.recipes);
         }
-        if (recipeState is RecipeFailure) {
+        if (recipeState is RecipesFailure) {
           return const ErrorPage();
         }
 
@@ -53,10 +65,9 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   Widget _noRecipesWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      // ignore: prefer_const_literals_to_create_immutables
-      children: [
-        const Icon(Icons.no_food),
-        const Text("Recipes are not found!"),
+      children: const [
+        Icon(Icons.no_food),
+        Text("Recipes are not found!"),
       ],
     );
   }
@@ -66,24 +77,70 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
       resizeToAvoidBottomInset: true,
       drawer: SafeArea(
           child: AppDrawer(
-        routeName: PageConst.recipesPage,
+        routeName: pageName,
         width: MediaQuery.of(context).size.width - 80,
       )),
       key: _scaffolGlobalKey,
       appBar: MainAppBar(
         title: "Recipes",
         search: true,
-        searchDelegate: RecipeSearchDelegate(),
+        searchDelegate: RecipeSearchDelegate(pageName: pageName),
         filter: true,
       ),
       body: Container(
         alignment: Alignment.topCenter,
-        child: recipes.isEmpty ? _noRecipesWidget() : _recipes(),
+        child: recipes.isEmpty ? _noRecipesWidget() : _recipes(recipes),
       ),
     );
   }
 
-  Widget _recipes() {
-    return const RecipeList();
+  Widget _recipes(List<RecipeEntity> recipes) {
+    return Column(
+      children: [
+        searchByProducts(),
+        Expanded(
+          child: RecipeList(
+            pageName: pageName,
+            recipes: recipes,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget searchByProducts() {
+    return Container(
+      child: Column(
+        children: [
+          products(),
+          selectedProducts(),
+          searchButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget searchButton() {
+    return Button(
+      text: "Search",
+      backgroundColor: AppColors.dirtyGreen,
+      fontColor: AppColors.textColorWhite,
+      width: MediaQuery.of(context).size.width / 3,
+    );
+  }
+
+  Widget selectedProducts() {
+    return Text("products list");
+  }
+
+  Widget products() {
+    return Column(
+      children: [
+        SearchTextField(
+          context: context,
+          controller: productController,
+        ),
+      ],
+    );
   }
 }

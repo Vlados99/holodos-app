@@ -20,21 +20,24 @@ class RecipeEntity extends Equatable {
   final List<StepEntity>? steps;
   final List<CommentEntity>? comments;
   final List<TagEntity>? tags;
+  bool? isFavorite;
 
-  const RecipeEntity(
-      {required this.id,
-      required this.name,
-      required this.cuisines,
-      required this.cookTime,
-      required this.complexity,
-      required this.serves,
-      required this.imageLocation,
-      required this.description,
-      this.categories,
-      this.ingredients,
-      this.steps,
-      this.comments,
-      this.tags});
+  RecipeEntity({
+    required this.id,
+    required this.name,
+    required this.cuisines,
+    required this.cookTime,
+    required this.complexity,
+    required this.serves,
+    required this.imageLocation,
+    required this.description,
+    this.categories,
+    this.ingredients,
+    this.steps,
+    this.comments,
+    this.tags,
+    this.isFavorite = false,
+  });
 
   @override
   List<Object?> get props => [
@@ -51,5 +54,6 @@ class RecipeEntity extends Equatable {
         steps,
         comments,
         tags,
+        isFavorite,
       ];
 }

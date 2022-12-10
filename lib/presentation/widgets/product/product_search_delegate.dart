@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/app_theme.dart';
 import 'package:holodos/presentation/bloc/search_product/search_product_bloc.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/product/product_list.dart';
@@ -21,7 +22,7 @@ class ProductSearchDelegate extends SearchDelegate {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return ThemeData.light();
+    return AppTheme().lightTheme;
   }
 
   @override

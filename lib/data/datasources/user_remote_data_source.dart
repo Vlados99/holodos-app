@@ -24,6 +24,7 @@ abstract class UserRemoteDataSource {
   Future<List<ProductEntity>> getListOfUsersProducts();
 
   Future<List<RecipeEntity>> getAllRecipes(Map<String, dynamic>? params);
+  Future<RecipeEntity> getRecipeByid(String id);
   Future<List<ProductEntity>> getRecipeIngredients(String recipeId);
   Future<List<CategoryEntity>> getRecipeCategories(String recipeId);
   Future<List<CommentEntity>> getRecipeComments(String recipeId);

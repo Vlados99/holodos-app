@@ -2,8 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 
 class ProductModel extends ProductEntity {
-  const ProductModel({required id, required name, required unit})
-      : super(id: id, name: name, unit: unit);
+  const ProductModel({
+    required id,
+    required name,
+    required unit,
+    required imageLocation,
+  }) : super(
+          id: id,
+          name: name,
+          unit: unit,
+          imageLocation: imageLocation,
+        );
 
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
     return ProductModel(
@@ -14,6 +23,11 @@ class ProductModel extends ProductEntity {
       unit: snapshot.data().toString().contains('unit')
           ? snapshot.get('unit')
           : '',
+      imageLocation: snapshot.data().toString().contains('imageLocation')
+          ? (snapshot.get("imageLocation")
+                  as DocumentReference<Map<String, dynamic>>)
+              .id
+          : '',
     );
   }
 
@@ -22,6 +36,7 @@ class ProductModel extends ProductEntity {
       'id': id,
       'name': name,
       'unit': unit,
+      'imageLocation': imageLocation,
     };
   }
 }

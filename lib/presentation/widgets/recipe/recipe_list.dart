@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
-import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
-import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_item.dart';
 
 class RecipeList extends StatefulWidget {
-  final List<RecipeEntity>? recipes;
+  final List<RecipeEntity> recipes;
+  final String pageName;
   const RecipeList({
     Key? key,
-    this.recipes,
+    required this.recipes,
+    required this.pageName,
   }) : super(key: key);
 
   @override
@@ -22,30 +21,33 @@ class _RecipeListState extends State<RecipeList> {
   @override
   Widget build(BuildContext context) {
     final recipes = widget.recipes;
-    return BlocBuilder<RecipeCubit, RecipeState>(builder: (context, state) {
-      if (state is RecipesLoaded) {
-        return listView(recipes ?? state.recipes);
-      }
-      if (state is RecipeFailure) {
-        return const ErrorPage();
-      }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+    return listView(recipes: recipes);
   }
 
-  ListView listView(List<RecipeEntity> recipes) {
+  ListView listView({required List<RecipeEntity> recipes}) {
     return ListView.builder(
       itemCount: recipes.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, PageConst.recipePage, ((route) => true),
-                arguments: recipes[index]);
+                context, PageConst.recipePage, ((route) => true), arguments: {
+              "id": recipes[index].id,
+              "isFavorite": recipes[index].isFavorite
+            });
           },
-          child: RecipeItem(
-            recipe: recipes[index],
+          child: Column(
+            children: [
+              RecipeItem(
+                recipe: recipes[index],
+                pageName: widget.pageName,
+              ),
+              const Divider(
+                color: AppColors.orange,
+                thickness: 2,
+              ),
+            ],
           ),
         );
       },

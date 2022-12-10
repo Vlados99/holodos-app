@@ -14,6 +14,7 @@ import 'package:holodos/domain/usecases/get_all_products.dart';
 import 'package:holodos/domain/usecases/get_all_recipes.dart';
 import 'package:holodos/domain/usecases/get_current_user_id.dart';
 import 'package:holodos/domain/usecases/get_list_of_users_products.dart';
+import 'package:holodos/domain/usecases/get_recipe_by_id.dart';
 import 'package:holodos/domain/usecases/get_recipe_categories.dart';
 import 'package:holodos/domain/usecases/get_recipe_comments.dart';
 import 'package:holodos/domain/usecases/get_recipe_ingredients.dart';
@@ -67,13 +68,15 @@ init() {
         resetPasswordUseCase: sl(),
       ));
 
-  sl.registerFactory(() => RecipeCubit(
+  sl.registerFactory(() => RecipesCubit(
         removeRecipeFromFavoritesUseCase: sl(),
         getRecipesFromFavoritesUseCase: sl(),
         addRecipeToFavoritesUseCase: sl(),
         getAllRecipesUseCase: sl(),
         commentOnRecipe: sl(),
       ));
+
+  sl.registerFactory(() => RecipeCubit(getRecipeByIdUseCase: sl()));
 
   sl.registerFactory(() => ProductCubit(
         addProductToUserListUseCase: sl(),
@@ -95,6 +98,7 @@ init() {
   sl.registerLazySingleton(() => CreateCurrentUser(repository: sl()));
   sl.registerLazySingleton(() => GetAllProducts(repository: sl()));
   sl.registerLazySingleton(() => GetAllRecipes(repository: sl()));
+  sl.registerLazySingleton(() => GetRecipeById(repository: sl()));
   sl.registerLazySingleton(() => GetCurrentUserId(repository: sl()));
   sl.registerLazySingleton(() => GetListOfUsersProducts(repository: sl()));
   sl.registerLazySingleton(() => GetRecipesFromFavorites(repository: sl()));

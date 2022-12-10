@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 
 import 'package:holodos/domain/entities/product_entity.dart';
+import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/product/product_item.dart';
@@ -13,10 +14,12 @@ import 'package:holodos/presentation/widgets/text_field.dart';
 class ProductList extends StatefulWidget {
   final List<ProductEntity>? products;
   final bool? isFavorite;
+  final bool? isAuth;
 
   const ProductList({
     Key? key,
     this.products,
+    this.isAuth,
     this.isFavorite = false,
   }) : super(key: key);
 
@@ -26,6 +29,14 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   final TextEditingController _productUnitController = TextEditingController();
+
+  bool isAuth = false;
+
+  @override
+  void initState() {
+    isAuth = widget.isAuth ?? false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +73,12 @@ class _ProductListState extends State<ProductList> {
       alignment: Alignment.centerRight,
       children: [
         GestureDetector(
-          onTap: () => productDialog(product: product),
+          onTap: () {
+            isAuth
+                ? productDialog(product: product)
+                : snackBarError(
+                    context: context, message: "You are not logged in");
+          },
           child: ProductItem(product: product),
         ),
         widget.isFavorite!
@@ -175,10 +191,12 @@ class _ProductListState extends State<ProductList> {
 
   Widget inputRow() {
     return SimpleTextField(
-        controller: _productUnitController,
-        labelText: "Enter quantity",
-        formatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ]);
+      controller: _productUnitController,
+      labelText: "Enter quantity",
+      formatters: [
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+      keyboardType: TextInputType.number,
+    );
   }
 }

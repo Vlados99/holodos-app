@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthCubit>(
             create: (_) => di.sl<AuthCubit>()..userIsSignIn()),
         BlocProvider<UserCubit>(create: (_) => di.sl<UserCubit>()),
+        BlocProvider<RecipesCubit>(create: (_) => di.sl<RecipesCubit>()),
         BlocProvider<RecipeCubit>(create: (_) => di.sl<RecipeCubit>()),
         BlocProvider<ProductCubit>(create: (_) => di.sl<ProductCubit>()),
         BlocProvider<CuisineCubit>(create: (_) => di.sl<CuisineCubit>()),

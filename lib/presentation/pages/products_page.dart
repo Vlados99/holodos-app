@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
+import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
@@ -61,10 +62,9 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget _noProductsWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      // ignore: prefer_const_literals_to_create_immutables
-      children: [
-        const Icon(Icons.no_food),
-        const Text("Products are not found!"),
+      children: const [
+        Icon(Icons.no_food),
+        Text("Products are not found!"),
       ],
     );
   }
@@ -91,10 +91,15 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Widget _products() {
-    return Column(
-      children: const [
-        ProductList(),
-      ],
-    );
+    bool isAuth = false;
+
+    return BlocBuilder<AuthCubit, AuthState>(builder: (context, authState) {
+      isAuth = authState is Authenticated ? true : false;
+      return Column(
+        children: [
+          ProductList(isAuth: isAuth),
+        ],
+      );
+    });
   }
 }

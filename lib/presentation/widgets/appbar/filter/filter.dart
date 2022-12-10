@@ -95,7 +95,7 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
                     "serves": servesValue == 0 ? null : servesValue,
                   };
 
-                  BlocProvider.of<RecipeCubit>(context)
+                  BlocProvider.of<RecipesCubit>(context)
                       .getRecipes(recipeParams: params);
                   Navigator.pop(context);
                 },

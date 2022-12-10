@@ -29,6 +29,7 @@ abstract class UserRepository {
 
   Future<Either<Failure, List<RecipeEntity>>> getAllRecipes(
       Map<String, dynamic>? params);
+  Future<Either<Failure, RecipeEntity>> getRecipeById(String id);
   Future<Either<Failure, List<ProductEntity>>> getRecipeIngredients(
       String recipeId);
   Future<Either<Failure, List<CategoryEntity>>> getRecipeCategories(
