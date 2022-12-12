@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/network_status_service.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
@@ -26,6 +27,13 @@ class _SignInPageState extends State<SignInPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    checkConnection(context);
+
+    super.initState();
+  }
 
   @override
   void dispose() {

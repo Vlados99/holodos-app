@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/network_status_service.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
@@ -39,6 +40,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void initState() {
+    checkConnection(context);
+
     _emailController.clear();
     _usernameController.clear();
     _passwordController.clear();

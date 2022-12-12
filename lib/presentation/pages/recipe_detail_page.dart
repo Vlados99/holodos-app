@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/network_status_service.dart';
 import 'package:holodos/domain/entities/category_entity.dart';
 import 'package:holodos/domain/entities/comment_entity.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
@@ -42,6 +43,8 @@ class _RecipePageState extends State<RecipePage> {
   var id = "";
   @override
   void initState() {
+    checkConnection(context);
+
     id = widget.recipe.id;
     recipe = widget.recipe;
     BlocProvider.of<RecipesCubit>(context).getRecipeById(id: id);

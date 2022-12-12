@@ -48,7 +48,15 @@ class OnGenerateRoute {
         return materialBuilder(widget: const AvailableProductsPage());
 
       default:
-        return materialBuilder(widget: const ErrorPage());
+        {
+          return args is Map
+              ? materialBuilder(
+                  widget: ErrorPage(
+                  title: args["title"],
+                  message: args["message"],
+                ))
+              : materialBuilder(widget: const ErrorPage());
+        }
     }
   }
 }

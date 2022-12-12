@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/network_status_service.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
@@ -23,6 +24,8 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   final pageName = PageConst.favoriteRecipesPage;
   @override
   void initState() {
+    checkConnection(context);
+
     BlocProvider.of<RecipesCubit>(context).getRecipesFromFavorites();
 
     super.initState();

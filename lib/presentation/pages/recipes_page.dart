@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/network_status_service.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
@@ -38,6 +39,8 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
 
   @override
   void initState() {
+    checkConnection(context);
+
     BlocProvider.of<RecipesCubit>(context).getRecipes();
     BlocProvider.of<ProductCubit>(context).getProducts();
 

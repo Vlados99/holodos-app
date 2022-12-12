@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
+import 'package:holodos/common/network_status_service.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
@@ -25,6 +26,8 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   void initState() {
+    checkConnection(context);
+
     BlocProvider.of<ProductCubit>(context).getProducts();
 
     super.initState();

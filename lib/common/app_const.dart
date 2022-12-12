@@ -59,6 +59,8 @@ class TextStyles {
       fontSize: 16, color: AppColors.textColorWhite, fontFamily: poppins);
   static const TextStyle text12white = TextStyle(
       fontSize: 12, color: AppColors.textColorWhite, fontFamily: poppins);
+  static const TextStyle text12black = TextStyle(
+      fontSize: 12, color: AppColors.textColorBlack, fontFamily: poppins);
   static const TextStyle text24white = TextStyle(
       fontSize: 24, color: AppColors.textColorWhite, fontFamily: poppins);
   static const TextStyle text24black = TextStyle(
