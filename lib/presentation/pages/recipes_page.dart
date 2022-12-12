@@ -57,7 +57,10 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
         Icon(Icons.no_food),
-        Text("Recipes are not found!"),
+        Text(
+          "Recipes are not found!",
+          style: TextStyles.text16black,
+        ),
       ],
     );
   }

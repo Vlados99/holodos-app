@@ -35,6 +35,7 @@ class Button extends StatelessWidget {
         style: TextStyle(
           color: fontColor ?? AppColors.textColorBlack,
           fontSize: 16,
+          fontFamily: TextStyles.poppins,
         ),
       ),
     );

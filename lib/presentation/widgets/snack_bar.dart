@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holodos/common/app_const.dart';
 
 void snackBarError(
     {required BuildContext context, String? message, SnackBarAction? action}) {
@@ -6,6 +7,7 @@ void snackBarError(
     SnackBar(
       content: Text(
         message ?? "Error",
+        style: TextStyles.text16white,
       ),
       duration: const Duration(seconds: 3),
       backgroundColor: Colors.deepOrange,
@@ -19,6 +21,7 @@ void snackBarSuccess({required BuildContext context, String? message}) {
     SnackBar(
       content: Text(
         message ?? "Success",
+        style: TextStyles.text16white,
       ),
       duration: const Duration(seconds: 3),
       backgroundColor: Colors.green,

@@ -25,6 +25,7 @@ class AppColors {
 
   static const Color orange = Color(0xFFF2822C);
   static const Color black = Colors.black;
+  static const Color white = Colors.white;
   static const Color dirtyGreen = Color(0xFF267B6B);
 }
 
@@ -65,6 +66,11 @@ class TextStyles {
       fontSize: 24, color: AppColors.textColorWhite, fontFamily: poppins);
   static const TextStyle text24black = TextStyle(
       fontSize: 24, color: AppColors.textColorBlack, fontFamily: poppins);
+  static const TextStyle text24blackBold = TextStyle(
+      fontSize: 24,
+      color: AppColors.textColorBlack,
+      fontFamily: poppins,
+      fontWeight: FontWeight.bold);
 
   static TextStyle productTextStyle = TextStyle(
     fontSize: 32,

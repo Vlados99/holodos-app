@@ -20,6 +20,15 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
+  String routeName = "";
+
+  @override
+  void initState() {
+    routeName = widget.routeName;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
@@ -29,7 +38,40 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
+  List<Map<String, dynamic>> listDrawerItem = [
+    {
+      "icon": Icons.receipt_long_rounded,
+      "text": "Recipes",
+      "pageName": PageConst.recipesPage
+    },
+    {
+      "icon": Icons.list_alt_rounded,
+      "text": "Products",
+      "pageName": PageConst.productsPage
+    },
+    {
+      "icon": Icons.star,
+      "text": "Favorite recipes",
+      "pageName": PageConst.favoriteRecipesPage
+    },
+    {
+      "icon": Icons.favorite_border,
+      "text": "My products",
+      "pageName": PageConst.availableProductsPage
+    },
+  ];
+
   Widget _drawer(bool isSignIn) {
+    var list = listDrawerItem.map((e) {
+      return DrawerItem(
+        icon: e["icon"],
+        text: e["text"],
+        selectedMenuItem: routeName,
+        currentPageName: e["pageName"],
+        isSelected: routeName == e["pageName"],
+      );
+    }).toList();
+
     return Drawer(
       backgroundColor: AppColors.mainBackground,
       width: widget.width,
@@ -37,99 +79,33 @@ class _AppDrawerState extends State<AppDrawer> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           drawerHeader(text: "Holodos"),
-          GestureDetector(
-            onTap: () {
-              if (widget.routeName != PageConst.recipesPage) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.recipesPage, (route) => false);
-              } else {
-                Navigator.pop(context);
-              }
-            },
-            child: drawerItem(
-              icon: Icons.receipt_long_rounded,
-              text: "Recipes",
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              if (widget.routeName != PageConst.productsPage) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.productsPage, (route) => false);
-              } else {
-                Navigator.pop(context);
-              }
-            },
-            child: drawerItem(
-              icon: Icons.list_alt_rounded,
-              text: "Products",
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              if (widget.routeName != PageConst.favoriteRecipesPage) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.favoriteRecipesPage, (route) => false);
-              } else {
-                Navigator.pop(context);
-              }
-            },
-            child: drawerItem(
-              icon: Icons.star,
-              text: "Favorite recipes",
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              if (widget.routeName != PageConst.availableProductsPage) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.availableProductsPage, (route) => false);
-              } else {
-                Navigator.pop(context);
-              }
-            },
-            child: drawerItem(
-              icon: Icons.favorite_border,
-              text: "My products",
-            ),
-          ),
+          for (var el in list) el,
           Container(
-            child: isSignIn
-                ? bottomDrawerItemSignOut(context)
-                : bottomDrawerItemSignIn(context),
+            child: bottomDrawerItemSignIn(context, isSignIn),
           ),
         ],
       ),
     );
   }
 
-  Expanded bottomDrawerItemSignIn(BuildContext context) {
+  Widget bottomDrawerItemSignIn(BuildContext context, bool isSignIn) {
     return Expanded(
-        child: GestureDetector(
-      onTap: () => Navigator.pushNamedAndRemoveUntil(
-          context, PageConst.signInPage, (route) => false),
-      child: drawerItem(
+      child: DrawerItem(
+        onTap: () {
+          if (isSignIn) {
+            BlocProvider.of<AuthCubit>(context).loggedOut();
+            Navigator.pushNamedAndRemoveUntil(
+                context, PageConst.signInPage, (route) => false);
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+                context, PageConst.signInPage, (route) => false);
+          }
+        },
         icon: Icons.logout,
-        text: "Sign in",
+        text: isSignIn ? "Sign out" : "Sign in",
         alignment: Alignment.bottomCenter,
       ),
-    ));
-  }
-
-  Expanded bottomDrawerItemSignOut(BuildContext context) {
-    return Expanded(
-        child: GestureDetector(
-      onTap: () {
-        BlocProvider.of<AuthCubit>(context).loggedOut();
-        Navigator.pushNamedAndRemoveUntil(
-            context, PageConst.signInPage, (route) => false);
-      },
-      child: drawerItem(
-        icon: Icons.logout,
-        text: "Sign out",
-        alignment: Alignment.bottomCenter,
-      ),
-    ));
+    );
   }
 
   Widget drawerHeader({
@@ -147,28 +123,77 @@ class _AppDrawerState extends State<AppDrawer> {
       ),
     );
   }
+}
 
-  Widget drawerItem({
-    Color? backgroundColor,
-    required IconData icon,
-    required String text,
-    Alignment? alignment,
-  }) {
-    return Align(
-      alignment: alignment ?? Alignment.topLeft,
-      child: Container(
-        height: 60,
-        color: backgroundColor ?? AppColors.mainBackground,
-        child: Row(
-          children: [
-            CustomSizedBox().w15(),
-            Icon(icon),
-            CustomSizedBox().w15(),
-            Text(
-              text,
-              style: TextStyles.text16black,
-            ),
-          ],
+class DrawerItem extends StatefulWidget {
+  final IconData icon;
+  final String text;
+  final Alignment? alignment;
+  final bool? isSelected;
+  final String? selectedMenuItem;
+  final String? currentPageName;
+  final Function()? onTap;
+
+  const DrawerItem({
+    Key? key,
+    required this.icon,
+    required this.text,
+    this.alignment,
+    this.isSelected,
+    this.selectedMenuItem,
+    this.currentPageName,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  State<DrawerItem> createState() => _DrawerItemState();
+}
+
+class _DrawerItemState extends State<DrawerItem> {
+  bool isSelected = false;
+  String currentPageName = "";
+
+  @override
+  void initState() {
+    isSelected = widget.isSelected ?? false;
+    currentPageName = widget.currentPageName ?? "";
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap ??
+          () {
+            if (widget.selectedMenuItem != currentPageName) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, currentPageName, (route) => false);
+            } else {
+              Navigator.pop(context);
+            }
+          },
+      child: Align(
+        alignment: widget.alignment ?? Alignment.topLeft,
+        child: Container(
+          height: 60,
+          color: isSelected ? AppColors.orange : AppColors.mainBackground,
+          child: Row(
+            children: [
+              CustomSizedBox().w15(),
+              Icon(
+                widget.icon,
+                color: isSelected ? AppColors.white : AppColors.black,
+              ),
+              CustomSizedBox().w15(),
+              Text(
+                widget.text,
+                style: isSelected
+                    ? TextStyles.text16white
+                    : TextStyles.text16black,
+              ),
+            ],
+          ),
         ),
       ),
     );

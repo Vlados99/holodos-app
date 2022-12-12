@@ -164,14 +164,15 @@ class _SignInPageState extends State<SignInPage> {
                                   PageConst.signUpPage,
                                   ((route) => false)),
                               child: Row(
-                                children: [
-                                  Button(
-                                    width:
-                                        MediaQuery.of(context).size.width - 270,
-                                    text: "Create Account",
-                                    fontColor: AppColors.textColorDirtyGreen,
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Button(
+                                      text: "Create Account",
+                                      fontColor: AppColors.textColorDirtyGreen,
+                                    ),
                                   ),
-                                  const Icon(
+                                  Icon(
                                     Icons.chevron_right,
                                     color: AppColors.dirtyGreen,
                                   ),

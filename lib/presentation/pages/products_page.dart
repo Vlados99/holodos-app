@@ -50,7 +50,10 @@ class _ProductsPageState extends State<ProductsPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
         Icon(Icons.no_food),
-        Text("Products are not found!"),
+        Text(
+          "Products are not found!",
+          style: TextStyles.text16black,
+        ),
       ],
     );
   }

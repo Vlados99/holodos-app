@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holodos/common/app_const.dart';
 
 class ServesDropdownButton extends StatefulWidget {
   final ValueChanged<int> onChanged;
@@ -25,6 +26,7 @@ class _ServesDropdownButtonState extends State<ServesDropdownButton> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      style: TextStyles.text16black,
       isExpanded: true,
       value: dropdownValue,
       icon: const Icon(Icons.arrow_downward),

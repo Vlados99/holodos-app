@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:holodos/common/app_const.dart';
 import 'package:holodos/presentation/cubit/cuisine/cuisine_cubit.dart';
 
 class CuisinesDropdownButton extends StatefulWidget {
@@ -46,6 +47,7 @@ class _CuisinesDropdownButtonState extends State<CuisinesDropdownButton> {
   DropdownButton<String> dropdownMenu(List<String> cuisines) {
     items = ["All"] + cuisines;
     return DropdownButton<String>(
+      style: TextStyles.text16black,
       isExpanded: true,
       value: dropdownValue,
       icon: const Icon(Icons.arrow_downward),

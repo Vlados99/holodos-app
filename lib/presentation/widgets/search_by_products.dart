@@ -227,6 +227,7 @@ class _SearchByProductsState extends State<SearchByProducts> {
         fieldViewBuilder:
             (context, textEditingController, focusNode, onFieldSubmitted) =>
                 TextField(
+          style: TextStyles.text16black,
           controller: textEditingController,
           focusNode: focusNode,
           decoration: InputDecoration(

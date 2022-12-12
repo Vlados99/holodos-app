@@ -88,17 +88,51 @@ class _ProductListState extends State<ProductList> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Remove ${product.name}"),
+            title: Text(
+              "Remove ${product.name}",
+              style: TextStyles.text24blackBold,
+            ),
             content: Text(
-                "Do you really want to remove ${product.name} from your Holodos?"),
+              "Do you really want to remove ${product.name} from your Holodos?",
+              style: TextStyles.text16black,
+            ),
             actions: [
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: AppColors.orange,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyles.text16white,
+                      )),
+                ),
               ),
-              GestureDetector(
-                onTap: () => submitRemoveProduct(product),
-                child: const Text("Remove"),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: GestureDetector(
+                  onTap: () => submitRemoveProduct(product),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: AppColors.orange,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: const Text(
+                      "Remove",
+                      style: TextStyles.text16white,
+                    ),
+                  ),
+                ),
               ),
             ],
           );
@@ -111,20 +145,53 @@ class _ProductListState extends State<ProductList> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(product.name),
+            title: Text(
+              product.name,
+              style: TextStyles.text24blackBold,
+            ),
             content: inputRow(),
             actions: [
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: AppColors.orange,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyles.text16white,
+                    ),
+                  ),
+                ),
               ),
-              GestureDetector(
-                onTap: () {
-                  widget.isFavorite!
-                      ? submitUpdateProduct(product)
-                      : submitAddProduct(product);
-                },
-                child: Text(widget.isFavorite! ? "Update" : "Add"),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: GestureDetector(
+                  onTap: () {
+                    widget.isFavorite!
+                        ? submitUpdateProduct(product)
+                        : submitAddProduct(product);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: AppColors.orange,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Text(
+                      widget.isFavorite! ? "Update" : "Add",
+                      style: TextStyles.text16white,
+                    ),
+                  ),
+                ),
               ),
             ],
           );

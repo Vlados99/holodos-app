@@ -118,20 +118,22 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "New Holodos?",
+                        "Already have an account?",
                         style: TextStyles.text16gray,
                       ),
                       GestureDetector(
                         onTap: () => Navigator.pushNamedAndRemoveUntil(
-                            context, PageConst.signUpPage, ((route) => false)),
+                            context, PageConst.signInPage, ((route) => false)),
                         child: Row(
-                          children: [
-                            Button(
-                              width: MediaQuery.of(context).size.width - 270,
-                              text: "Create Account",
-                              fontColor: AppColors.textColorDirtyGreen,
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Button(
+                                text: "Log in",
+                                fontColor: AppColors.textColorDirtyGreen,
+                              ),
                             ),
-                            const Icon(
+                            Icon(
                               Icons.chevron_right,
                               color: AppColors.dirtyGreen,
                             ),

@@ -44,6 +44,7 @@ class _SimpleTextFieldState extends State<SimpleTextField> {
     return SizedBox(
       width: widget.width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
+        style: TextStyles.text16black,
         maxLines: widget.maxLines ?? 1,
         minLines: 1,
         keyboardType: widget.keyboardType ?? TextInputType.text,
@@ -96,6 +97,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return SizedBox(
       width: widget.width ?? MediaQuery.of(context).size.width - 30,
       child: TextField(
+        style: TextStyles.text16black,
         obscureText: passenable,
         obscuringCharacter: "*",
         enableSuggestions: false,

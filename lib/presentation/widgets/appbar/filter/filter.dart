@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
@@ -7,6 +9,7 @@ import 'package:holodos/presentation/widgets/appbar/filter/complexity_filter.dar
 import 'package:holodos/presentation/widgets/appbar/filter/cook_time_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/cuisines_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/serves_filter.dart';
+import 'package:holodos/presentation/widgets/sized_box.dart';
 
 class FilterAppBarItem extends StatefulWidget {
   const FilterAppBarItem({Key? key}) : super(key: key);
@@ -53,7 +56,12 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Filter for recipes"),
+            title: const Center(
+              child: Text(
+                "Filter for recipes",
+                style: TextStyles.text16blackBold,
+              ),
+            ),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -83,26 +91,57 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
               ],
             ),
             actions: [
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: AppColors.orange,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyles.text16white,
+                    ),
+                  ),
+                ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Map<String, dynamic> params = {
-                    "complexity": complexityValue == 0 ? null : complexityValue,
-                    "cookTime": cookTimeValue == 0 ? null : cookTimeValue,
-                    "cookTimeSymbol":
-                        cookTimeSymbol == "All" ? null : cookTimeSymbol,
-                    "cuisines": cuisinesValue == "All" ? null : cuisinesValue,
-                    "serves": servesValue == 0 ? null : servesValue,
-                  };
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: GestureDetector(
+                  onTap: () {
+                    Map<String, dynamic> params = {
+                      "complexity":
+                          complexityValue == 0 ? null : complexityValue,
+                      "cookTime": cookTimeValue == 0 ? null : cookTimeValue,
+                      "cookTimeSymbol":
+                          cookTimeSymbol == "All" ? null : cookTimeSymbol,
+                      "cuisines": cuisinesValue == "All" ? null : cuisinesValue,
+                      "serves": servesValue == 0 ? null : servesValue,
+                    };
 
-                  BlocProvider.of<RecipesCubit>(context)
-                      .getRecipes(recipeParams: params);
-                  Navigator.pop(context);
-                },
-                child: const Text("Enter"),
+                    BlocProvider.of<RecipesCubit>(context)
+                        .getRecipes(recipeParams: params);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: AppColors.orange,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: const Text(
+                      "Enter",
+                      style: TextStyles.text16white,
+                    ),
+                  ),
+                ),
               ),
             ],
           );
@@ -113,7 +152,10 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(name),
+          Text(
+            name,
+            style: TextStyles.text16black,
+          ),
           SizedBox(width: 100, child: widget),
         ],
       );

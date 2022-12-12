@@ -88,7 +88,6 @@ class _RecipePageState extends State<RecipePage> {
                     // recipeCategories(),
                     // recipeTags(),
                     recipeSteps(),
-                    sharedButton(),
                     recipeComments(),
                   ],
                 ),
@@ -152,7 +151,10 @@ class _RecipePageState extends State<RecipePage> {
 
   Widget cookTime() {
     return Column(
-      children: [txt16(text: "Time"), txt16(text: "${recipe.cookTime} min")],
+      children: [
+        txt16(text: "Time"),
+        txt16(text: "${recipe.cookTime} min"),
+      ],
     );
   }
 
@@ -160,9 +162,7 @@ class _RecipePageState extends State<RecipePage> {
     return Column(
       children: [
         txt16(text: "Serves"),
-        txt16(
-          text: recipe.serves.toString(),
-        ),
+        txt16(text: recipe.serves.toString()),
       ],
     );
   }
@@ -183,19 +183,6 @@ class _RecipePageState extends State<RecipePage> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: txt16(text: recipe.description)),
         divider(),
-      ],
-    );
-  }
-
-  Widget sharedButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        txt24(text: "Share"),
-        const Icon(
-          Icons.share,
-          size: 24,
-        ),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holodos/common/app_const.dart';
 import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 
 class ErrorPage extends StatelessWidget {
@@ -11,7 +12,10 @@ class ErrorPage extends StatelessWidget {
     return Scaffold(
       appBar: MainAppBar(title: title ?? "Error"),
       body: Center(
-        child: Text(message ?? "Sorry but you got to a page with an error"),
+        child: Text(
+          message ?? "Sorry but you got to a page with an error",
+          style: TextStyles.text16black,
+        ),
       ),
     );
   }

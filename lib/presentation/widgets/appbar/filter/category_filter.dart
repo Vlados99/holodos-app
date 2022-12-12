@@ -49,7 +49,10 @@ class _CategoriesFilterState extends State<CategoriesFilter> {
           children: [
             const Padding(
               padding: EdgeInsets.only(bottom: 10),
-              child: Text("Category"),
+              child: Text(
+                "Category",
+                style: TextStyles.text16black,
+              ),
             ),
             GridView.count(
                 scrollDirection: Axis.vertical,
