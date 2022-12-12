@@ -47,7 +47,10 @@ class _CategoriesFilterState extends State<CategoriesFilter> {
         width: 200,
         child: Column(
           children: [
-            const Text("Category"),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text("Category"),
+            ),
             GridView.count(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,

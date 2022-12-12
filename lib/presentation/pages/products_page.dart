@@ -72,7 +72,8 @@ class _ProductsPageState extends State<ProductsPage> {
             List<ProductEntity> products = productState.products;
             return Container(
               alignment: Alignment.topCenter,
-              child: products.isEmpty ? _noProductsWidget() : _products(),
+              child:
+                  products.isEmpty ? _noProductsWidget() : _products(products),
             );
           }
           if (productState is ProductFailure) {
@@ -87,16 +88,13 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  Widget _products() {
+  Widget _products(List<ProductEntity> products) {
     bool isAuth = false;
 
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, authState) {
       isAuth = authState is Authenticated ? true : false;
-      return Column(
-        children: [
-          ProductList(isAuth: isAuth),
-        ],
-      );
+
+      return ProductList(products: products, isAuth: isAuth);
     });
   }
 }

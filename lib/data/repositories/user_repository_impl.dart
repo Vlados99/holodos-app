@@ -126,7 +126,7 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, List<RecipeEntity>>> searchRecipesByProducts(
-      List<ProductEntity> products) async {
+      List<String> products) async {
     return await _call<List<RecipeEntity>>(
         () => remoteDataSource.searchRecipesByProducts(products));
   }

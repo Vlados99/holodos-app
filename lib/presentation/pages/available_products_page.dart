@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
-import 'package:holodos/presentation/cubit/product/product_cubit.dart';
+import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
+import 'package:holodos/presentation/cubit/user_product/user_product_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/product/product_list.dart';
-import 'package:holodos/presentation/widgets/product/product_search_delegate.dart';
+import 'package:holodos/presentation/widgets/snack_bar.dart';
 
 class AvailableProductsPage extends StatefulWidget {
   const AvailableProductsPage({Key? key}) : super(key: key);
@@ -21,12 +22,14 @@ class AvailableProductsPage extends StatefulWidget {
 class _AvailableProductsPageState extends State<AvailableProductsPage> {
   final GlobalKey<ScaffoldState> _scaffolGlobalKey = GlobalKey<ScaffoldState>();
 
+  bool isAuth = false;
+
   final TextEditingController _productSearchController =
       TextEditingController();
 
   @override
   void initState() {
-    BlocProvider.of<ProductCubit>(context).getProductsFromList();
+    BlocProvider.of<UserProductCubit>(context).getProductsFromList();
 
     super.initState();
   }
@@ -40,13 +43,10 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _builder();
-  }
-
-  Widget _builder() {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
-        return authState is Authenticated ? _bodyWidget() : notLoggedIn();
+        isAuth = authState is Authenticated ? true : false;
+        return isAuth ? _bodyWidget() : notLoggedIn();
       },
     );
   }
@@ -125,16 +125,17 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
       appBar: const MainAppBar(
         title: "Holodos",
       ),
-      body: BlocBuilder<ProductCubit, ProductState>(
-        builder: (context, productState) {
-          if (productState is ProductLoaded) {
-            List<ProductEntity> products = productState.products;
+      body: BlocBuilder<UserProductCubit, UserProductState>(
+        builder: (context, userProductState) {
+          if (userProductState is UserProductLoaded) {
+            List<ProductEntity> products = userProductState.products;
             return Container(
               alignment: Alignment.topCenter,
-              child: products.isEmpty ? _noProductsWidget() : _products(),
+              child:
+                  products.isEmpty ? _noProductsWidget() : _products(products),
             );
           }
-          if (productState is ProductFailure) {
+          if (userProductState is UserProductFailure) {
             return const ErrorPage();
           }
 
@@ -146,11 +147,35 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
     );
   }
 
-  Widget _products() {
+  Widget _products(List<ProductEntity> products) {
     return Column(
-      children: const [
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            alignment: Alignment.topCenter,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, PageConst.recipesPage, (route) => false);
+                BlocProvider.of<RecipesCubit>(context).searchRecipesByProducts(
+                    products: products.map((e) => e.name).toList());
+              },
+              child: Button(
+                text: "Search by my products",
+                backgroundColor: products.isEmpty
+                    ? AppColors.dirtyGreen.withOpacity(0.4)
+                    : AppColors.dirtyGreen,
+                fontColor: AppColors.textColorWhite,
+                width: MediaQuery.of(context).size.width / 2,
+              ),
+            ),
+          ),
+        ),
         ProductList(
+          products: products,
           isFavorite: true,
+          isAuth: isAuth,
         ),
       ],
     );

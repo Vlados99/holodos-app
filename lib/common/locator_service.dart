@@ -44,16 +44,14 @@ import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe_comments/recipe_comments_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
+import 'package:holodos/presentation/cubit/user_product/user_product_cubit.dart';
 
 final sl = GetIt.instance;
 
 init() {
   // Bloc / Cubit
 
-  sl.registerFactory(() => SearchRecipeBloc(
-      searchRecipesByCategories: sl(),
-      searchRecipesByProducts: sl(),
-      searchRecipesByName: sl()));
+  sl.registerFactory(() => SearchRecipeBloc(searchRecipesByName: sl()));
 
   sl.registerFactory(() => SearchProductBloc(searchProductsByName: sl()));
 
@@ -75,18 +73,21 @@ init() {
         getRecipesFromFavoritesUseCase: sl(),
         addRecipeToFavoritesUseCase: sl(),
         searchRecipesByCategoriesUseCase: sl(),
+        searchRecipesByProductsUseCase: sl(),
         getAllRecipesUseCase: sl(),
         getRecipeByIdUseCase: sl(),
         commentOnRecipe: sl(),
       ));
 
   sl.registerFactory(() => ProductCubit(
-        addProductToUserListUseCase: sl(),
-        getListOfUsersProductsUseCase: sl(),
-        removeProductFromUserListUseCase: sl(),
-        updateProductFromUserListUseCase: sl(),
         getAllProductsUseCase: sl(),
       ));
+
+  sl.registerFactory(() => UserProductCubit(
+      addProductToUserListUseCase: sl(),
+      getListOfUsersProductsUseCase: sl(),
+      removeProductFromUserListUseCase: sl(),
+      updateProductFromUserListUseCase: sl()));
 
   sl.registerFactory(() => CuisineCubit(getAllCuisinesUseCase: sl()));
 

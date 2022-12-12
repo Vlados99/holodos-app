@@ -244,13 +244,15 @@ class _RecipePageState extends State<RecipePage> {
                 itemBuilder: (context, index) {
                   ProductEntity product = products[index];
 
+                  String name =
+                      product.name[0].toUpperCase() + product.name.substring(1);
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // ImageGetter(
                       //     dir: "recipes/ingredients/${recipe.name}",
                       //     imgName: product.imageLocation!),
-                      txt16(text: "${product.name} - ${product.unit}"),
+                      txt16(text: "$name - ${product.unit}"),
                     ],
                   );
                 },

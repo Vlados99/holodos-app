@@ -44,6 +44,7 @@ class _RecipeItemState extends State<RecipeItem> {
     itemHeight = 200;
     itemWidth = MediaQuery.of(context).size.width;
     final h15 = CustomSizedBox().h15();
+
     return SizedBox(
       width: itemWidth,
       height: itemHeight + h15.height! + 12,

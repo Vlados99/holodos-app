@@ -2,23 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
-
 import 'package:holodos/domain/entities/product_entity.dart';
-import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
-import 'package:holodos/presentation/cubit/product/product_cubit.dart';
-import 'package:holodos/presentation/pages/error_page.dart';
+import 'package:holodos/presentation/cubit/user_product/user_product_cubit.dart';
 import 'package:holodos/presentation/widgets/product/product_item.dart';
 import 'package:holodos/presentation/widgets/snack_bar.dart';
 import 'package:holodos/presentation/widgets/text_field.dart';
 
 class ProductList extends StatefulWidget {
-  final List<ProductEntity>? products;
+  final List<ProductEntity> products;
   final bool? isFavorite;
   final bool? isAuth;
 
   const ProductList({
     Key? key,
-    this.products,
+    required this.products,
     this.isAuth,
     this.isFavorite = false,
   }) : super(key: key);
@@ -41,18 +38,7 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     final products = widget.products;
-    return BlocBuilder<ProductCubit, ProductState>(
-      builder: (context, state) {
-        if (state is ProductLoaded) {
-          return separatedListView(products ?? state.products);
-        }
-        if (state is ProductFailure) {
-          return const ErrorPage();
-        }
-
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
+    return separatedListView(products);
   }
 
   ListView separatedListView(List<ProductEntity> products) {
@@ -152,7 +138,7 @@ class _ProductListState extends State<ProductList> {
           name: product.name,
           unit: _productUnitController.text);
 
-      BlocProvider.of<ProductCubit>(context)
+      BlocProvider.of<UserProductCubit>(context)
           .updateProductFromUserList(product: userProduct);
       Navigator.pop(context);
       snackBarSuccess(context: context, message: "Product is updated");
@@ -170,7 +156,7 @@ class _ProductListState extends State<ProductList> {
           name: product.name,
           unit: _productUnitController.text);
 
-      BlocProvider.of<ProductCubit>(context)
+      BlocProvider.of<UserProductCubit>(context)
           .addProductToList(product: userProduct);
       Navigator.pop(context);
       snackBarSuccess(
@@ -183,7 +169,7 @@ class _ProductListState extends State<ProductList> {
   }
 
   void submitRemoveProduct(ProductEntity product) {
-    BlocProvider.of<ProductCubit>(context)
+    BlocProvider.of<UserProductCubit>(context)
         .removeProductFromList(product: product);
     Navigator.pop(context);
     snackBarSuccess(context: context, message: "Product is removed");

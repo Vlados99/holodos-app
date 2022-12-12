@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-void snackBarError({required BuildContext context, String? message}) {
+void snackBarError(
+    {required BuildContext context, String? message, SnackBarAction? action}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
@@ -8,6 +9,7 @@ void snackBarError({required BuildContext context, String? message}) {
       ),
       duration: const Duration(seconds: 3),
       backgroundColor: Colors.deepOrange,
+      action: action,
     ),
   );
 }

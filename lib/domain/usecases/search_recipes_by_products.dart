@@ -1,8 +1,7 @@
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:holodos/core/error/failure.dart';
-import 'package:dartz/dartz.dart';
 import 'package:holodos/core/usecases/usecase_with_params.dart';
-import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/repositories/user_repository.dart';
 
@@ -19,7 +18,7 @@ class SearchRecipesByProducts extends UseCaseWithParams<List<RecipeEntity>,
 }
 
 class SearchRecipesByProductsParams extends Equatable {
-  final List<ProductEntity> products;
+  final List<String> products;
 
   const SearchRecipesByProductsParams({required this.products});
 

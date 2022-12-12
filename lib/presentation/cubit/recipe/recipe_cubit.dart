@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/category_entity.dart';
+import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/usecases/add_recipe_to_favorites.dart';
 import 'package:holodos/domain/usecases/comment_on_recipe.dart';
@@ -13,6 +14,7 @@ import 'package:holodos/domain/usecases/get_recipe_by_id.dart';
 import 'package:holodos/domain/usecases/get_recipes_from_favorites.dart';
 import 'package:holodos/domain/usecases/remove_recipe_from_favorites.dart';
 import 'package:holodos/domain/usecases/search_recipes_by_categories.dart';
+import 'package:holodos/domain/usecases/search_recipes_by_products.dart';
 
 part 'recipe_state.dart';
 
@@ -20,7 +22,9 @@ class RecipesCubit extends Cubit<RecipesState> {
   final RemoveRecipeFromFavorites removeRecipeFromFavoritesUseCase;
   final GetRecipesFromFavorites getRecipesFromFavoritesUseCase;
   final AddRecipeToFavorites addRecipeToFavoritesUseCase;
+
   final SearchRecipesByCategory searchRecipesByCategoriesUseCase;
+  final SearchRecipesByProducts searchRecipesByProductsUseCase;
 
   final GetAllRecipes getAllRecipesUseCase;
   final GetRecipeById getRecipeByIdUseCase;
@@ -35,6 +39,7 @@ class RecipesCubit extends Cubit<RecipesState> {
     required this.getRecipeByIdUseCase,
     required this.commentOnRecipe,
     required this.searchRecipesByCategoriesUseCase,
+    required this.searchRecipesByProductsUseCase,
   }) : super(RecipesInitial());
 
   Future<void> addRecipeToFavorites({required RecipeEntity recipe}) async {
@@ -122,6 +127,21 @@ class RecipesCubit extends Cubit<RecipesState> {
       SearchRecipesByCategoryParams params =
           SearchRecipesByCategoryParams(category: category);
       final failureOrRecipe = await searchRecipesByCategoriesUseCase(params);
+      failureOrRecipe.fold((_) => emit(RecipesFailure()),
+          (recipes) => emit(RecipesLoaded(recipes: recipes)));
+    } on SocketException catch (_) {
+      emit(RecipesFailure());
+    } catch (_) {
+      emit(RecipesFailure());
+    }
+  }
+
+  Future<void> searchRecipesByProducts({required List<String> products}) async {
+    emit(RecipesLoading());
+    try {
+      SearchRecipesByProductsParams params =
+          SearchRecipesByProductsParams(products: products);
+      final failureOrRecipe = await searchRecipesByProductsUseCase(params);
       failureOrRecipe.fold((_) => emit(RecipesFailure()),
           (recipes) => emit(RecipesLoaded(recipes: recipes)));
     } on SocketException catch (_) {

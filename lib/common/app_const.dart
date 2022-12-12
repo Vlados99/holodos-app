@@ -63,4 +63,16 @@ class TextStyles {
       fontSize: 24, color: AppColors.textColorWhite, fontFamily: poppins);
   static const TextStyle text24black = TextStyle(
       fontSize: 24, color: AppColors.textColorBlack, fontFamily: poppins);
+
+  static TextStyle productTextStyle = TextStyle(
+    fontSize: 32,
+    fontFamily: poppins,
+    color: AppColors.textColorBlack,
+    shadows: [
+      Shadow(
+        color: AppColors.dirtyGreen.withOpacity(0.3),
+        offset: const Offset(0, 1),
+      ),
+    ],
+  );
 }

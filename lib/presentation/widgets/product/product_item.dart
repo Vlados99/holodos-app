@@ -23,8 +23,8 @@ class _ProductItemState extends State<ProductItem> {
   Widget productItem({String? unit, required String name}) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.only(bottom: 8, left: 10),
-      decoration: const BoxDecoration(color: AppColors.orange),
+      padding: const EdgeInsets.only(bottom: 8, left: 20),
+      decoration: const BoxDecoration(color: AppColors.mainBackground),
       child: txt(name: name, unit: unit),
     );
   }
@@ -32,16 +32,18 @@ class _ProductItemState extends State<ProductItem> {
   Widget txt({required String name, String? unit}) {
     return Row(
       children: [
-        Text(
-          name,
-          style: TextStyles.text32black,
+        Container(
+          padding: const EdgeInsets.only(bottom: 5),
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.orange, width: 1),
+            ),
+          ),
+          child: Text(
+            unit != "" ? "$name - $unit" : name,
+            style: TextStyles.productTextStyle,
+          ),
         ),
-        unit != ""
-            ? Text(
-                " - $unit",
-                style: TextStyles.text32black,
-              )
-            : Container(),
       ],
     );
   }

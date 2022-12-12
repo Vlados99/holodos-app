@@ -13,6 +13,8 @@ class RecipeSearchDelegate extends SearchDelegate {
 
   final _suggestions = [
     "Onion rings",
+    "Carbonara",
+    "Fresh pasta",
   ];
 
   @override

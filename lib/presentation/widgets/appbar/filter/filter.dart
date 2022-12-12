@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
-import 'package:holodos/presentation/widgets/appbar/filter/categoriy_filter.dart';
+import 'package:holodos/presentation/widgets/appbar/filter/category_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/complexity_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/cook_time_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/cuisines_filter.dart';

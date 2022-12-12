@@ -59,8 +59,9 @@ class UserCubit extends Cubit<UserState> {
     try {
       ResetPasswordParams params = ResetPasswordParams(user: user);
 
-      await resetPasswordUseCase(params);
-      emit(UserSuccess());
+      final failureOrVoid = await resetPasswordUseCase(params);
+      failureOrVoid.fold((_) => emit(const UserFailure(errorMessage: "Error")),
+          (l) => emit(UserSuccess()));
     } on FirebaseException catch (e) {
       emit(UserFailure(errorMessage: e.message!));
     } catch (_) {

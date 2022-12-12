@@ -14,6 +14,7 @@ import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe_comments/recipe_comments_cubit.dart';
 import 'package:holodos/presentation/cubit/user/user_cubit.dart';
+import 'package:holodos/presentation/cubit/user_product/user_product_cubit.dart';
 import 'package:holodos/presentation/pages/recipes_page.dart';
 import 'package:holodos/presentation/pages/sign_in_page.dart';
 
@@ -41,6 +42,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserCubit>(create: (_) => di.sl<UserCubit>()),
         BlocProvider<RecipesCubit>(create: (_) => di.sl<RecipesCubit>()),
         BlocProvider<ProductCubit>(create: (_) => di.sl<ProductCubit>()),
+        BlocProvider<UserProductCubit>(
+            create: (_) => di.sl<UserProductCubit>()),
         BlocProvider<CuisineCubit>(create: (_) => di.sl<CuisineCubit>()),
         BlocProvider<CategoryCubit>(create: (_) => di.sl<CategoryCubit>()),
         BlocProvider<CommentsCubit>(create: (_) => di.sl<CommentsCubit>()),

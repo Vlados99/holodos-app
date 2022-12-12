@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
@@ -94,7 +96,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       id: userProductDocId,
       name: product.name,
       unit: product.unit,
-      imageLocation: product.imageLocation,
+      // imageLocation: product.imageLocation,
     ).toDocument();
 
     await usersProductCollectionRef.doc(userProductDocId).set(newProduct);
@@ -451,9 +453,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     QuerySnapshot querySnapshot =
         await usersProductCollectionRef.orderBy("name").get();
 
-    return querySnapshot.docs
-        .map((doc) => ProductModel.fromSnapshot(doc))
-        .toList();
+    return querySnapshot.docs.map((doc) {
+      return ProductModel.fromSnapshot(doc);
+    }).toList();
   }
 
   @override
@@ -558,8 +560,67 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<List<RecipeEntity>> searchRecipesByProducts(
-      List<ProductEntity> products) {
-    throw UnimplementedError();
+      List<String> products) async {
+    // final productsCollectionRef = firestore
+    //     .collection("recipes")
+    //     .doc()
+    //     .collection("ingredients")
+    //     .orderBy(fieldName)
+    //     .where(fieldName, whereIn: products);
+    final recipesCollectionRef = firestore.collection("recipes");
+    QuerySnapshot querySnapshot = await recipesCollectionRef.get();
+
+    var result = querySnapshot.docs.map((doc) async {
+      String recipeId = doc.id;
+      return RecipeModel.fromSnapshot(
+        doc,
+        ingredients: await getRecipeIngredients(recipeId),
+      );
+    }).toList();
+
+    List<RecipeEntity> recipes = [];
+
+    for (var element in result) {
+      final recipe = await element;
+      recipe.isFavorite = !await _recipeNotExists(recipe);
+      recipes.add(recipe);
+    }
+
+    List<RecipeEntity> res = [];
+    List<int> numberOfMatches =
+        List<int>.generate(recipes.length, (index) => 0);
+
+    for (var recipe in recipes) {
+      List<ProductEntity> ingredients = recipe.ingredients ?? [];
+      if (ingredients.isNotEmpty) {
+        for (var ingr in ingredients.map((e) => e.name).toList()) {
+          for (var prod in products) {
+            if (ingr.toLowerCase() == prod.toLowerCase()) {
+              numberOfMatches[
+                  recipes.indexWhere((element) => element == recipe)] += 1;
+            }
+          }
+        }
+      }
+    }
+
+    final Map<int, RecipeEntity> mappings = {
+      for (int i = 0; i < numberOfMatches.length; i++)
+        numberOfMatches[i]: recipes[i]
+    };
+
+    numberOfMatches.sort(((a, b) => b.compareTo(a)));
+
+    recipes = [for (int num in numberOfMatches) mappings[num]!];
+
+    for (var el in numberOfMatches) {
+      final index = numberOfMatches.indexWhere((element) => element == el);
+      if (el == 0) {
+        recipes.removeAt(index);
+      }
+    }
+
+    return recipes;
   }
 
   @override
@@ -613,8 +674,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<void> resetPassword(UserEntity user) async {
-    auth.sendPasswordResetEmail(email: user.email!);
-    return;
+    return auth.sendPasswordResetEmail(email: user.email!);
   }
 
   @override

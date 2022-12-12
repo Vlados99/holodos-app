@@ -40,8 +40,7 @@ abstract class UserRemoteDataSource {
   Future<List<ProductEntity>> searchProductsByName(String name);
 
   Future<List<RecipeEntity>> searchRecipesByName(String name);
-  Future<List<RecipeEntity>> searchRecipesByProducts(
-      List<ProductEntity> products);
+  Future<List<RecipeEntity>> searchRecipesByProducts(List<String> products);
   Future<List<RecipeEntity>> searchRecipesByCategories(
       CategoryEntity categories);
 

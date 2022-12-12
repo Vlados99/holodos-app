@@ -6,12 +6,12 @@ class ProductModel extends ProductEntity {
     required id,
     required name,
     required unit,
-    required imageLocation,
+    // imageLocation,
   }) : super(
           id: id,
           name: name,
           unit: unit,
-          imageLocation: imageLocation,
+          // imageLocation: imageLocation,
         );
 
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -23,11 +23,11 @@ class ProductModel extends ProductEntity {
       unit: snapshot.data().toString().contains('unit')
           ? snapshot.get('unit')
           : '',
-      imageLocation: snapshot.data().toString().contains('imageLocation')
-          ? (snapshot.get("imageLocation")
-                  as DocumentReference<Map<String, dynamic>>)
-              .id
-          : '',
+      // imageLocation: snapshot.data().toString().contains('imageLocation')
+      //     ? (snapshot.get("imageLocation")
+      //             as DocumentReference<Map<String, dynamic>>)
+      //         .id
+      //     : '',
     );
   }
 
@@ -36,7 +36,7 @@ class ProductModel extends ProductEntity {
       'id': id,
       'name': name,
       'unit': unit,
-      'imageLocation': imageLocation,
+      // 'imageLocation': imageLocation,
     };
   }
 }

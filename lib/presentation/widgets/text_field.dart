@@ -11,6 +11,7 @@ class SimpleTextField extends StatefulWidget {
   final Icon? icon;
   final TextInputType? keyboardType;
   final int? maxLines;
+  final FocusNode? focusNode;
 
   const SimpleTextField({
     Key? key,
@@ -21,6 +22,7 @@ class SimpleTextField extends StatefulWidget {
     this.icon,
     this.keyboardType,
     this.maxLines,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,15 @@ class SimpleTextField extends StatefulWidget {
 }
 
 class _SimpleTextFieldState extends State<SimpleTextField> {
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    controller = widget.controller;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -39,7 +50,8 @@ class _SimpleTextFieldState extends State<SimpleTextField> {
         inputFormatters: widget.formatters ??
             [FilteringTextInputFormatter.singleLineFormatter],
         cursorColor: AppColors.orange,
-        controller: widget.controller,
+        controller: controller,
+        focusNode: widget.focusNode,
         decoration: InputDecoration(
           enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: AppColors.black)),
@@ -111,57 +123,6 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               child: Icon(
                 passenable == true ? Icons.remove_red_eye : Icons.password,
                 size: 20,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SearchTextField extends StatelessWidget {
-  final double? width;
-  final BuildContext context;
-  final TextEditingController controller;
-  final String? labelText;
-  final List<TextInputFormatter>? formatters;
-  final Icon? icon;
-
-  const SearchTextField({
-    Key? key,
-    this.width,
-    required this.context,
-    required this.controller,
-    this.labelText,
-    this.formatters,
-    this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width ?? MediaQuery.of(context).size.width - 30,
-      child: TextField(
-        inputFormatters:
-            formatters ?? [FilteringTextInputFormatter.singleLineFormatter],
-        cursorColor: AppColors.appBar,
-        controller: controller,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: labelText,
-          labelStyle: TextStyles.text16gray,
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: AppColors.appBar),
-          ),
-          suffix: Container(
-            padding: const EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () {},
-              child: const Icon(
-                Icons.arrow_forward,
-                size: 28,
-                color: AppColors.dirtyGreen,
               ),
             ),
           ),
