@@ -11,7 +11,6 @@ import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
 import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/product/product_list.dart';
-import 'package:holodos/presentation/widgets/snack_bar.dart';
 
 class AvailableProductsPage extends StatefulWidget {
   const AvailableProductsPage({Key? key}) : super(key: key);

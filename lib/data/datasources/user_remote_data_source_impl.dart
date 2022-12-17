@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
@@ -202,6 +200,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         await _createAndAddRecipe(
             recipe, favoriteRecipesCollectionRef, favoriteRecipeDocId);
       } else {
+        // ignore: avoid_print
         print("-----RECIPE EXISTS, SHOW FOR USER MESSAGE-----");
       }
       return;
@@ -496,7 +495,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<List<RecipeEntity>> searchRecipesByCategories(
+  Future<List<RecipeEntity>> searchRecipesByCategory(
       CategoryEntity category) async {
     final recipesCollectionRef = firestore.collection("recipes");
 
@@ -586,7 +585,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       recipes.add(recipe);
     }
 
-    List<RecipeEntity> res = [];
     List<int> numberOfMatches =
         List<int>.generate(recipes.length, (index) => 0);
 

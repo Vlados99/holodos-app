@@ -51,8 +51,8 @@ abstract class UserRepository {
   Future<Either<Failure, List<RecipeEntity>>> searchRecipesByName(String name);
   Future<Either<Failure, List<RecipeEntity>>> searchRecipesByProducts(
       List<String> products);
-  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByCategories(
-      CategoryEntity categories);
+  Future<Either<Failure, List<RecipeEntity>>> searchRecipesByCategory(
+      CategoryEntity category);
 
   Future<Either<Failure, void>> shareRecipe(RecipeEntity recipe);
   Future<Either<Failure, void>> commentOnRecipe(

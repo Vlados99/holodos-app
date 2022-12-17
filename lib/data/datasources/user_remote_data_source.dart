@@ -41,8 +41,7 @@ abstract class UserRemoteDataSource {
 
   Future<List<RecipeEntity>> searchRecipesByName(String name);
   Future<List<RecipeEntity>> searchRecipesByProducts(List<String> products);
-  Future<List<RecipeEntity>> searchRecipesByCategories(
-      CategoryEntity categories);
+  Future<List<RecipeEntity>> searchRecipesByCategory(CategoryEntity category);
 
   Future<void> shareRecipe(RecipeEntity recipe);
   Future<void> commentOnRecipe(String comment, RecipeEntity recipe);

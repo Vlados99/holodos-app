@@ -14,7 +14,7 @@ class SearchRecipesByCategory extends UseCaseWithParams<List<RecipeEntity>,
 
   @override
   Future<Either<Failure, List<RecipeEntity>>> call(params) async {
-    return await repository.searchRecipesByCategories(params.category);
+    return await repository.searchRecipesByCategory(params.category);
   }
 }
 

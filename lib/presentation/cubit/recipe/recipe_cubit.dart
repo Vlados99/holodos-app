@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/domain/entities/category_entity.dart';
-import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/usecases/add_recipe_to_favorites.dart';
 import 'package:holodos/domain/usecases/comment_on_recipe.dart';
@@ -13,7 +12,7 @@ import 'package:holodos/domain/usecases/get_all_recipes.dart';
 import 'package:holodos/domain/usecases/get_recipe_by_id.dart';
 import 'package:holodos/domain/usecases/get_recipes_from_favorites.dart';
 import 'package:holodos/domain/usecases/remove_recipe_from_favorites.dart';
-import 'package:holodos/domain/usecases/search_recipes_by_categories.dart';
+import 'package:holodos/domain/usecases/search_recipes_by_category.dart';
 import 'package:holodos/domain/usecases/search_recipes_by_products.dart';
 
 part 'recipe_state.dart';

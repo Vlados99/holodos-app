@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
 import 'package:holodos/common/network_status_service.dart';
-import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/presentation/cubit/product/product_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/pages/error_page.dart';
 import 'package:holodos/presentation/widgets/appbar/app_bar.dart';
-import 'package:holodos/presentation/widgets/button.dart';
 import 'package:holodos/presentation/widgets/drawer.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_list.dart';
 import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart';
 import 'package:holodos/presentation/widgets/search_by_products.dart';
-import 'package:holodos/presentation/widgets/text_field.dart';
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({

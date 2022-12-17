@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:holodos/common/app_const.dart';
@@ -9,7 +7,6 @@ import 'package:holodos/presentation/widgets/appbar/filter/complexity_filter.dar
 import 'package:holodos/presentation/widgets/appbar/filter/cook_time_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/cuisines_filter.dart';
 import 'package:holodos/presentation/widgets/appbar/filter/serves_filter.dart';
-import 'package:holodos/presentation/widgets/sized_box.dart';
 
 class FilterAppBarItem extends StatefulWidget {
   const FilterAppBarItem({Key? key}) : super(key: key);

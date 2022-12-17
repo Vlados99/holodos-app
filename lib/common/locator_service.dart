@@ -27,7 +27,7 @@ import 'package:holodos/domain/usecases/remove_product_from_user_list.dart';
 import 'package:holodos/domain/usecases/remove_recipe_from_favorites.dart';
 import 'package:holodos/domain/usecases/reset_password.dart';
 import 'package:holodos/domain/usecases/search_products_by_name.dart';
-import 'package:holodos/domain/usecases/search_recipes_by_categories.dart';
+import 'package:holodos/domain/usecases/search_recipes_by_category.dart';
 import 'package:holodos/domain/usecases/search_recipes_by_name.dart';
 import 'package:holodos/domain/usecases/search_recipes_by_products.dart';
 import 'package:holodos/domain/usecases/share_recipe.dart';

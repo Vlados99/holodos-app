@@ -59,11 +59,9 @@ class UserProductCubit extends Cubit<UserProductState> {
       final failureOrProducts = await getListOfUsersProductsUseCase();
       failureOrProducts.fold((_) => emit(UserProductFailure()),
           (value) => emit(UserProductLoaded(products: value)));
-    } on SocketException catch (e) {
-      print(e);
+    } on SocketException catch (_) {
       emit(UserProductFailure());
-    } catch (e) {
-      print(e);
+    } catch (_) {
       emit(UserProductFailure());
     }
   }
