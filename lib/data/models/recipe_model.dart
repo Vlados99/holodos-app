@@ -4,7 +4,6 @@ import 'package:holodos/domain/entities/comment_entity.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
-import 'package:holodos/domain/entities/tag_entity.dart';
 
 class RecipeModel extends RecipeEntity {
   RecipeModel({
@@ -20,7 +19,6 @@ class RecipeModel extends RecipeEntity {
     ingredients,
     steps,
     comments,
-    tags,
   }) : super(
           id: id,
           name: name,
@@ -34,7 +32,6 @@ class RecipeModel extends RecipeEntity {
           ingredients: ingredients,
           steps: steps,
           comments: comments,
-          tags: tags,
         );
 
   factory RecipeModel.fromSnapshot(
@@ -43,38 +40,37 @@ class RecipeModel extends RecipeEntity {
     List<StepEntity>? steps,
     List<CategoryEntity>? categories,
     List<CommentEntity>? comments,
-    List<TagEntity>? tags,
   }) {
     return RecipeModel(
-        id: snapshot.id,
-        name: snapshot.data().toString().contains('name')
-            ? snapshot.get('name')
-            : '',
-        cuisines: snapshot.data().toString().contains('cuisines')
-            ? snapshot.get('cuisines')
-            : '',
-        cookTime: snapshot.data().toString().contains('cookTime')
-            ? snapshot.get('cookTime')
-            : 0,
-        complexity: snapshot.data().toString().contains('complexity')
-            ? snapshot.get('complexity')
-            : 0,
-        serves: snapshot.data().toString().contains('serves')
-            ? snapshot.get('serves')
-            : 0,
-        imageLocation: snapshot.data().toString().contains('imageLocation')
-            ? (snapshot.get("imageLocation")
-                    as DocumentReference<Map<String, dynamic>>)
-                .id
-            : '',
-        description: snapshot.data().toString().contains("description")
-            ? snapshot.get("description")
-            : '',
-        categories: categories ?? <CategoryEntity>[],
-        ingredients: ingredients ?? <ProductEntity>[],
-        steps: steps ?? <StepEntity>[],
-        comments: comments ?? <CommentEntity>[],
-        tags: tags ?? <TagEntity>[]);
+      id: snapshot.id,
+      name: snapshot.data().toString().contains('name')
+          ? snapshot.get('name')
+          : '',
+      cuisines: snapshot.data().toString().contains('cuisines')
+          ? snapshot.get('cuisines')
+          : '',
+      cookTime: snapshot.data().toString().contains('cookTime')
+          ? snapshot.get('cookTime')
+          : 0,
+      complexity: snapshot.data().toString().contains('complexity')
+          ? snapshot.get('complexity')
+          : 0,
+      serves: snapshot.data().toString().contains('serves')
+          ? snapshot.get('serves')
+          : 0,
+      imageLocation: snapshot.data().toString().contains('imageLocation')
+          ? (snapshot.get("imageLocation")
+                  as DocumentReference<Map<String, dynamic>>)
+              .id
+          : '',
+      description: snapshot.data().toString().contains("description")
+          ? snapshot.get("description")
+          : '',
+      categories: categories ?? <CategoryEntity>[],
+      ingredients: ingredients ?? <ProductEntity>[],
+      steps: steps ?? <StepEntity>[],
+      comments: comments ?? <CommentEntity>[],
+    );
   }
 
   Map<String, dynamic> toFavoriteRecipe() {
@@ -98,7 +94,6 @@ class RecipeModel extends RecipeEntity {
       'ingredients': ingredients,
       'steps': steps,
       'comments': comments,
-      'tags': tags,
     };
   }
 }

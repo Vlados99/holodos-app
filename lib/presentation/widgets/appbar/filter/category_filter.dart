@@ -74,7 +74,7 @@ class _CategoriesFilterState extends State<CategoriesFilter> {
     return GestureDetector(
       onTap: () {
         BlocProvider.of<RecipesCubit>(context)
-            .searchRecipesByCategories(category: category);
+            .searchRecipesByCategory(category: category);
         Navigator.of(context).pop();
       },
       child: Container(

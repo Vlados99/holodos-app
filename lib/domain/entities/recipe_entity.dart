@@ -4,7 +4,6 @@ import 'category_entity.dart';
 import 'comment_entity.dart';
 import 'product_entity.dart';
 import 'step_entity.dart';
-import 'tag_entity.dart';
 
 class RecipeEntity extends Equatable {
   final String id;
@@ -19,7 +18,6 @@ class RecipeEntity extends Equatable {
   final List<ProductEntity>? ingredients;
   final List<StepEntity>? steps;
   final List<CommentEntity>? comments;
-  final List<TagEntity>? tags;
   bool? isFavorite;
 
   RecipeEntity({
@@ -35,7 +33,6 @@ class RecipeEntity extends Equatable {
     this.ingredients,
     this.steps,
     this.comments,
-    this.tags,
     this.isFavorite = false,
   });
 
@@ -53,7 +50,6 @@ class RecipeEntity extends Equatable {
         ingredients,
         steps,
         comments,
-        tags,
         isFavorite,
       ];
 }

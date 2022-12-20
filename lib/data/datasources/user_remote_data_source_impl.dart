@@ -7,10 +7,8 @@ import 'package:holodos/data/models/cuisine_model.dart';
 import 'package:holodos/data/models/product_model.dart';
 import 'package:holodos/data/models/recipe_model.dart';
 import 'package:holodos/data/models/step_model.dart';
-import 'package:holodos/data/models/tag_model.dart';
 import 'package:holodos/data/models/user_model.dart';
 import 'package:holodos/domain/entities/cuisine_entity.dart';
-import 'package:holodos/domain/entities/tag_entity.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
@@ -179,7 +177,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       ingredients: recipe.ingredients,
       steps: recipe.steps,
       comments: recipe.comments,
-      tags: recipe.tags,
     ).toFavoriteRecipe();
 
     await favoriteRecipesCollectionRef.doc(recipe.id).set(newRecipe);
@@ -323,18 +320,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<List<TagEntity>> getRecipeTags(String recipeId) async {
-    final ingredientsRef =
-        firestore.collection("recipes").doc(recipeId).collection("tags");
-
-    QuerySnapshot querySnapshot = await ingredientsRef.get();
-
-    return querySnapshot.docs.map((doc) {
-      return TagModel.fromSnapshot(doc);
-    }).toList();
-  }
-
-  @override
   Future<List<RecipeEntity>> getAllRecipes(Map<String, dynamic>? params) async {
     final recipesCollectionRef = firestore.collection("recipes");
 
@@ -347,32 +332,10 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       RecipeQuery servesQuery = RecipeQuery.main;
       RecipeQuery cuisinesQuery = RecipeQuery.main;
 
-      if (params.containsKey("complexity") && params["complexity"] != null) {
-        complexityQuery = RecipeQuery.complexity;
-      }
-      if (params.containsKey("cookTime") &&
-          params.containsKey("cookTimeSymbol") &&
-          params["cookTime"] != null &&
-          params["cookTimeSymbol"] != null) {
-        if (params["cookTimeSymbol"] == "<") {
-          cookTimeQuery = RecipeQuery.cookTimeLess;
-        }
-        if (params["cookTimeSymbol"] == ">") {
-          cookTimeQuery = RecipeQuery.cookTimeGreater;
-        }
-      }
-      if (params.containsKey("serves") && params["serves"] != null) {
-        if (params["serves"] >= 3) {
-          servesQuery = RecipeQuery.servesGreater;
-        } else {
-          servesQuery = RecipeQuery.serves;
-        }
-      }
-      if (params.containsKey("cuisines") &&
-          params["cuisines"] != "" &&
-          params["cuisines"] != null) {
-        cuisinesQuery = RecipeQuery.cuisines;
-      }
+      complexityQuery = filterComplexity(params, complexityQuery);
+      cookTimeQuery = filterCookTIme(params, cookTimeQuery);
+      servesQuery = filterServes(params, servesQuery);
+      cuisinesQuery = filterCuisines(params, cuisinesQuery);
 
       querySnapshot = await recipesCollectionRef
           .queryBy(RecipeQuery.main, params)
@@ -391,18 +354,62 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         categories: await getRecipeCategories(recipeId),
         comments: await getRecipeComments(recipeId),
         steps: await getRecipeSteps(recipeId),
-        tags: await getRecipeTags(recipeId),
       );
     }).toList();
 
     List<RecipeEntity> recipes = [];
-
     for (var element in result) {
       final recipe = await element;
       recipe.isFavorite = !await _recipeNotExists(recipe);
       recipes.add(recipe);
     }
     return recipes;
+  }
+
+  RecipeQuery filterCuisines(
+      Map<String, dynamic> params, RecipeQuery cuisinesQuery) {
+    if (params.containsKey("cuisines") &&
+        params["cuisines"] != "" &&
+        params["cuisines"] != null) {
+      cuisinesQuery = RecipeQuery.cuisines;
+    }
+    return cuisinesQuery;
+  }
+
+  RecipeQuery filterServes(
+      Map<String, dynamic> params, RecipeQuery servesQuery) {
+    if (params.containsKey("serves") && params["serves"] != null) {
+      if (params["serves"] >= 3) {
+        servesQuery = RecipeQuery.servesGreater;
+      } else {
+        servesQuery = RecipeQuery.serves;
+      }
+    }
+    return servesQuery;
+  }
+
+  RecipeQuery filterCookTIme(
+      Map<String, dynamic> params, RecipeQuery cookTimeQuery) {
+    if (params.containsKey("cookTime") &&
+        params.containsKey("cookTimeSymbol") &&
+        params["cookTime"] != null &&
+        params["cookTimeSymbol"] != null) {
+      if (params["cookTimeSymbol"] == "<") {
+        cookTimeQuery = RecipeQuery.cookTimeLess;
+      }
+      if (params["cookTimeSymbol"] == ">") {
+        cookTimeQuery = RecipeQuery.cookTimeGreater;
+      }
+    }
+    return cookTimeQuery;
+  }
+
+  RecipeQuery filterComplexity(
+      Map<String, dynamic> params, RecipeQuery complexityQuery) {
+    if (params.containsKey("complexity") && params["complexity"] != null) {
+      complexityQuery = RecipeQuery.complexity;
+    }
+    return complexityQuery;
   }
 
   @override
@@ -429,7 +436,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         categories: await getRecipeCategories(recipeId),
         comments: await getRecipeComments(recipeId),
         steps: await getRecipeSteps(recipeId),
-        tags: await getRecipeTags(recipeId),
       );
     }).toList();
 
@@ -509,7 +515,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         categories: await getRecipeCategories(recipeId),
         comments: await getRecipeComments(recipeId),
         steps: await getRecipeSteps(recipeId),
-        tags: await getRecipeTags(recipeId),
       );
     }).toList();
 
@@ -560,23 +565,12 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<List<RecipeEntity>> searchRecipesByProducts(
       List<String> products) async {
-    // final productsCollectionRef = firestore
-    //     .collection("recipes")
-    //     .doc()
-    //     .collection("ingredients")
-    //     .orderBy(fieldName)
-    //     .where(fieldName, whereIn: products);
-    final recipesCollectionRef = firestore.collection("recipes");
-    QuerySnapshot querySnapshot = await recipesCollectionRef.get();
-
+    QuerySnapshot querySnapshot = await firestore.collection("recipes").get();
     var result = querySnapshot.docs.map((doc) async {
       String recipeId = doc.id;
-      return RecipeModel.fromSnapshot(
-        doc,
-        ingredients: await getRecipeIngredients(recipeId),
-      );
+      return RecipeModel.fromSnapshot(doc,
+          ingredients: await getRecipeIngredients(recipeId));
     }).toList();
-
     List<RecipeEntity> recipes = [];
 
     for (var element in result) {
@@ -584,7 +578,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       recipe.isFavorite = !await _recipeNotExists(recipe);
       recipes.add(recipe);
     }
-
     List<int> numberOfMatches =
         List<int>.generate(recipes.length, (index) => 0);
 
@@ -601,14 +594,12 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         }
       }
     }
-
     final Map<int, RecipeEntity> mappings = {
       for (int i = 0; i < numberOfMatches.length; i++)
         numberOfMatches[i]: recipes[i]
     };
 
     numberOfMatches.sort(((a, b) => b.compareTo(a)));
-
     recipes = [for (int num in numberOfMatches) mappings[num]!];
 
     for (var el in numberOfMatches) {
@@ -617,7 +608,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         recipes.removeAt(index);
       }
     }
-
     return recipes;
   }
 
@@ -687,7 +677,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<RecipeEntity> getRecipeByid(String id) async {
+  Future<RecipeEntity> getRecipeById(String id) async {
     final recipeRef = firestore.collection("recipes").doc(id);
 
     DocumentSnapshot docSnapshot = await recipeRef.get();
@@ -698,7 +688,6 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       categories: await getRecipeCategories(id),
       comments: await getRecipeComments(id),
       steps: await getRecipeSteps(id),
-      tags: await getRecipeTags(id),
     );
 
     recipe.isFavorite = !await _recipeNotExists(recipe);

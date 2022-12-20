@@ -7,7 +7,6 @@ import 'package:holodos/domain/entities/comment_entity.dart';
 import 'package:holodos/domain/entities/product_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
-import 'package:holodos/domain/entities/tag_entity.dart';
 import 'package:holodos/presentation/cubit/auth/auth_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe/recipe_cubit.dart';
 import 'package:holodos/presentation/cubit/recipe_comments/recipe_comments_cubit.dart';
@@ -277,35 +276,6 @@ class _RecipePageState extends State<RecipePage> {
               CategoryEntity category = categories[index];
 
               return txt16(text: category.name);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget recipeTags() {
-    List<TagEntity> tags = recipe.tags!;
-
-    if (tags.isEmpty) {
-      return Container();
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          txt32(text: "Tags"),
-          ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(8),
-            itemCount: tags.length,
-            itemBuilder: (context, index) {
-              TagEntity tag = tags[index];
-
-              return txt16(text: tag.name);
             },
           ),
         ],

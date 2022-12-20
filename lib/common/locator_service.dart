@@ -20,7 +20,6 @@ import 'package:holodos/domain/usecases/get_recipe_categories.dart';
 import 'package:holodos/domain/usecases/get_recipe_comments.dart';
 import 'package:holodos/domain/usecases/get_recipe_ingredients.dart';
 import 'package:holodos/domain/usecases/get_recipe_steps.dart';
-import 'package:holodos/domain/usecases/get_recipe_tags.dart';
 import 'package:holodos/domain/usecases/get_recipes_from_favorites.dart';
 import 'package:holodos/domain/usecases/is_sign_in.dart';
 import 'package:holodos/domain/usecases/remove_product_from_user_list.dart';
@@ -124,7 +123,6 @@ init() {
   sl.registerLazySingleton(() => GetRecipeComments(repository: sl()));
   sl.registerLazySingleton(() => GetRecipeIngredients(repository: sl()));
   sl.registerLazySingleton(() => GetRecipeSteps(repository: sl()));
-  sl.registerLazySingleton(() => GetRecipeTags(repository: sl()));
   sl.registerLazySingleton(() => GetAllCuisines(repository: sl()));
   sl.registerLazySingleton(() => GetAllCategories(repository: sl()));
 

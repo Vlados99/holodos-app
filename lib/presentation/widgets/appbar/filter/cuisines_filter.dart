@@ -15,7 +15,7 @@ class CuisinesDropdownButton extends StatefulWidget {
 
 class _CuisinesDropdownButtonState extends State<CuisinesDropdownButton> {
   String dropdownValue = "";
-  String cuisinesValue = "";
+  String cuisinesValue = "All";
 
   List<String> items = ["All"];
 
@@ -23,7 +23,7 @@ class _CuisinesDropdownButtonState extends State<CuisinesDropdownButton> {
   void initState() {
     BlocProvider.of<CuisineCubit>(context).getCuisines();
 
-    cuisinesValue = "";
+    cuisinesValue = "All";
     dropdownValue = items.first;
     super.initState();
   }
@@ -52,7 +52,11 @@ class _CuisinesDropdownButtonState extends State<CuisinesDropdownButton> {
       value: dropdownValue,
       icon: const Icon(Icons.arrow_downward),
       onChanged: (String? value) {
-        cuisinesValue = value!;
+        if (value! != "All") {
+          cuisinesValue = value;
+        } else {
+          cuisinesValue = "All";
+        }
         setState(() {
           dropdownValue = value;
         });

@@ -119,7 +119,7 @@ class RecipesCubit extends Cubit<RecipesState> {
     }
   }
 
-  Future<void> searchRecipesByCategories(
+  Future<void> searchRecipesByCategory(
       {required CategoryEntity category}) async {
     emit(RecipesLoading());
     try {

@@ -1,7 +1,6 @@
 import 'package:holodos/core/error/exception.dart';
 import 'package:holodos/data/datasources/user_remote_data_source.dart';
 import 'package:holodos/domain/entities/cuisine_entity.dart';
-import 'package:holodos/domain/entities/tag_entity.dart';
 import 'package:holodos/domain/entities/step_entity.dart';
 import 'package:holodos/domain/entities/user_entity.dart';
 import 'package:holodos/domain/entities/recipe_entity.dart';
@@ -199,13 +198,6 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, List<TagEntity>>> getRecipeTags(
-      String recipeId) async {
-    return await _call<List<TagEntity>>(
-        () => remoteDataSource.getRecipeTags(recipeId));
-  }
-
-  @override
   Future<Either<Failure, List<CuisineEntity>>> getAllCuisines() async {
     return await _call<List<CuisineEntity>>(
         () => remoteDataSource.getAllCuisines());
@@ -213,7 +205,7 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Either<Failure, RecipeEntity>> getRecipeById(String id) async {
-    return await _call<RecipeEntity>(() => remoteDataSource.getRecipeByid(id));
+    return await _call<RecipeEntity>(() => remoteDataSource.getRecipeById(id));
   }
 
   @override

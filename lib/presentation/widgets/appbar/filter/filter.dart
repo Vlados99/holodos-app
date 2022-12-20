@@ -83,7 +83,9 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
                 filterItem(
                     name: "Cuisines",
                     widget: CuisinesDropdownButton(
-                      onChanged: (value) => cuisinesValue = value,
+                      onChanged: (value) {
+                        cuisinesValue = value;
+                      },
                     )),
               ],
             ),

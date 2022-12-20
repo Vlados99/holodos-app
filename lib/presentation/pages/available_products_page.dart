@@ -62,7 +62,7 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
       )),
       key: _scaffolGlobalKey,
       appBar: const MainAppBar(
-        title: "Holodos",
+        title: "My products",
       ),
       body: centerWidget(
         icon: const Icon(Icons.no_accounts),
@@ -124,7 +124,7 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
       )),
       key: _scaffolGlobalKey,
       appBar: const MainAppBar(
-        title: "Holodos",
+        title: "My products",
       ),
       body: BlocBuilder<UserProductCubit, UserProductState>(
         builder: (context, userProductState) {
