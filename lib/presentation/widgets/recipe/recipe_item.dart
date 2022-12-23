@@ -124,32 +124,33 @@ class _RecipeItemState extends State<RecipeItem> {
 
   Widget saveItButton() {
     return GestureDetector(
-      onTap: () {
-        isFavorite ? removeRecipeFromFavorites() : addRecipeToFavorites();
+      onTap: () async {
+        isFavorite
+            ? await removeRecipeFromFavorites()
+            : await addRecipeToFavorites();
         widget.callback();
-
-        // if (widget.pageName == PageConst.recipesPage) {
-        //   BlocProvider.of<RecipesCubit>(context).getRecipes();
-        // }
-        // if (widget.pageName == PageConst.favoriteRecipesPage && isFavorite) {
-        //   BlocProvider.of<RecipesCubit>(context).getRecipesFromFavorites();
-        // }
       },
       child: isFavorite ? favorite() : notFavorite(),
     );
   }
 
-  void removeRecipeFromFavorites() {
-    BlocProvider.of<RecipesCubit>(context)
+  Future<void> removeRecipeFromFavorites() async {
+    await BlocProvider.of<RecipesCubit>(context)
         .removeRecipeFromFavorites(recipe: recipe);
-    snackBarSuccess(context: context, message: "Recipe removed from favorites");
+    if (mounted) {
+      snackBarSuccess(
+          context: context, message: "Recipe removed from favorites");
+    }
   }
 
-  void addRecipeToFavorites() {
-    BlocProvider.of<RecipesCubit>(context).addRecipeToFavorites(recipe: recipe);
-    snackBarSuccess(
-        context: context,
-        message: "The recipe has been successfully added to your favorites");
+  Future<void> addRecipeToFavorites() async {
+    await BlocProvider.of<RecipesCubit>(context)
+        .addRecipeToFavorites(recipe: recipe);
+    if (mounted) {
+      snackBarSuccess(
+          context: context,
+          message: "The recipe has been successfully added to your favorites");
+    }
   }
 
   Widget favorite() {

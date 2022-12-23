@@ -30,21 +30,28 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   Widget txt({required String name, String? unit}) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(bottom: 5),
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: AppColors.orange, width: 1),
+    return Padding(
+      padding: EdgeInsets.only(right: unit != "" ? 50 : 20),
+      child: Row(
+        children: [
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.only(
+                bottom: 5,
+              ),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: AppColors.orange, width: 1),
+                ),
+              ),
+              child: Text(
+                unit != "" ? "$name - $unit" : name,
+                style: TextStyles.productTextStyle,
+              ),
             ),
           ),
-          child: Text(
-            unit != "" ? "$name - $unit" : name,
-            style: TextStyles.productTextStyle,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

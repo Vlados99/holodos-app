@@ -156,11 +156,13 @@ class _AvailableProductsPageState extends State<AvailableProductsPage> {
           child: Container(
             alignment: Alignment.topCenter,
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, PageConst.recipesPage, (route) => false);
-                BlocProvider.of<RecipesCubit>(context).searchRecipesByProducts(
-                    products: products.map((e) => e.name).toList());
+                    context, PageConst.recipesPage, (route) => false,
+                    arguments: {
+                      "fromFavoritePage": true,
+                      "products": products.map((e) => e.name).toList()
+                    });
               },
               child: Button(
                 text: "Search by my products",

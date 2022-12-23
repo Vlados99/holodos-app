@@ -13,8 +13,13 @@ import 'package:holodos/presentation/widgets/recipe/recipe_search_delegate.dart'
 import 'package:holodos/presentation/widgets/search_by_products.dart';
 
 class RecipesPage extends StatefulWidget {
+  final bool? fromFavoritePage;
+  final List<String>? products;
+
   const RecipesPage({
     Key? key,
+    this.fromFavoritePage = false,
+    this.products,
   }) : super(key: key);
 
   @override
@@ -38,7 +43,13 @@ class _RecipesPageState extends State<RecipesPage> with RouteAware {
   void initState() {
     checkConnection(context);
 
-    BlocProvider.of<RecipesCubit>(context).getRecipes();
+    if (widget.fromFavoritePage == false) {
+      BlocProvider.of<RecipesCubit>(context).getRecipes();
+    } else {
+      BlocProvider.of<RecipesCubit>(context)
+          .searchRecipesByProducts(products: widget.products!);
+    }
+
     BlocProvider.of<ProductCubit>(context).getProducts();
 
     super.initState();

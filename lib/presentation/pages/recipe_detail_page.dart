@@ -235,13 +235,16 @@ class _RecipePageState extends State<RecipePage> {
 
                   String name =
                       product.name[0].toUpperCase() + product.name.substring(1);
+                  String unit = product.unit ?? "";
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // ImageGetter(
                       //     dir: "recipes/ingredients/${recipe.name}",
                       //     imgName: product.imageLocation!),
-                      txt16(text: "$name - ${product.unit}"),
+                      txt16(
+                          text: unit != "" ? "$name - ${product.unit}" : name),
                     ],
                   );
                 },

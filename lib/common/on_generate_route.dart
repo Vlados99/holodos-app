@@ -39,7 +39,13 @@ class OnGenerateRoute {
         return materialBuilder(widget: const ProductsPage());
 
       case PageConst.recipesPage:
-        return materialBuilder(widget: const RecipesPage());
+        return args is Map
+            ? materialBuilder(
+                widget: RecipesPage(
+                fromFavoritePage: args["fromFavoritePage"],
+                products: args["products"],
+              ))
+            : materialBuilder(widget: const RecipesPage());
 
       case PageConst.favoriteRecipesPage:
         return materialBuilder(widget: const FavoriteRecipesPage());

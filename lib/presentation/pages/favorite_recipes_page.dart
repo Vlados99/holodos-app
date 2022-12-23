@@ -147,7 +147,6 @@ class _FavoriteRecipesPageState extends State<FavoriteRecipesPage> {
   }
 
   void callback() {
-    setState(() {});
     BlocProvider.of<RecipesCubit>(context).update(name: pageName);
   }
 }

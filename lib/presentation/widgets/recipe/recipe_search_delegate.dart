@@ -12,8 +12,8 @@ class RecipeSearchDelegate extends SearchDelegate {
       : super(searchFieldLabel: 'Enter recipe name');
 
   final _suggestions = [
-    "Onion rings",
-    "Carbonara",
+    "Toffee apples",
+    "Christmas terrine",
     "Fresh pasta",
   ];
 

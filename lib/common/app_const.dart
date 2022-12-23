@@ -83,4 +83,15 @@ class TextStyles {
       ),
     ],
   );
+  static TextStyle productForSearchTextStyle = TextStyle(
+    fontSize: 16,
+    fontFamily: poppins,
+    color: AppColors.textColorBlack,
+    shadows: [
+      Shadow(
+        color: AppColors.dirtyGreen.withOpacity(0.3),
+        offset: const Offset(0, 1),
+      ),
+    ],
+  );
 }

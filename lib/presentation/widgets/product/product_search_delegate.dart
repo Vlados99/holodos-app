@@ -11,11 +11,11 @@ class ProductSearchDelegate extends SearchDelegate {
   ProductSearchDelegate() : super(searchFieldLabel: 'Enter product name');
 
   final _suggestions = [
-    "Salt",
+    "Banana",
     "Olive oil",
+    "Orange",
     "Flour",
-    "Onion",
-    "Egg",
+    "Garlic",
   ];
 
   @override

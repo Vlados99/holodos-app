@@ -49,6 +49,13 @@ class _FilterAppBarItemState extends State<FilterAppBarItem> {
   }
 
   void showFilter({required BuildContext context}) {
+    complexityValue = 0;
+    servesValue = 0;
+    cookTimeValue = 0;
+
+    cookTimeSymbol = "All";
+    cuisinesValue = "All";
+    categoriesValue = "All";
     showDialog(
         context: context,
         builder: (BuildContext context) {

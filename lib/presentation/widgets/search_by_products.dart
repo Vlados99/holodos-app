@@ -135,47 +135,85 @@ class _SearchByProductsState extends State<SearchByProducts> {
   Widget selectedProducts() {
     return selectedProductsList.isEmpty
         ? Container()
-        : GridView.count(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            crossAxisCount: 3,
-            childAspectRatio: 3,
-            mainAxisSpacing: 3,
-            crossAxisSpacing: 3,
+        : Wrap(
             children: selectedProductsList.map((e) => productItem(e)).toList());
   }
 
   Widget productItem(String name) {
     return Container(
-      padding: const EdgeInsets.all(8),
-      alignment: Alignment.center,
-      decoration: const BoxDecoration(color: AppColors.orange),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            name,
-            style: TextStyles.text16white,
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedProductsList.removeWhere((element) => element == name);
-
-                if (selectedProductsList.isEmpty) {
-                  isListNotEmpty = false;
-                }
-              });
-            },
-            child: const Icon(
-              Icons.close,
-              color: AppColors.black,
-            ),
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+      decoration: const BoxDecoration(color: AppColors.mainBackground),
+      child: txt(name: name),
     );
   }
+
+  Widget txt({required String name}) {
+    return Wrap(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(
+            bottom: 5,
+          ),
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.orange, width: 1),
+            ),
+          ),
+          child: Text(
+            name,
+            style: TextStyles.productForSearchTextStyle,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              selectedProductsList.removeWhere((element) => element == name);
+
+              if (selectedProductsList.isEmpty) {
+                isListNotEmpty = false;
+              }
+            });
+          },
+          child: const Icon(
+            Icons.close,
+            color: AppColors.black,
+          ),
+        )
+      ],
+    );
+  }
+
+  // Widget productItem(String name) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(8),
+  //     alignment: Alignment.center,
+  //     decoration: const BoxDecoration(color: AppColors.orange),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Text(
+  //           name,
+  //           style: TextStyles.text16white,
+  //         ),
+  //         GestureDetector(
+  //           onTap: () {
+  //             setState(() {
+  //               selectedProductsList.removeWhere((element) => element == name);
+
+  //               if (selectedProductsList.isEmpty) {
+  //                 isListNotEmpty = false;
+  //               }
+  //             });
+  //           },
+  //           child: const Icon(
+  //             Icons.close,
+  //             color: AppColors.black,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget products() {
     return BlocBuilder<ProductCubit, ProductState>(

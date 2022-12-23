@@ -492,9 +492,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     await usersFavoriteRecipesCollectionRef
         .doc(recipe.id)
         .get()
-        .then((docSnapshot) {
+        .then((docSnapshot) async {
       if (docSnapshot.exists) {
-        usersFavoriteRecipesCollectionRef.doc(recipe.id).delete();
+        await usersFavoriteRecipesCollectionRef.doc(recipe.id).delete();
       }
       return;
     });
@@ -565,30 +565,18 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<List<RecipeEntity>> searchRecipesByProducts(
       List<String> products) async {
-    QuerySnapshot querySnapshot = await firestore.collection("recipes").get();
-    var result = querySnapshot.docs.map((doc) async {
-      String recipeId = doc.id;
-      return RecipeModel.fromSnapshot(doc,
-          ingredients: await getRecipeIngredients(recipeId));
-    }).toList();
-    List<RecipeEntity> recipes = [];
+    var result = await getAllRecipes({});
 
-    for (var element in result) {
-      final recipe = await element;
-      recipe.isFavorite = !await _recipeNotExists(recipe);
-      recipes.add(recipe);
-    }
-    List<int> numberOfMatches =
-        List<int>.generate(recipes.length, (index) => 0);
+    List<int> numberOfMatches = List<int>.generate(result.length, (index) => 0);
 
-    for (var recipe in recipes) {
+    for (var recipe in result) {
       List<ProductEntity> ingredients = recipe.ingredients ?? [];
       if (ingredients.isNotEmpty) {
         for (var ingr in ingredients.map((e) => e.name).toList()) {
           for (var prod in products) {
             if (ingr.toLowerCase() == prod.toLowerCase()) {
               numberOfMatches[
-                  recipes.indexWhere((element) => element == recipe)] += 1;
+                  result.indexWhere((element) => element == recipe)] += 1;
             }
           }
         }
@@ -596,18 +584,15 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     }
     final Map<int, RecipeEntity> mappings = {
       for (int i = 0; i < numberOfMatches.length; i++)
-        numberOfMatches[i]: recipes[i]
+        if (numberOfMatches[i] != 0) i: result[i]
     };
 
     numberOfMatches.sort(((a, b) => b.compareTo(a)));
-    recipes = [for (int num in numberOfMatches) mappings[num]!];
+    List<RecipeEntity> recipes = [];
+    mappings.forEach((key, value) {
+      recipes.add(value);
+    });
 
-    for (var el in numberOfMatches) {
-      final index = numberOfMatches.indexWhere((element) => element == el);
-      if (el == 0) {
-        recipes.removeAt(index);
-      }
-    }
     return recipes;
   }
 
